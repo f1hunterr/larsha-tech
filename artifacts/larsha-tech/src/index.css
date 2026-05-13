@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 @plugin "@tailwindcss/typography";
@@ -57,36 +57,38 @@
   --elevate-1: rgba(0,0,0, .03);
   --elevate-2: rgba(0,0,0, .08);
 
-  --background: 220 33% 98%;
-  --foreground: 224 71% 4%;
-  --border: 214 32% 91%;
-  
+  /* Pure white base — cleaner than the previous blue-tinted grey */
+  --background: 0 0% 100%;
+  --foreground: 222 47% 11%;
+  --border: 214 20% 88%;
+
   --card: 0 0% 100%;
-  --card-foreground: 224 71% 4%;
-  --card-border: 214 32% 91%;
+  --card-foreground: 222 47% 11%;
+  --card-border: 214 20% 90%;
 
   --popover: 0 0% 100%;
-  --popover-foreground: 224 71% 4%;
-  --popover-border: 214 32% 91%;
+  --popover-foreground: 222 47% 11%;
+  --popover-border: 214 20% 90%;
 
-  --primary: 212 100% 48%;
-  --primary-foreground: 210 40% 98%;
-  
-  --secondary: 214 15% 91%;
-  --secondary-foreground: 224 71% 4%;
-  
-  --muted: 214 15% 91%;
+  /* Richer, more vivid blue */
+  --primary: 221 83% 53%;
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 210 40% 96%;
+  --secondary-foreground: 222 47% 11%;
+
+  --muted: 210 40% 96%;
   --muted-foreground: 215 16% 47%;
-  
-  --accent: 214 15% 91%;
-  --accent-foreground: 224 71% 4%;
-  
-  --destructive: 0 84% 60%;
-  --destructive-foreground: 210 40% 98%;
 
-  --input: 214 32% 91%;
-  --ring: 212 100% 48%;
-  
+  --accent: 210 40% 96%;
+  --accent-foreground: 222 47% 11%;
+
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+
+  --input: 214 20% 88%;
+  --ring: 221 83% 53%;
+
   --app-font-sans: 'Outfit', sans-serif;
   --app-font-serif: Georgia, serif;
   --app-font-mono: Menlo, monospace;
@@ -94,35 +96,35 @@
 }
 
 .dark {
-  --background: 224 71% 4%;
+  --background: 222 47% 5%;
   --foreground: 210 40% 98%;
-  --border: 216 34% 17%;
-  
-  --card: 224 71% 4%;
+  --border: 217 33% 15%;
+
+  --card: 222 47% 7%;
   --card-foreground: 210 40% 98%;
-  --card-border: 216 34% 17%;
+  --card-border: 217 33% 15%;
 
-  --popover: 224 71% 4%;
+  --popover: 222 47% 7%;
   --popover-foreground: 210 40% 98%;
-  --popover-border: 216 34% 17%;
+  --popover-border: 217 33% 15%;
 
-  --primary: 212 100% 48%;
-  --primary-foreground: 210 40% 98%;
-  
-  --secondary: 216 34% 17%;
+  --primary: 221 83% 60%;
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 217 33% 15%;
   --secondary-foreground: 210 40% 98%;
-  
-  --muted: 216 34% 17%;
-  --muted-foreground: 215 20.2% 65.1%;
-  
-  --accent: 216 34% 17%;
+
+  --muted: 217 33% 15%;
+  --muted-foreground: 215 20% 60%;
+
+  --accent: 217 33% 15%;
   --accent-foreground: 210 40% 98%;
-  
-  --destructive: 0 62.8% 30.6%;
+
+  --destructive: 0 63% 31%;
   --destructive-foreground: 210 40% 98%;
 
-  --input: 216 34% 17%;
-  --ring: 212 100% 48%;
+  --input: 217 33% 15%;
+  --ring: 221 83% 60%;
 }
 
 @layer base {
@@ -133,4 +135,9 @@
     @apply font-sans antialiased bg-background text-foreground;
     scroll-behavior: smooth;
   }
+  /* Smoother scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: hsl(var(--border)); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: hsl(var(--muted-foreground)); }
 }
