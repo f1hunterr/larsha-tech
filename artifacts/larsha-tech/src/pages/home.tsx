@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
-import { motion, useScroll } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
   Monitor,
   Code,
   Wrench,
   ShieldCheck,
   Globe,
-  Smartphone,
   PhoneCall,
-  Mail,
   MapPin,
   CheckCircle2,
   ArrowRight,
@@ -25,7 +23,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 
 import repairHeroImg from '../assets/repair-hero.jpg';
-import webDevImg from '../assets/web-dev.jpg';
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -43,7 +40,6 @@ const staggerContainer = {
 };
 
 export default function Home() {
-  const { scrollYProgress } = useScroll();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const scrollTo = (id: string) => {
@@ -425,7 +421,7 @@ export default function Home() {
                     </li>
                     <li className="flex justify-between items-center border-b border-border/50 pb-4">
                       <div className="flex flex-col">
-                        <span className="font-bold text-foreground text-primary">Business Website</span>
+                        <span className="font-bold text-primary">Business Website</span>
                         <span className="text-sm text-muted-foreground">3-5 Pages, Contact Form</span>
                       </div>
                       <span className="font-bold text-lg whitespace-nowrap text-primary">₹8k – ₹15k</span>
