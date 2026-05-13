@@ -1,24 +1,26 @@
-import React from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { 
-  Monitor, 
-  Code, 
-  Wrench, 
-  Clock, 
-  ShieldCheck, 
-  Cpu, 
-  Globe, 
-  HardDrive, 
+import React, { useState } from 'react';
+import { motion, useScroll } from 'framer-motion';
+import {
+  Monitor,
+  Code,
+  Wrench,
+  ShieldCheck,
+  Globe,
   Smartphone,
   PhoneCall,
   Mail,
   MapPin,
   CheckCircle2,
   ArrowRight,
-  Server,
   Zap,
-  Laptop
+  Menu,
+  X,
+  MessageCircle,
+  ClipboardList,
+  BadgeCheck,
+  Headphones,
 } from 'lucide-react';
+import { FaWhatsapp } from 'react-icons/fa';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 
@@ -42,13 +44,14 @@ const staggerContainer = {
 
 export default function Home() {
   const { scrollYProgress } = useScroll();
-  const y = useTransform(scrollYProgress, [0, 1], ['0%', '20%']);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
     if (el) {
       el.scrollIntoView({ behavior: 'smooth' });
     }
+    setMobileMenuOpen(false);
   };
 
   return (
@@ -56,22 +59,67 @@ export default function Home() {
       {/* Navbar */}
       <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2 text-primary font-bold text-xl tracking-tight">
-            <Monitor className="w-6 h-6" />
+          <div className="flex items-center gap-2 font-bold text-xl tracking-tight">
+            <Monitor className="w-6 h-6 text-primary" />
             <span className="text-foreground">Larsha <span className="text-primary">Tech</span></span>
           </div>
+
+          {/* Desktop nav */}
           <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-muted-foreground">
-            <button onClick={() => scrollTo('services')} className="hover:text-primary transition-colors data-[state=active]:text-primary" data-testid="nav-link-services">Services</button>
+            <button onClick={() => scrollTo('services')} className="hover:text-primary transition-colors" data-testid="nav-link-services">Services</button>
             <button onClick={() => scrollTo('why-us')} className="hover:text-primary transition-colors" data-testid="nav-link-why-us">Why Us</button>
             <button onClick={() => scrollTo('pricing')} className="hover:text-primary transition-colors" data-testid="nav-link-pricing">Pricing</button>
-            <button onClick={() => scrollTo('projects')} className="hover:text-primary transition-colors" data-testid="nav-link-projects">Projects</button>
+            <button onClick={() => scrollTo('how-we-work')} className="hover:text-primary transition-colors" data-testid="nav-link-how">How We Work</button>
             <button onClick={() => scrollTo('contact')} className="hover:text-primary transition-colors" data-testid="nav-link-contact">Contact</button>
           </nav>
-          <Button onClick={() => window.open('tel:+918088461724')} data-testid="button-nav-call">
-            <PhoneCall className="w-4 h-4 mr-2" />
-            Call Now
-          </Button>
+
+          <div className="flex items-center gap-2">
+            <Button onClick={() => window.open('tel:+918088461724')} data-testid="button-nav-call">
+              <PhoneCall className="w-4 h-4 mr-2" />
+              Call Now
+            </Button>
+            {/* Mobile hamburger */}
+            <button
+              className="md:hidden p-2 rounded-md text-muted-foreground hover:text-foreground transition-colors"
+              onClick={() => setMobileMenuOpen((v) => !v)}
+              aria-label="Toggle menu"
+              data-testid="button-mobile-menu"
+            >
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
         </div>
+
+        {/* Mobile menu dropdown */}
+        {mobileMenuOpen && (
+          <div className="md:hidden border-t bg-background">
+            <nav className="container mx-auto px-4 py-4 flex flex-col gap-1">
+              {[
+                { label: 'Services', id: 'services' },
+                { label: 'Why Us', id: 'why-us' },
+                { label: 'Pricing', id: 'pricing' },
+                { label: 'How We Work', id: 'how-we-work' },
+                { label: 'Contact', id: 'contact' },
+              ].map(({ label, id }) => (
+                <button
+                  key={id}
+                  onClick={() => scrollTo(id)}
+                  className="text-left px-3 py-3 rounded-lg text-sm font-medium text-muted-foreground hover:text-primary hover:bg-muted transition-colors"
+                >
+                  {label}
+                </button>
+              ))}
+              <div className="pt-2 border-t mt-2 flex gap-2">
+                <Button className="flex-1" onClick={() => { window.open('tel:+918088461724'); setMobileMenuOpen(false); }}>
+                  <PhoneCall className="w-4 h-4 mr-2" /> Call Now
+                </Button>
+                <Button variant="outline" className="flex-1" onClick={() => { window.open('https://wa.me/918088461724'); setMobileMenuOpen(false); }}>
+                  <FaWhatsapp className="w-4 h-4 mr-2 text-green-500" /> WhatsApp
+                </Button>
+              </div>
+            </nav>
+          </div>
+        )}
       </header>
 
       <main className="flex-1">
@@ -86,7 +134,7 @@ export default function Home() {
                 className="max-w-2xl"
               >
                 <motion.span variants={fadeInUp} className="inline-block py-1.5 px-4 rounded-full bg-primary/10 text-primary font-semibold text-sm mb-6 border border-primary/20">
-                  Bangalore's Trusted Tech Partner
+                  Your Local Tech Partner · Bangalore
                 </motion.span>
                 <motion.h1 variants={fadeInUp} className="text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight mb-6 text-balance text-foreground leading-[1.1]">
                   Fast, Reliable & Affordable <br />
@@ -98,8 +146,8 @@ export default function Home() {
                   </span>
                 </motion.h1>
                 <motion.p variants={fadeInUp} className="text-xl text-muted-foreground mb-10 text-balance leading-relaxed">
-                  Expert computer repair and professional website development. 
-                  We bring your devices back to life and your business online with honest pricing.
+                  Expert computer repair and professional website development in Bangalore.
+                  Honest pricing, no jargon, no hidden fees — just real solutions.
                 </motion.p>
                 <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row items-center gap-4">
                   <Button size="lg" className="w-full sm:w-auto text-lg h-14 px-8" onClick={() => scrollTo('services')} data-testid="button-hero-services">
@@ -107,12 +155,12 @@ export default function Home() {
                     <ArrowRight className="ml-2 w-5 h-5" />
                   </Button>
                   <Button size="lg" variant="outline" className="w-full sm:w-auto text-lg h-14 px-8 border-2" onClick={() => window.open('https://wa.me/918088461724')} data-testid="button-hero-whatsapp">
-                    <PhoneCall className="w-5 h-5 mr-2 text-green-500" />
+                    <FaWhatsapp className="w-5 h-5 mr-2 text-green-500" />
                     WhatsApp Us
                   </Button>
                 </motion.div>
-                
-                <motion.div variants={fadeInUp} className="mt-12 flex items-center gap-6 text-sm font-medium text-muted-foreground">
+
+                <motion.div variants={fadeInUp} className="mt-12 flex flex-wrap items-center gap-6 text-sm font-medium text-muted-foreground">
                   <div className="flex items-center gap-2">
                     <CheckCircle2 className="w-5 h-5 text-primary" />
                     Same Day Fixes
@@ -120,6 +168,10 @@ export default function Home() {
                   <div className="flex items-center gap-2">
                     <CheckCircle2 className="w-5 h-5 text-primary" />
                     No Hidden Fees
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="w-5 h-5 text-primary" />
+                    Free Diagnostics
                   </div>
                 </motion.div>
               </motion.div>
@@ -397,32 +449,86 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Projects / Work Showcase */}
-        <section id="projects" className="py-24 bg-muted/50 border-t border-b">
+        {/* How We Work */}
+        <section id="how-we-work" className="py-24 bg-muted/50 border-t border-b">
           <div className="container mx-auto px-4">
             <div className="text-center max-w-3xl mx-auto mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">Recent Projects & Fixes</h2>
-              <p className="text-lg text-muted-foreground">A snapshot of how we help our clients succeed.</p>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">How We Work</h2>
+              <p className="text-lg text-muted-foreground">Simple, transparent, and stress-free — from first contact to final delivery.</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
               {[
-                { title: "SSD Upgrade for Faster Systems", desc: "Revived a 5-year-old Dell laptop to boot in 10 seconds.", icon: HardDrive },
-                { title: "Business Website for Local Shop", desc: "A 5-page responsive site driving local foot traffic.", icon: Globe },
-                { title: "Windows & Software Setup", desc: "Clean install of Windows 11 with full office suite ready for work.", icon: Monitor },
-                { title: "Portfolio Website", desc: "Sleek, fast-loading personal brand site for a freelancer.", icon: Code },
-                { title: "Performance Optimization", desc: "Cleared malware and optimized startup for sluggish office PCs.", icon: Zap },
-                { title: "Service Landing Page", desc: "High-converting single page with WhatsApp integration.", icon: Smartphone },
-              ].map((project, i) => (
-                <Card key={i} className="bg-background border-none shadow-sm hover:shadow-md transition-shadow">
-                  <CardContent className="p-6">
-                    <project.icon className="w-8 h-8 text-primary mb-4" />
-                    <h4 className="font-bold text-lg mb-2">{project.title}</h4>
-                    <p className="text-muted-foreground text-sm">{project.desc}</p>
-                  </CardContent>
-                </Card>
+                {
+                  step: '01',
+                  icon: MessageCircle,
+                  title: 'Contact Us',
+                  desc: 'Reach out via WhatsApp or call. Describe the problem — no technical knowledge needed.',
+                  color: 'text-blue-500',
+                  bg: 'bg-blue-500/10',
+                },
+                {
+                  step: '02',
+                  icon: ClipboardList,
+                  title: 'Free Diagnosis',
+                  desc: 'We assess the issue at no charge and give you a clear, honest quote before any work begins.',
+                  color: 'text-purple-500',
+                  bg: 'bg-purple-500/10',
+                },
+                {
+                  step: '03',
+                  icon: Wrench,
+                  title: 'We Fix or Build',
+                  desc: 'Repair or website development done with care. You get updates throughout the process.',
+                  color: 'text-primary',
+                  bg: 'bg-primary/10',
+                },
+                {
+                  step: '04',
+                  icon: BadgeCheck,
+                  title: 'Satisfaction Check',
+                  desc: "We hand over only when you're happy. Post-service support included for peace of mind.",
+                  color: 'text-green-500',
+                  bg: 'bg-green-500/10',
+                },
+              ].map((item, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-80px' }}
+                  transition={{ delay: i * 0.1, duration: 0.5 }}
+                  className="relative bg-background rounded-2xl p-6 border shadow-sm flex flex-col"
+                >
+                  <span className="text-5xl font-black text-muted/20 absolute top-4 right-5 select-none leading-none">
+                    {item.step}
+                  </span>
+                  <div className={`w-12 h-12 rounded-xl ${item.bg} flex items-center justify-center ${item.color} mb-4`}>
+                    <item.icon className="w-6 h-6" />
+                  </div>
+                  <h4 className="font-bold text-lg mb-2">{item.title}</h4>
+                  <p className="text-muted-foreground text-sm leading-relaxed">{item.desc}</p>
+                </motion.div>
               ))}
             </div>
+
+            {/* Launch offer callout */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="mt-12 max-w-2xl mx-auto bg-primary/5 border border-primary/20 rounded-2xl p-6 text-center"
+            >
+              <Headphones className="w-8 h-8 text-primary mx-auto mb-3" />
+              <h3 className="font-bold text-xl mb-2">Free Diagnostics — Always</h3>
+              <p className="text-muted-foreground mb-4">
+                We diagnose your issue at zero cost. No fix, no fee. You only pay when you're satisfied with the solution.
+              </p>
+              <Button onClick={() => window.open('https://wa.me/918088461724?text=Hi%2C%20I%20need%20a%20free%20diagnosis')} data-testid="button-free-diag">
+                <FaWhatsapp className="w-4 h-4 mr-2 text-green-400" />
+                Book a Free Diagnosis
+              </Button>
+            </motion.div>
           </div>
         </section>
 
@@ -443,7 +549,7 @@ export default function Home() {
                   +91 80884 61724
                 </Button>
                 <Button size="lg" variant="outline" className="w-full sm:w-auto text-lg h-16 px-10 rounded-2xl border-white/20 text-white hover:bg-white/10" onClick={() => window.open('https://wa.me/918088461724')} data-testid="button-cta-whatsapp">
-                  <Mail className="w-5 h-5 mr-3" />
+                  <FaWhatsapp className="w-5 h-5 mr-3 text-green-400" />
                   WhatsApp Us
                 </Button>
               </div>
@@ -455,11 +561,11 @@ export default function Home() {
                 </div>
                 <div>
                   <div className="text-white/50 text-sm font-medium mb-1 uppercase tracking-wider">Location</div>
-                  <div className="text-white font-medium">Bangalore, India</div>
+                  <div className="text-white font-medium">Bangalore, Karnataka</div>
                 </div>
                 <div>
                   <div className="text-white/50 text-sm font-medium mb-1 uppercase tracking-wider">Working Hours</div>
-                  <div className="text-white font-medium">Available for Quick Support</div>
+                  <div className="text-white font-medium">Mon – Sat, 9 am – 7 pm</div>
                 </div>
               </div>
             </div>
@@ -467,14 +573,14 @@ export default function Home() {
         </section>
 
         {/* Floating WhatsApp */}
-        <a 
-          href="https://wa.me/918088461724" 
-          target="_blank" 
+        <a
+          href="https://wa.me/918088461724"
+          target="_blank"
           rel="noreferrer"
-          className="fixed bottom-6 right-6 w-14 h-14 bg-[#25D366] text-white rounded-full flex items-center justify-center shadow-2xl hover:scale-110 hover:shadow-[#25D366]/20 transition-all z-50 group"
+          className="fixed bottom-6 right-6 w-14 h-14 bg-[#25D366] text-white rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition-all z-50 group"
           data-testid="link-floating-whatsapp"
         >
-          <PhoneCall className="w-6 h-6 group-hover:animate-pulse" />
+          <FaWhatsapp className="w-7 h-7" />
           <span className="absolute right-full mr-4 bg-foreground text-background text-xs font-bold px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
             Chat with us
           </span>
