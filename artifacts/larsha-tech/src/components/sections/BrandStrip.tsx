@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   SiDell, SiHp, SiLenovo, SiAsus, SiAcer,
-  SiHtml, SiCss, SiJavascript, SiPhp, SiMysql, SiLinux, SiReact, SiTailwindcss, SiWordpress,
+  SiHtml5, SiCss, SiJavascript, SiPhp, SiMysql, SiLinux, SiReact, SiTailwindcss, SiWordpress,
 } from 'react-icons/si';
 
 const BRANDS = [
@@ -13,7 +13,7 @@ const BRANDS = [
 ];
 
 const TECH = [
-  { icon: SiHtml,        label: 'HTML5',      color: '#E34F26' },
+  { icon: SiHtml5,       label: 'HTML5',      color: '#E34F26' },
   { icon: SiCss,         label: 'CSS3',       color: '#1572B6' },
   { icon: SiJavascript,  label: 'JavaScript', color: '#F7DF1E' },
   { icon: SiReact,       label: 'React',      color: '#61DAFB' },
