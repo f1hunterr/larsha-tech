@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Monitor, PhoneCall, Menu, X, Sun, Moon } from 'lucide-react';
 import { FaWhatsapp } from 'react-icons/fa';
-import { useTheme } from 'next-themes';
+import { useTheme } from '@/hooks/useTheme';
 import { Button } from '@/components/ui/button';
 
 const NAV_LINKS = [
@@ -16,8 +16,7 @@ const NAV_LINKS = [
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const { resolvedTheme, setTheme } = useTheme();
-  const isDark = resolvedTheme === 'dark';
+  const { isDark, toggle: toggleTheme } = useTheme();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -60,7 +59,7 @@ export default function Navbar() {
         {/* Actions */}
         <div className="flex items-center gap-2">
           <button
-            onClick={() => setTheme(isDark ? 'light' : 'dark')}
+            onClick={toggleTheme}
             aria-label="Toggle theme"
             className={`p-2 rounded-lg transition-colors ${
               scrolled ? 'text-muted-foreground hover:text-foreground hover:bg-muted' : 'text-white/70 hover:text-white hover:bg-white/10'
