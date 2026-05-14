@@ -26,8 +26,8 @@ export default function Home() {
         <BrandStrip />
         <WhyUs />
         <Services />
-        <LeadForm />
         <Pricing />
+        <LeadForm />
         <HowWeWork />
         <About />
         <FAQ />
