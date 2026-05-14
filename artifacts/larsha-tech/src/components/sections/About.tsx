@@ -27,9 +27,11 @@ export default function About() {
             className="flex flex-col items-center md:items-start"
           >
             <div className="relative mb-6">
-              <div className="w-48 h-48 rounded-3xl bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center text-white text-7xl font-black shadow-2xl shadow-blue-500/25 select-none">
-                H
-              </div>
+              <img
+                src="/hemanth.jpg"
+                alt="Hemanth K — Founder, Larsha Tech"
+                className="w-48 h-48 rounded-3xl object-cover shadow-2xl shadow-blue-500/25"
+              />
               <div className="absolute -bottom-3 -right-3 bg-card border shadow-md rounded-xl px-3 py-2 flex items-center gap-2">
                 <BadgeCheck className="w-4 h-4 text-blue-600 shrink-0" />
                 <span className="text-xs font-bold">Verified Tech</span>

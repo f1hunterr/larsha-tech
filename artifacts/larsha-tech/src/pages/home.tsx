@@ -1,5 +1,5 @@
 import React from 'react';
-import { Monitor, PhoneCall } from 'lucide-react';
+import { PhoneCall } from 'lucide-react';
 import { FaWhatsapp } from 'react-icons/fa';
 import { Button } from '@/components/ui/button';
 import UrgencyBanner from '@/components/UrgencyBanner';
@@ -51,9 +51,8 @@ export default function Home() {
       {/* Footer */}
       <footer className="bg-background border-t py-8">
         <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2 font-bold text-lg">
-            <Monitor className="w-5 h-5 text-primary" />
-            <span>Larsha <span className="text-primary">Tech</span></span>
+          <div className="flex items-center gap-2">
+            <img src="/logo.png" alt="Larsha Tech" className="h-8 w-auto object-contain" />
           </div>
           <p className="text-muted-foreground text-sm">
             © {new Date().getFullYear()} Larsha Technologies · Bangalore, Karnataka
