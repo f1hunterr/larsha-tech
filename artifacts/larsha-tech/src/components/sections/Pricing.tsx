@@ -18,7 +18,7 @@ const WEB_ITEMS = [
 
 export default function Pricing() {
   return (
-    <section id="pricing" className="py-24 bg-background">
+    <section id="pricing" className="py-14 sm:py-24 bg-background">
       <div className="container mx-auto px-4">
         <div className="text-center max-w-2xl mx-auto mb-14">
           <p className="text-primary font-bold text-sm uppercase tracking-widest mb-3">Pricing</p>
@@ -43,9 +43,9 @@ export default function Pricing() {
               <ul className="space-y-4">
                 {REPAIR_ITEMS.map(({ service, range, note }) => (
                   <li key={service} className="border-b border-border/50 pb-4 last:border-0 last:pb-0">
-                    <div className="flex justify-between items-start mb-1">
+                    <div className="flex flex-wrap justify-between items-start gap-x-2 mb-1">
                       <span className="text-sm font-semibold">{service}</span>
-                      <span className="font-bold text-sm whitespace-nowrap ml-4 text-primary">{range}</span>
+                      <span className="font-bold text-sm sm:whitespace-nowrap sm:ml-4 text-primary text-right">{range}</span>
                     </div>
                     <p className="text-xs text-muted-foreground leading-relaxed">{note}</p>
                   </li>
@@ -88,12 +88,12 @@ export default function Pricing() {
                 <ul className="space-y-4">
                   {WEB_ITEMS.map(({ title, sub, price, note, highlight }) => (
                     <li key={title} className="border-b border-border/50 pb-4 last:border-0 last:pb-0">
-                      <div className="flex justify-between items-start mb-1">
+                      <div className="flex flex-wrap justify-between items-start gap-x-2 mb-1">
                         <div>
                           <p className={`font-bold text-sm ${highlight ? 'text-primary' : ''}`}>{title}</p>
                           <p className="text-xs text-muted-foreground">{sub}</p>
                         </div>
-                        <span className={`font-bold text-sm whitespace-nowrap ml-4 ${highlight ? 'text-primary' : ''}`}>{price}</span>
+                        <span className={`font-bold text-sm sm:whitespace-nowrap sm:ml-4 text-right ${highlight ? 'text-primary' : ''}`}>{price}</span>
                       </div>
                       <p className="text-xs text-muted-foreground leading-relaxed">{note}</p>
                     </li>

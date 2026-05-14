@@ -13,7 +13,7 @@ const STEPS = [
 
 export default function HowWeWork() {
   return (
-    <section id="how-we-work" className="py-24 bg-muted border-t border-b">
+    <section id="how-we-work" className="py-14 sm:py-24 bg-muted border-t border-b">
       <div className="container mx-auto px-4">
         <div className="text-center max-w-2xl mx-auto mb-14">
           <p className="text-primary font-bold text-sm uppercase tracking-widest mb-3">The Process</p>
@@ -32,7 +32,7 @@ export default function HowWeWork() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-60px' }}
                 transition={{ delay: i * 0.12, duration: 0.5 }}
-                className="relative bg-card rounded-2xl p-6 border shadow-sm flex flex-col items-center text-center"
+                className="relative bg-card rounded-2xl p-4 sm:p-6 border shadow-sm flex flex-col items-center text-center"
               >
                 <div className={`relative z-10 w-14 h-14 rounded-full ${item.bg} border ${item.border} ring-4 ${item.ring} flex items-center justify-center ${item.color} mb-5`}>
                   <item.icon className="w-6 h-6" />
@@ -49,7 +49,7 @@ export default function HowWeWork() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mt-12 max-w-xl mx-auto bg-card border shadow-sm rounded-2xl p-7 text-center"
+          className="mt-12 max-w-xl mx-auto bg-card border shadow-sm rounded-2xl p-5 sm:p-7 text-center"
         >
           <Headphones className="w-8 h-8 text-primary mx-auto mb-3" />
           <h3 className="font-black text-xl mb-2">Free Diagnostics — Always</h3>

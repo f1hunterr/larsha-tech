@@ -53,7 +53,7 @@ export function adminHtml(leads: Lead[]): string {
     </div>
     ${leads.length === 0
       ? '<div class="empty">No leads yet — share the site to get started!</div>'
-      : `<table>
+      : `<div style="overflow-x:auto"><table>
       <thead><tr><th>#</th><th>Name</th><th>Phone</th><th>Service</th><th>Message</th><th>Date</th></tr></thead>
       <tbody>
         ${leads.map(l => `<tr>
@@ -64,7 +64,7 @@ export function adminHtml(leads: Lead[]): string {
           <td class="msg">${esc(l.message)}</td>
           <td class="dt">${new Date(l.created_at).toLocaleString('en-IN',{timeZone:'Asia/Kolkata'})}</td>
         </tr>`).join('')}
-      </tbody></table>`}
+      </tbody></table></div>`}
   </main>
 </body>
 </html>`;

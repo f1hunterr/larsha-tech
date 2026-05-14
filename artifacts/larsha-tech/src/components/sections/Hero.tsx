@@ -35,7 +35,7 @@ export default function Hero() {
           <motion.div initial="hidden" animate="visible" variants={staggerContainer}>
             <motion.span
               variants={fadeInUp}
-              className="inline-flex items-center gap-2 py-1.5 px-4 rounded-full bg-white/10 text-blue-300 font-semibold text-sm mb-6 border border-white/10 backdrop-blur-sm"
+              className="inline-flex items-center gap-2 py-1.5 px-3 sm:px-4 rounded-full bg-white/10 text-blue-300 font-semibold text-xs sm:text-sm mb-5 sm:mb-6 border border-white/10 backdrop-blur-sm"
             >
               <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
               Your Local Tech Partner · Bangalore
@@ -43,7 +43,7 @@ export default function Hero() {
 
             <motion.h1
               variants={fadeInUp}
-              className="text-5xl md:text-6xl lg:text-7xl font-black tracking-tight mb-6 leading-[1.05] text-white"
+              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight mb-6 leading-[1.05] text-white"
             >
               Fast, Reliable<br />&amp; Affordable<br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
@@ -51,7 +51,7 @@ export default function Hero() {
               </span>
             </motion.h1>
 
-            <motion.p variants={fadeInUp} className="text-lg text-slate-400 mb-10 leading-relaxed max-w-lg">
+            <motion.p variants={fadeInUp} className="text-base sm:text-lg text-slate-400 mb-8 sm:mb-10 leading-relaxed max-w-lg">
               Expert computer repair and professional website development in Bangalore.
               Honest pricing, no jargon, no hidden fees — just real solutions.
             </motion.p>

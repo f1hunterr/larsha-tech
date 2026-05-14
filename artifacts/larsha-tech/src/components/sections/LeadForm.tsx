@@ -97,7 +97,7 @@ export default function LeadForm() {
   const reset = () => { setForm({ name: '', phone: '', service: '', message: '' }); setStatus('idle'); };
 
   return (
-    <section id="get-quote" className="py-24 bg-background">
+    <section id="get-quote" className="py-14 sm:py-24 bg-background">
       <div className="container mx-auto px-4">
         <div className="max-w-2xl mx-auto">
 
@@ -137,7 +137,7 @@ export default function LeadForm() {
             ) : (
               /* ── Form ── */
               <form onSubmit={handleSubmit} noValidate>
-                <div className="p-8 space-y-5">
+                <div className="p-5 sm:p-8 space-y-4 sm:space-y-5">
 
                   {/* Name + Phone */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -206,7 +206,7 @@ export default function LeadForm() {
                 </div>
 
                 {/* Footer */}
-                <div className="px-8 pb-8 space-y-3">
+                <div className="px-5 sm:px-8 pb-5 sm:pb-8 space-y-3">
                   <Button
                     type="submit"
                     size="lg"

@@ -36,7 +36,7 @@ export default function Navbar() {
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
 
         {/* Logo */}
-        <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="flex items-center gap-2 font-bold text-xl tracking-tight">
+        <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="flex items-center gap-2 font-bold text-lg sm:text-xl tracking-tight">
           <img src={`${import.meta.env.BASE_URL}logo.png`} alt="" className="h-9 w-auto object-contain" />
           <span className={scrolled ? 'text-foreground' : 'text-white'}>
             Larsha <span className="text-primary">Tech</span>
@@ -61,7 +61,7 @@ export default function Navbar() {
           <button
             onClick={toggleTheme}
             aria-label="Toggle theme"
-            className={`p-2 rounded-lg transition-colors ${
+            className={`p-2.5 rounded-lg transition-colors ${
               scrolled ? 'text-muted-foreground hover:text-foreground hover:bg-muted' : 'text-white/70 hover:text-white hover:bg-white/10'
             }`}
           >
@@ -76,7 +76,7 @@ export default function Navbar() {
           </Button>
 
           <button
-            className={`md:hidden p-2 rounded-md transition-colors ${
+            className={`md:hidden p-2.5 rounded-md transition-colors ${
               scrolled ? 'text-muted-foreground hover:text-foreground' : 'text-white/80 hover:text-white'
             }`}
             onClick={() => setMobileOpen(v => !v)}
@@ -95,7 +95,7 @@ export default function Navbar() {
               <button
                 key={id}
                 onClick={() => scrollTo(id)}
-                className="text-left px-3 py-3 rounded-lg text-sm font-medium text-muted-foreground hover:text-primary hover:bg-muted transition-colors"
+                className="text-left px-4 py-3 min-h-[44px] flex items-center rounded-lg text-sm font-medium text-muted-foreground hover:text-primary hover:bg-muted transition-colors"
               >
                 {label}
               </button>

@@ -7,7 +7,7 @@ const scrollTo = (id: string) => document.getElementById(id)?.scrollIntoView({ b
 
 export default function Services() {
   return (
-    <section id="services" className="py-24 bg-muted">
+    <section id="services" className="py-14 sm:py-24 bg-muted">
       <div className="container mx-auto px-4">
         <div className="text-center max-w-2xl mx-auto mb-14">
           <p className="text-primary font-bold text-sm uppercase tracking-widest mb-3">What We Do</p>
@@ -25,11 +25,11 @@ export default function Services() {
             className="bg-card rounded-3xl overflow-hidden shadow-sm border hover:shadow-md transition-shadow flex flex-col"
           >
             <div className="h-1.5 bg-gradient-to-r from-blue-500 to-cyan-400" />
-            <div className="p-8 lg:p-10 flex-1">
+            <div className="p-6 sm:p-8 lg:p-10 flex-1">
               <div className="w-13 h-13 rounded-xl bg-blue-50 dark:bg-blue-950/40 border border-blue-100 dark:border-blue-900/50 flex items-center justify-center text-blue-600 dark:text-blue-400 mb-6">
                 <Wrench className="w-6 h-6" />
               </div>
-              <h3 className="text-2xl font-black mb-3">Computer &amp; Laptop Repair</h3>
+              <h3 className="text-xl sm:text-2xl font-black mb-3">Computer &amp; Laptop Repair</h3>
               <p className="text-muted-foreground mb-7 leading-relaxed">
                 From slow laptops to dead motherboards, we diagnose and fix issues quickly to get you back to work.
               </p>
@@ -75,11 +75,11 @@ export default function Services() {
             className="bg-card rounded-3xl overflow-hidden shadow-sm border hover:shadow-md transition-shadow flex flex-col"
           >
             <div className="h-1.5 bg-gradient-to-r from-violet-500 to-purple-400" />
-            <div className="p-8 lg:p-10 flex-1">
+            <div className="p-6 sm:p-8 lg:p-10 flex-1">
               <div className="w-13 h-13 rounded-xl bg-purple-50 dark:bg-purple-950/40 border border-purple-100 dark:border-purple-900/50 flex items-center justify-center text-purple-600 dark:text-purple-400 mb-6">
                 <Globe className="w-6 h-6" />
               </div>
-              <h3 className="text-2xl font-black mb-3">Website Design &amp; Development</h3>
+              <h3 className="text-xl sm:text-2xl font-black mb-3">Website Design &amp; Development</h3>
               <p className="text-muted-foreground mb-7 leading-relaxed">
                 Professional, fast, and mobile-ready websites to establish your digital presence and grow your business.
               </p>

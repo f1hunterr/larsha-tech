@@ -15,9 +15,9 @@ const STATS = [
 
 export default function About() {
   return (
-    <section id="about" className="py-24 bg-background">
+    <section id="about" className="py-14 sm:py-24 bg-background">
       <div className="container mx-auto px-4">
-        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-14 items-center">
+        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-14 items-center">
 
           <motion.div
             initial={{ opacity: 0, x: -24 }}
@@ -30,7 +30,7 @@ export default function About() {
               <img
                 src={`${import.meta.env.BASE_URL}hemanth.jpg`}
                 alt="Hemanth K — Founder, Larsha Tech"
-                className="w-48 h-48 rounded-3xl object-cover shadow-2xl shadow-blue-500/25"
+                className="w-36 h-36 sm:w-48 sm:h-48 rounded-3xl object-cover shadow-2xl shadow-blue-500/25"
               />
               <div className="absolute -bottom-3 -right-3 bg-card border shadow-md rounded-xl px-3 py-2 flex items-center gap-2">
                 <BadgeCheck className="w-4 h-4 text-blue-600 shrink-0" />
@@ -58,7 +58,7 @@ export default function About() {
             transition={{ duration: 0.55 }}
           >
             <p className="text-primary font-bold text-sm uppercase tracking-widest mb-3">About Us</p>
-            <h2 className="text-3xl md:text-4xl font-black mb-5 leading-tight">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-black mb-5 leading-tight">
               The person behind<br />Larsha Tech
             </h2>
             <p className="text-muted-foreground leading-relaxed mb-5">

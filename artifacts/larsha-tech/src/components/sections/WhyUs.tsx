@@ -11,7 +11,7 @@ const FEATURES = [
 
 export default function WhyUs() {
   return (
-    <section id="why-us" className="py-24 bg-background">
+    <section id="why-us" className="py-14 sm:py-24 bg-background">
       <div className="container mx-auto px-4">
         <div className="text-center max-w-2xl mx-auto mb-14">
           <p className="text-primary font-bold text-sm uppercase tracking-widest mb-3">Why Larsha Tech</p>
@@ -27,12 +27,12 @@ export default function WhyUs() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-80px' }}
               transition={{ delay: i * 0.1, duration: 0.5 }}
-              className="p-6 rounded-2xl bg-card border shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200"
+              className="p-4 sm:p-6 rounded-2xl bg-card border shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200"
             >
               <div className={`w-12 h-12 rounded-xl ${f.bg} border ${f.border} flex items-center justify-center ${f.color} mb-5`}>
                 <f.icon className="w-6 h-6" />
               </div>
-              <h3 className="font-bold text-lg mb-2">{f.title}</h3>
+              <h3 className="font-bold text-base sm:text-lg mb-2">{f.title}</h3>
               <p className="text-muted-foreground text-sm leading-relaxed">{f.desc}</p>
             </motion.div>
           ))}

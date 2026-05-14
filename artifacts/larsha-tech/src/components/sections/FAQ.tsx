@@ -37,7 +37,7 @@ const FAQS = [
 
 export default function FAQ() {
   return (
-    <section id="faq" className="py-24 bg-muted">
+    <section id="faq" className="py-14 sm:py-24 bg-muted">
       <div className="container mx-auto px-4">
         <div className="text-center max-w-2xl mx-auto mb-12">
           <p className="text-primary font-bold text-sm uppercase tracking-widest mb-3">FAQ</p>
@@ -50,12 +50,12 @@ export default function FAQ() {
             <AccordionItem
               key={i}
               value={`faq-${i}`}
-              className="border-0 bg-card rounded-xl shadow-sm px-6 overflow-hidden"
+              className="border-0 bg-card rounded-xl shadow-sm px-4 sm:px-6 overflow-hidden"
             >
-              <AccordionTrigger className="text-base font-semibold py-5 hover:no-underline text-left">
+              <AccordionTrigger className="text-sm sm:text-base font-semibold py-4 sm:py-5 hover:no-underline text-left min-h-[44px]">
                 {faq.q}
               </AccordionTrigger>
-              <AccordionContent className="text-muted-foreground leading-relaxed pb-5">
+              <AccordionContent className="text-muted-foreground text-sm leading-relaxed pb-4 sm:pb-5">
                 {faq.a}
               </AccordionContent>
             </AccordionItem>

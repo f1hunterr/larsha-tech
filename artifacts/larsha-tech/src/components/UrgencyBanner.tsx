@@ -23,11 +23,11 @@ export default function UrgencyBanner() {
           transition={{ duration: 0.25 }}
           className="overflow-hidden bg-gradient-to-r from-blue-600 to-violet-600 text-white"
         >
-          <div className="container mx-auto px-4 py-2 flex items-center justify-between gap-4">
-            <div className="flex-1" />
-            <p className="flex items-center gap-2 text-xs font-semibold text-center">
-              <Zap className="w-3.5 h-3.5 shrink-0 text-yellow-300" />
-              Same-day repair slots available today · Free diagnosis for all walk-ins · Limited slots
+          <div className="container mx-auto px-4 py-2 flex items-center gap-3">
+            <Zap className="w-3.5 h-3.5 shrink-0 text-yellow-300" />
+            <p className="flex-1 text-xs font-semibold text-center leading-snug">
+              <span className="hidden sm:inline">Same-day repair slots available · Free diagnosis for all walk-ins · </span>
+              <span className="sm:hidden">Free diagnosis · Limited slots · </span>
               <a
                 href="#contact"
                 onClick={e => { e.preventDefault(); document.getElementById('get-quote')?.scrollIntoView({ behavior: 'smooth' }); }}
@@ -36,11 +36,9 @@ export default function UrgencyBanner() {
                 Book now →
               </a>
             </p>
-            <div className="flex-1 flex justify-end">
-              <button onClick={dismiss} aria-label="Dismiss" className="p-1 rounded hover:bg-white/20 transition-colors">
-                <X className="w-3.5 h-3.5" />
-              </button>
-            </div>
+            <button onClick={dismiss} aria-label="Dismiss" className="p-1.5 rounded hover:bg-white/20 transition-colors shrink-0">
+              <X className="w-3.5 h-3.5" />
+            </button>
           </div>
         </motion.div>
       )}
