@@ -15,9 +15,12 @@ const NAV_LINKS = [
   { label: 'Contact',   id: 'contact'    },
 ];
 
+const SECTION_IDS = NAV_LINKS.map(l => l.id).filter(id => id !== 'home');
+
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState('home');
   const { isDark, toggle: toggleTheme } = useTheme();
   const [location, navigate] = useLocation();
   const isHome = location === '/';
@@ -27,6 +30,22 @@ export default function Navbar() {
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  useEffect(() => {
+    if (!isHome) { setActiveSection(''); return; }
+    const detect = () => {
+      if (window.scrollY < 80) { setActiveSection('home'); return; }
+      let current = 'home';
+      for (const id of SECTION_IDS) {
+        const el = document.getElementById(id);
+        if (el && el.getBoundingClientRect().top <= 100) current = id;
+      }
+      setActiveSection(current);
+    };
+    detect();
+    window.addEventListener('scroll', detect, { passive: true });
+    return () => window.removeEventListener('scroll', detect);
+  }, [isHome]);
 
   const scrollTo = (id: string) => {
     if (id === 'home') {
@@ -60,15 +79,25 @@ export default function Navbar() {
 
         {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
-          {NAV_LINKS.map(({ label, id }) => (
-            <button
-              key={id}
-              onClick={() => scrollTo(id)}
-              className={`transition-colors hover:text-primary ${scrolled ? 'text-muted-foreground' : 'text-white/80'}`}
-            >
-              {label}
-            </button>
-          ))}
+          {NAV_LINKS.map(({ label, id }) => {
+            const isActive = activeSection === id;
+            return (
+              <button
+                key={id}
+                onClick={() => scrollTo(id)}
+                className={`relative transition-colors hover:text-primary ${
+                  isActive
+                    ? 'text-primary font-semibold'
+                    : scrolled ? 'text-muted-foreground' : 'text-white/80'
+                }`}
+              >
+                {label}
+                {isActive && (
+                  <span className="absolute -bottom-1 left-0 right-0 h-0.5 rounded-full bg-primary" />
+                )}
+              </button>
+            );
+          })}
         </nav>
 
         {/* Actions */}
@@ -130,15 +159,22 @@ export default function Navbar() {
       {mobileOpen && (
         <div className="md:hidden border-t bg-background shadow-lg">
           <nav className="container mx-auto px-4 py-4 flex flex-col gap-1">
-            {NAV_LINKS.map(({ label, id }) => (
-              <button
-                key={id}
-                onClick={() => scrollTo(id)}
-                className="text-left px-4 py-3 min-h-[44px] flex items-center rounded-lg text-sm font-medium text-muted-foreground hover:text-primary hover:bg-muted transition-colors"
-              >
-                {label}
-              </button>
-            ))}
+            {NAV_LINKS.map(({ label, id }) => {
+              const isActive = activeSection === id;
+              return (
+                <button
+                  key={id}
+                  onClick={() => scrollTo(id)}
+                  className={`text-left px-4 py-3 min-h-[44px] flex items-center rounded-lg text-sm font-medium transition-colors ${
+                    isActive
+                      ? 'text-primary bg-primary/10 font-semibold'
+                      : 'text-muted-foreground hover:text-primary hover:bg-muted'
+                  }`}
+                >
+                  {label}
+                </button>
+              );
+            })}
             <div className="pt-2 border-t mt-2 space-y-2">
               <Button
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white"
