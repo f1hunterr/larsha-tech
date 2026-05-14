@@ -36,8 +36,11 @@ export default function Navbar() {
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
 
         {/* Logo */}
-        <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="flex items-center gap-2">
-          <img src={`${import.meta.env.BASE_URL}logo.png`} alt="Larsha Tech" className="h-9 w-auto object-contain" />
+        <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="flex items-center gap-2 font-bold text-xl tracking-tight">
+          <img src={`${import.meta.env.BASE_URL}logo.png`} alt="" className="h-9 w-auto object-contain" />
+          <span className={scrolled ? 'text-foreground' : 'text-white'}>
+            Larsha <span className="text-primary">Tech</span>
+          </span>
         </button>
 
         {/* Desktop nav */}
