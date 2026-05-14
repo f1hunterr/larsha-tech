@@ -44,6 +44,7 @@ jobs:
           PORT: "3000"
           BASE_PATH: /larsha-tech/
           NODE_ENV: production
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
         run: pnpm --filter @workspace/larsha-tech run build
 
       - name: Add SPA 404 fallback
