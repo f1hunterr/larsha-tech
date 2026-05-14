@@ -1,0 +1,15 @@
+# Larsha Tech — API server (Express + SQLite)
+FROM node:24-slim
+
+RUN corepack enable && corepack prepare pnpm@10 --activate
+
+WORKDIR /app
+COPY . .
+
+RUN pnpm install --no-frozen-lockfile
+
+WORKDIR /app/artifacts/server
+
+EXPOSE 4000
+
+CMD ["pnpm", "start"]

@@ -62,6 +62,28 @@ export default function LeadForm() {
     setStatus('loading');
     track('lead_form_submit', { service: form.service });
 
+    const payload = { name: form.name, phone: form.phone, service: form.service, message: form.message };
+
+    // Formspree — email alert (fire and forget)
+    const formspreeId = import.meta.env.VITE_FORMSPREE_ID as string | undefined;
+    if (formspreeId) {
+      fetch(`https://formspree.io/f/${formspreeId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      }).catch(() => {});
+    }
+
+    // Backend API — save to database (fire and forget)
+    const apiUrl = import.meta.env.VITE_API_URL as string | undefined;
+    if (apiUrl) {
+      fetch(`${apiUrl}/api/leads`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      }).catch(() => {});
+    }
+
     const msg = encodeURIComponent(
       `Hi Larsha Tech! 👋\n\nName: ${form.name}\nPhone: ${form.phone}\nService: ${form.service}\n\nIssue / Requirement:\n${form.message}\n\nPlease get back to me at your earliest convenience. 🙏`
     );

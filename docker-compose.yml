@@ -1,5 +1,23 @@
 services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    environment:
+      PORT: "4000"
+      DB_PATH: /data/leads.db
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-changeme}
+    volumes:
+      - leads_data:/data
+    restart: unless-stopped
+
   web:
     build: .
     ports:
       - "3000:80"
+    depends_on:
+      - api
+    restart: unless-stopped
+
+volumes:
+  leads_data:
