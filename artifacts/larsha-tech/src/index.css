@@ -151,6 +151,10 @@
     -webkit-user-select: none;
     user-select: none;
   }
+  /* Pointer cursor on all interactive elements */
+  button, [role="button"], a, label[for], select {
+    cursor: pointer;
+  }
   /* Allow text selection inside form fields */
   input, textarea, select, [contenteditable="true"] {
     -webkit-user-select: auto;
