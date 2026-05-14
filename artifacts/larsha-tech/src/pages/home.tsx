@@ -1,26 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import {
-  Monitor,
-  Code,
-  Wrench,
-  ShieldCheck,
-  Globe,
-  PhoneCall,
-  MapPin,
-  CheckCircle2,
-  ArrowRight,
-  Zap,
-  Menu,
-  X,
-  MessageCircle,
-  ClipboardList,
-  BadgeCheck,
-  Headphones,
+  Monitor, Code, Wrench, ShieldCheck, Globe, PhoneCall, MapPin,
+  CheckCircle2, ArrowRight, Zap, Menu, X, MessageCircle,
+  ClipboardList, BadgeCheck, Headphones,
 } from 'lucide-react';
 import { FaWhatsapp } from 'react-icons/fa';
+import { SiHtml5, SiJavascript, SiPhp, SiMysql, SiLinux, SiReact, SiTailwindcss } from 'react-icons/si';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 
 import repairHeroImg from '../assets/repair-hero.jpg';
 
@@ -33,6 +22,60 @@ const staggerContainer = {
   hidden: { opacity: 0 },
   visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
 };
+
+/* ─── static data ───────────────────────────────────────────────────────── */
+const TECH_ICONS = [
+  { icon: SiHtml5,      label: 'HTML5',      color: '#E34F26' },
+  { icon: SiJavascript, label: 'JavaScript',  color: '#F7DF1E' },
+  { icon: SiReact,      label: 'React',       color: '#61DAFB' },
+  { icon: SiPhp,        label: 'PHP',         color: '#777BB4' },
+  { icon: SiMysql,      label: 'MySQL',       color: '#4479A1' },
+  { icon: SiLinux,      label: 'Linux',       color: '#FCC624' },
+  { icon: SiTailwindcss,label: 'Tailwind CSS',color: '#06B6D4' },
+];
+
+const BRAND_NAMES = ['Dell', 'HP', 'Lenovo', 'ASUS', 'Acer'];
+
+const FAQS = [
+  {
+    q: 'Do you come to my home or office?',
+    a: 'Yes! We offer doorstep service across Bangalore — homes, offices, and shops. We also provide remote support for software issues via secure screen sharing. Just WhatsApp us your location and we\'ll schedule a visit at a time that suits you.',
+  },
+  {
+    q: 'How long does a repair take?',
+    a: 'Most software issues, OS installations, and optimizations are completed the same day. Hardware repairs usually take 24–48 hours. We always give you a clear timeline before starting any work — no surprises.',
+  },
+  {
+    q: 'What if you can\'t fix the problem?',
+    a: 'You pay absolutely nothing. Our free diagnostics promise is simple: if we assess your device and cannot solve the problem, there\'s no charge. We\'d rather be honest than bill you for a failed attempt.',
+  },
+  {
+    q: 'How do I know my data is safe?',
+    a: 'Data privacy is our top priority. We never access personal files unless required for the repair, and we always recommend taking a backup before any work begins. You\'re welcome to be present throughout the entire repair if you prefer.',
+  },
+  {
+    q: 'Do you offer a warranty on repairs?',
+    a: 'Yes — we provide a 30-day service warranty on all repairs. If the same issue recurs within 30 days, we fix it at no additional cost. This reflects our confidence in the quality of our work.',
+  },
+  {
+    q: 'What payment methods do you accept?',
+    a: 'We accept cash, all UPI apps (GPay, PhonePe, Paytm), and bank transfers. Payment is collected only after the work is completed and you\'re fully satisfied — not before.',
+  },
+  {
+    q: 'Can you build a website if I have no technical knowledge?',
+    a: 'Absolutely — that\'s exactly who we build for. Just share your business idea and what you want the website to do. We handle everything: design, development, domain registration, and hosting setup. No jargon, no technical knowledge needed from your side.',
+  },
+];
+
+/* ─── marquee item list (duplicated inside JSX for seamless loop) ────────── */
+type MarqueeItem =
+  | { type: 'brand'; label: string }
+  | { type: 'tech'; label: string; icon: React.ElementType; color: string };
+
+const MARQUEE_ITEMS: MarqueeItem[] = [
+  ...BRAND_NAMES.map(b => ({ type: 'brand' as const, label: b })),
+  ...TECH_ICONS.map(t => ({ type: 'tech' as const, label: t.label, icon: t.icon, color: t.color })),
+];
 
 /* ─── component ─────────────────────────────────────────────────────────── */
 export default function Home() {
@@ -51,15 +94,16 @@ export default function Home() {
   };
 
   const NAV_LINKS = [
-    { label: 'Services',    id: 'services'    },
-    { label: 'Why Us',      id: 'why-us'      },
-    { label: 'Pricing',     id: 'pricing'     },
-    { label: 'How We Work', id: 'how-we-work' },
-    { label: 'Contact',     id: 'contact'     },
+    { label: 'Services', id: 'services' },
+    { label: 'Pricing',  id: 'pricing'  },
+    { label: 'About',    id: 'about'    },
+    { label: 'FAQ',      id: 'faq'      },
+    { label: 'Contact',  id: 'contact'  },
   ];
 
   return (
-    <div className="flex flex-col min-h-screen">
+    /* pb-20 md:pb-0 ensures mobile content isn't hidden behind the sticky CTA bar */
+    <div className="flex flex-col min-h-screen pb-20 md:pb-0">
 
       {/* ── Navbar ──────────────────────────────────────────────────────── */}
       <header className={`sticky top-0 z-50 w-full transition-all duration-300 ${
@@ -68,7 +112,6 @@ export default function Home() {
           : 'bg-transparent border-b border-transparent'
       }`}>
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          {/* Logo */}
           <div className="flex items-center gap-2 font-bold text-xl tracking-tight">
             <Monitor className="w-6 h-6 text-primary" />
             <span className={scrolled ? 'text-foreground' : 'text-white'}>
@@ -76,8 +119,7 @@ export default function Home() {
             </span>
           </div>
 
-          {/* Desktop nav */}
-          <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
+          <nav className="hidden md:flex items-center gap-7 text-sm font-medium">
             {NAV_LINKS.map(({ label, id }) => (
               <button
                 key={id}
@@ -112,7 +154,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Mobile dropdown */}
         {mobileMenuOpen && (
           <div className="md:hidden border-t bg-background shadow-lg">
             <nav className="container mx-auto px-4 py-4 flex flex-col gap-1">
@@ -142,23 +183,16 @@ export default function Home() {
 
         {/* ── Hero ─────────────────────────────────────────────────────── */}
         <section id="hero" className="relative min-h-[92vh] flex items-center overflow-hidden bg-slate-950">
-          {/* Glow orbs */}
           <div className="absolute top-[-10%] left-[-5%] w-[600px] h-[600px] rounded-full bg-blue-600/20 blur-[120px] pointer-events-none" />
           <div className="absolute bottom-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full bg-blue-500/10 blur-[100px] pointer-events-none" />
-
-          {/* Dot-grid pattern */}
           <div
             className="absolute inset-0 opacity-[0.07] pointer-events-none"
-            style={{
-              backgroundImage: 'radial-gradient(circle, #94a3b8 1px, transparent 1px)',
-              backgroundSize: '32px 32px',
-            }}
+            style={{ backgroundImage: 'radial-gradient(circle, #94a3b8 1px, transparent 1px)', backgroundSize: '32px 32px' }}
           />
 
           <div className="container mx-auto px-4 py-24 relative z-10 w-full">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 
-              {/* Left — copy */}
               <motion.div initial="hidden" animate="visible" variants={staggerContainer}>
                 <motion.span
                   variants={fadeInUp}
@@ -172,16 +206,13 @@ export default function Home() {
                   variants={fadeInUp}
                   className="text-5xl md:text-6xl lg:text-7xl font-black tracking-tight mb-6 leading-[1.05] text-white"
                 >
-                  Fast, Reliable<br />& Affordable<br />
+                  Fast, Reliable<br />&amp; Affordable<br />
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
                     IT Services
                   </span>
                 </motion.h1>
 
-                <motion.p
-                  variants={fadeInUp}
-                  className="text-lg text-slate-400 mb-10 leading-relaxed max-w-lg"
-                >
+                <motion.p variants={fadeInUp} className="text-lg text-slate-400 mb-10 leading-relaxed max-w-lg">
                   Expert computer repair and professional website development in Bangalore.
                   Honest pricing, no jargon, no hidden fees — just real solutions.
                 </motion.p>
@@ -208,10 +239,7 @@ export default function Home() {
                   </Button>
                 </motion.div>
 
-                <motion.div
-                  variants={fadeInUp}
-                  className="mt-10 flex flex-wrap gap-6 text-sm font-medium text-slate-400"
-                >
+                <motion.div variants={fadeInUp} className="mt-10 flex flex-wrap gap-6 text-sm font-medium text-slate-400">
                   {['Same Day Fixes', 'No Hidden Fees', 'Free Diagnostics'].map(t => (
                     <div key={t} className="flex items-center gap-2">
                       <CheckCircle2 className="w-4 h-4 text-blue-400 shrink-0" />
@@ -221,7 +249,6 @@ export default function Home() {
                 </motion.div>
               </motion.div>
 
-              {/* Right — image */}
               <motion.div
                 initial={{ opacity: 0, scale: 0.92 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -231,15 +258,12 @@ export default function Home() {
                 <div className="relative rounded-2xl overflow-hidden shadow-2xl ring-1 ring-white/10 aspect-[4/3]">
                   <img src={repairHeroImg} alt="Technician repairing laptop" className="object-cover w-full h-full" />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent" />
-                  <div className="absolute bottom-5 left-5 right-5">
-                    <div className="flex items-center gap-2">
-                      <span className="w-2.5 h-2.5 rounded-full bg-green-400 animate-pulse" />
-                      <span className="text-white font-semibold text-xs tracking-widest uppercase">Currently accepting repairs</span>
-                    </div>
+                  <div className="absolute bottom-5 left-5 right-5 flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-green-400 animate-pulse" />
+                    <span className="text-white font-semibold text-xs tracking-widest uppercase">Currently accepting repairs</span>
                   </div>
                 </div>
 
-                {/* Floating badge */}
                 <motion.div
                   initial={{ y: 16, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
@@ -260,18 +284,28 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ── Brands banner ────────────────────────────────────────────── */}
+        {/* ── Brands / Tech marquee ─────────────────────────────────────── */}
         <section className="py-8 border-y bg-slate-50">
-          <div className="container mx-auto px-4 text-center">
-            <p className="text-xs font-bold text-slate-400 mb-5 uppercase tracking-[0.2em]">
-              We repair all major brands &amp; build with modern tech
-            </p>
-            <div className="flex flex-wrap justify-center items-center gap-x-10 gap-y-4">
-              {['Dell', 'HP', 'Lenovo', 'ASUS', 'Acer', 'Windows', 'Linux', 'HTML5', 'JavaScript', 'PHP', 'MySQL'].map(b => (
-                <span key={b} className="text-xs font-extrabold text-slate-300 hover:text-slate-600 transition-colors tracking-widest uppercase">
-                  {b}
-                </span>
-              ))}
+          <p className="text-center text-xs font-bold text-slate-400 mb-5 uppercase tracking-[0.2em]">
+            We repair all major brands &amp; build with modern tech
+          </p>
+          <div className="overflow-hidden relative">
+            {/* Fade edges */}
+            <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-slate-50 to-transparent z-10 pointer-events-none" />
+            <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-slate-50 to-transparent z-10 pointer-events-none" />
+            <div className="flex animate-marquee w-max gap-12 items-center px-8">
+              {[...MARQUEE_ITEMS, ...MARQUEE_ITEMS].map((item, i) =>
+                item.type === 'brand' ? (
+                  <span key={i} className="text-xs font-extrabold text-slate-400 tracking-[0.18em] uppercase whitespace-nowrap select-none">
+                    {item.label}
+                  </span>
+                ) : (
+                  <span key={i} className="flex items-center gap-1.5 whitespace-nowrap select-none">
+                    <item.icon style={{ color: item.color }} className="w-4 h-4 shrink-0" />
+                    <span className="text-xs font-extrabold text-slate-400 tracking-[0.18em] uppercase">{item.label}</span>
+                  </span>
+                )
+              )}
             </div>
           </div>
         </section>
@@ -287,10 +321,10 @@ export default function Home() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
-                { icon: Zap,          title: 'Quick & Fast',     desc: 'Same-day service for most repairs and fast turnarounds for websites.',             color: 'text-amber-500',  bg: 'bg-amber-50',   border: 'border-amber-100' },
-                { icon: CheckCircle2, title: 'Affordable',       desc: 'Honest pricing with no hidden fees. Quality service that fits your budget.',         color: 'text-green-500',  bg: 'bg-green-50',   border: 'border-green-100' },
-                { icon: MapPin,       title: 'Onsite & Remote',  desc: 'We come to you, or fix software issues remotely via secure connection.',             color: 'text-blue-500',   bg: 'bg-blue-50',    border: 'border-blue-100'  },
-                { icon: ShieldCheck,  title: 'Reliable',         desc: 'Professional technicians ensuring your data is safe and systems run perfectly.',      color: 'text-purple-500', bg: 'bg-purple-50',  border: 'border-purple-100'},
+                { icon: Zap,          title: 'Quick & Fast',    desc: 'Same-day service for most repairs and fast turnarounds for websites.',           color: 'text-amber-500',  bg: 'bg-amber-50',  border: 'border-amber-100'  },
+                { icon: CheckCircle2, title: 'Affordable',      desc: 'Honest pricing with no hidden fees. Quality service that fits your budget.',       color: 'text-green-500',  bg: 'bg-green-50',  border: 'border-green-100'  },
+                { icon: MapPin,       title: 'Onsite & Remote', desc: 'We come to you, or fix software issues remotely via secure connection.',           color: 'text-blue-500',   bg: 'bg-blue-50',   border: 'border-blue-100'   },
+                { icon: ShieldCheck,  title: 'Reliable',        desc: 'Professional technicians ensuring your data is safe and systems run perfectly.',    color: 'text-purple-500', bg: 'bg-purple-50', border: 'border-purple-100' },
               ].map((f, i) => (
                 <motion.div
                   key={i}
@@ -298,7 +332,7 @@ export default function Home() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: '-80px' }}
                   transition={{ delay: i * 0.1, duration: 0.5 }}
-                  className="group p-6 rounded-2xl bg-white border shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200"
+                  className="p-6 rounded-2xl bg-white border shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200"
                 >
                   <div className={`w-12 h-12 rounded-xl ${f.bg} border ${f.border} flex items-center justify-center ${f.color} mb-5`}>
                     <f.icon className="w-6 h-6" />
@@ -460,7 +494,7 @@ export default function Home() {
                     ))}
                   </ul>
                 </CardContent>
-                <CardFooter>
+                <CardFooter className="flex flex-col gap-3">
                   <Button
                     variant="outline"
                     className="w-full h-11 text-blue-600 border-blue-200 hover:bg-blue-50"
@@ -469,6 +503,10 @@ export default function Home() {
                   >
                     Book Repair
                   </Button>
+                  <p className="text-xs text-center text-muted-foreground flex items-center justify-center gap-1">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-green-500 shrink-0" />
+                    Free diagnosis always included — no fix, no fee
+                  </p>
                 </CardFooter>
               </Card>
 
@@ -529,17 +567,15 @@ export default function Home() {
               <p className="text-muted-foreground text-lg">Simple, transparent, and stress-free — every time.</p>
             </div>
 
-            {/* Steps with connector */}
             <div className="relative max-w-5xl mx-auto">
-              {/* Horizontal connector line (desktop) */}
               <div className="hidden lg:block absolute top-[2.75rem] left-[12.5%] right-[12.5%] h-px bg-gradient-to-r from-transparent via-border to-transparent" />
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {[
-                  { step: '01', icon: MessageCircle, title: 'Contact Us',        desc: 'Reach out via WhatsApp or call. No technical knowledge needed.',                            color: 'text-blue-600',   bg: 'bg-blue-50',   border: 'border-blue-100',   ring: 'ring-blue-200'   },
-                  { step: '02', icon: ClipboardList, title: 'Free Diagnosis',    desc: 'We assess the issue at zero cost and give you a clear honest quote.',                      color: 'text-purple-600', bg: 'bg-purple-50', border: 'border-purple-100', ring: 'ring-purple-200' },
-                  { step: '03', icon: Wrench,        title: 'We Fix or Build',   desc: 'Repair or website done with care. You get updates throughout.',                            color: 'text-primary',    bg: 'bg-blue-50',   border: 'border-blue-100',   ring: 'ring-blue-200'   },
-                  { step: '04', icon: BadgeCheck,    title: 'You're Satisfied',  desc: "We hand over only when you're happy. Post-service support included.",                      color: 'text-green-600',  bg: 'bg-green-50',  border: 'border-green-100',  ring: 'ring-green-200'  },
+                  { step: '01', icon: MessageCircle, title: 'Contact Us',       desc: 'Reach out via WhatsApp or call. No technical knowledge needed.',               color: 'text-blue-600',   bg: 'bg-blue-50',   border: 'border-blue-100',   ring: 'ring-blue-200'   },
+                  { step: '02', icon: ClipboardList, title: 'Free Diagnosis',   desc: 'We assess the issue at zero cost and give you a clear honest quote.',           color: 'text-purple-600', bg: 'bg-purple-50', border: 'border-purple-100', ring: 'ring-purple-200' },
+                  { step: '03', icon: Wrench,        title: 'We Fix or Build',  desc: 'Repair or website done with care. You get updates throughout.',                 color: 'text-primary',    bg: 'bg-blue-50',   border: 'border-blue-100',   ring: 'ring-blue-200'   },
+                  { step: '04', icon: BadgeCheck,    title: "You're Satisfied", desc: "We hand over only when you're happy. Post-service support included.",           color: 'text-green-600',  bg: 'bg-green-50',  border: 'border-green-100',  ring: 'ring-green-200'  },
                 ].map((item, i) => (
                   <motion.div
                     key={i}
@@ -560,7 +596,6 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Free diagnostics callout */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -579,6 +614,139 @@ export default function Home() {
               >
                 <FaWhatsapp className="w-4 h-4 mr-2 text-green-400" />
                 Book a Free Diagnosis
+              </Button>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* ── About / Founder ───────────────────────────────────────────── */}
+        <section id="about" className="py-24 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-14 items-center">
+
+              {/* Left — avatar card */}
+              <motion.div
+                initial={{ opacity: 0, x: -24 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.55 }}
+                className="flex flex-col items-center md:items-start"
+              >
+                <div className="relative mb-6">
+                  {/* Replace src with actual founder photo when available */}
+                  <div className="w-48 h-48 rounded-3xl bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center text-white text-7xl font-black shadow-2xl shadow-blue-500/25 select-none">
+                    H
+                  </div>
+                  {/* Verified badge */}
+                  <div className="absolute -bottom-3 -right-3 bg-white border shadow-md rounded-xl px-3 py-2 flex items-center gap-2">
+                    <BadgeCheck className="w-4 h-4 text-blue-600 shrink-0" />
+                    <span className="text-xs font-bold text-foreground">Verified Tech</span>
+                  </div>
+                </div>
+
+                <h3 className="text-2xl font-black mb-1">Hemanth K</h3>
+                <p className="text-primary font-semibold text-sm mb-4">Founder &amp; Tech Lead, Larsha Tech</p>
+
+                {/* Quick stats */}
+                <div className="grid grid-cols-2 gap-3 w-full max-w-xs">
+                  {[
+                    { label: 'Service Area',  value: 'All Bangalore'  },
+                    { label: 'Response Time', value: 'Same Day'        },
+                    { label: 'Diagnostics',   value: 'Always Free'     },
+                    { label: 'Satisfaction',  value: 'Guaranteed'      },
+                  ].map(({ label, value }) => (
+                    <div key={label} className="bg-slate-50 border rounded-xl p-3 text-center">
+                      <p className="font-black text-sm text-foreground">{value}</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">{label}</p>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+
+              {/* Right — bio */}
+              <motion.div
+                initial={{ opacity: 0, x: 24 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.55 }}
+              >
+                <p className="text-primary font-bold text-sm uppercase tracking-widest mb-3">About Us</p>
+                <h2 className="text-3xl md:text-4xl font-black mb-5 leading-tight">
+                  The person behind<br />Larsha Tech
+                </h2>
+                <p className="text-muted-foreground leading-relaxed mb-5">
+                  Hi, I'm Hemanth — a Bangalore-based tech professional who believes everyone deserves
+                  honest, jargon-free IT support. I started Larsha Tech to offer real solutions to real
+                  people: no inflated quotes, no passing the buck, no fine print.
+                </p>
+                <p className="text-muted-foreground leading-relaxed mb-8">
+                  Whether you need a laptop repaired or a website built from scratch, you work directly
+                  with me — not an anonymous support agent. That means faster answers, better accountability,
+                  and a service experience that actually feels personal.
+                </p>
+
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <Button
+                    size="lg"
+                    onClick={() => window.open('https://wa.me/918088461724?text=Hi%20Hemanth%2C%20I%20need%20help%20with')}
+                  >
+                    <FaWhatsapp className="w-4 h-4 mr-2 text-green-400" />
+                    Chat with Me
+                  </Button>
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    onClick={() => scrollTo('faq')}
+                  >
+                    Read FAQs
+                  </Button>
+                </div>
+              </motion.div>
+
+            </div>
+          </div>
+        </section>
+
+        {/* ── FAQ ──────────────────────────────────────────────────────── */}
+        <section id="faq" className="py-24 bg-slate-50">
+          <div className="container mx-auto px-4">
+            <div className="text-center max-w-2xl mx-auto mb-12">
+              <p className="text-primary font-bold text-sm uppercase tracking-widest mb-3">FAQ</p>
+              <h2 className="text-3xl md:text-4xl font-black mb-4">Frequently Asked Questions</h2>
+              <p className="text-muted-foreground text-lg">Everything you need to know before reaching out.</p>
+            </div>
+
+            <Accordion type="single" collapsible className="max-w-3xl mx-auto space-y-3">
+              {FAQS.map((faq, i) => (
+                <AccordionItem
+                  key={i}
+                  value={`faq-${i}`}
+                  className="border-0 bg-white rounded-xl shadow-sm px-6 overflow-hidden"
+                >
+                  <AccordionTrigger className="text-base font-semibold py-5 hover:no-underline text-left">
+                    {faq.q}
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground leading-relaxed pb-5">
+                    {faq.a}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+
+            {/* Still have questions CTA */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="mt-10 text-center"
+            >
+              <p className="text-muted-foreground text-sm mb-4">Still have questions? We're one message away.</p>
+              <Button
+                variant="outline"
+                onClick={() => window.open('https://wa.me/918088461724')}
+              >
+                <FaWhatsapp className="w-4 h-4 mr-2 text-green-500" />
+                Ask on WhatsApp
               </Button>
             </motion.div>
           </div>
@@ -625,9 +793,9 @@ export default function Home() {
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 border-t border-white/10 pt-10">
                 {[
-                  { label: 'Email Us',       value: 'support@larshatech.com', href: 'mailto:support@larshatech.com' },
-                  { label: 'Location',       value: 'Bangalore, Karnataka',   href: null },
-                  { label: 'Working Hours',  value: 'Mon – Sat, 9 am – 7 pm', href: null },
+                  { label: 'Email Us',      value: 'support@larshatech.com', href: 'mailto:support@larshatech.com' },
+                  { label: 'Location',      value: 'Bangalore, Karnataka',   href: null },
+                  { label: 'Working Hours', value: 'Mon – Sat, 9 am – 7 pm', href: null },
                 ].map(({ label, value, href }) => (
                   <div key={label} className="text-center md:text-left">
                     <div className="text-slate-500 text-xs font-bold uppercase tracking-widest mb-1">{label}</div>
@@ -642,12 +810,12 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ── Floating WhatsApp ─────────────────────────────────────────── */}
+        {/* ── Floating WhatsApp — desktop only ─────────────────────────── */}
         <a
           href="https://wa.me/918088461724"
           target="_blank"
           rel="noreferrer"
-          className="fixed bottom-6 right-6 w-14 h-14 bg-[#25D366] text-white rounded-full flex items-center justify-center shadow-2xl shadow-green-500/30 hover:scale-110 transition-all z-50 group"
+          className="hidden md:flex fixed bottom-6 right-6 w-14 h-14 bg-[#25D366] text-white rounded-full items-center justify-center shadow-2xl shadow-green-500/30 hover:scale-110 transition-all z-50 group"
           data-testid="link-floating-whatsapp"
         >
           <FaWhatsapp className="w-7 h-7" />
@@ -677,6 +845,27 @@ export default function Home() {
           </a>
         </div>
       </footer>
+
+      {/* ── Mobile sticky CTA bar ─────────────────────────────────────────── */}
+      <div className="fixed bottom-0 left-0 right-0 z-40 md:hidden bg-background/95 backdrop-blur-md border-t shadow-lg">
+        <div className="flex gap-2 p-3">
+          <Button
+            className="flex-1 h-12 bg-blue-600 hover:bg-blue-700 text-white"
+            onClick={() => window.open('tel:+918088461724')}
+          >
+            <PhoneCall className="w-4 h-4 mr-2" />
+            Call Now
+          </Button>
+          <Button
+            variant="outline"
+            className="flex-1 h-12 border-green-200 text-green-700 hover:bg-green-50"
+            onClick={() => window.open('https://wa.me/918088461724')}
+          >
+            <FaWhatsapp className="w-4 h-4 mr-2 text-green-500" />
+            WhatsApp
+          </Button>
+        </div>
+      </div>
 
     </div>
   );
