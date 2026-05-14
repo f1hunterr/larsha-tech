@@ -34,15 +34,25 @@ export default function Navbar() {
   useEffect(() => {
     if (!isHome) { setActiveSection(''); return; }
     const detect = () => {
-      if (window.scrollY < 80) { setActiveSection('home'); return; }
+      const scrollY = window.scrollY;
+      if (scrollY < 80) { setActiveSection('home'); return; }
+
+      // Compute absolute document position for each section, then sort by it.
+      // This way nav-link order never affects the result.
+      const entries = SECTION_IDS
+        .map(id => {
+          const el = document.getElementById(id);
+          return el ? { id, top: el.getBoundingClientRect().top + scrollY } : null;
+        })
+        .filter((e): e is { id: string; top: number } => e !== null)
+        .sort((a, b) => a.top - b.top);
+
+      // Last section whose absolute top has passed the trigger (64 px navbar + 16 px buffer)
+      const trigger = scrollY + 80;
       let current = 'home';
-      let best = -Infinity;
-      for (const id of SECTION_IDS) {
-        const el = document.getElementById(id);
-        if (!el) continue;
-        const top = el.getBoundingClientRect().top;
-        // Pick the section whose top is closest to (but still ≤) 120px
-        if (top <= 120 && top > best) { best = top; current = id; }
+      for (const { id, top } of entries) {
+        if (top <= trigger) current = id;
+        else break;
       }
       setActiveSection(current);
     };
