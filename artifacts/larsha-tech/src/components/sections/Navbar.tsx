@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
-import { PhoneCall, Menu, X, Sun, Moon } from 'lucide-react';
+import { PhoneCall, Menu, X, Sun, Moon, Lock } from 'lucide-react';
 import { FaWhatsapp } from 'react-icons/fa';
 import { useTheme } from '@/hooks/useTheme';
 import { Button } from '@/components/ui/button';
@@ -79,6 +79,13 @@ export default function Navbar() {
           <Button
             variant="outline"
             className={`hidden sm:flex ${scrolled ? '' : 'border-white/30 text-white bg-white/10 hover:bg-white/20'}`}
+            onClick={() => { navigate('/careers'); setMobileOpen(false); }}
+          >
+            Careers
+          </Button>
+          <Button
+            variant="outline"
+            className={`hidden sm:flex ${scrolled ? '' : 'border-white/30 text-white bg-white/10 hover:bg-white/20'}`}
             onClick={() => { navigate('/book-repair'); setMobileOpen(false); }}
           >
             Book Repair
@@ -89,6 +96,16 @@ export default function Navbar() {
           >
             <PhoneCall className="w-4 h-4 mr-2" /> Call Now
           </Button>
+          <button
+            onClick={() => { navigate('/admin'); setMobileOpen(false); }}
+            aria-label="Admin login"
+            title="Admin login"
+            className={`hidden sm:flex p-2.5 rounded-lg transition-colors ${
+              scrolled ? 'text-muted-foreground hover:text-foreground hover:bg-muted' : 'text-white/50 hover:text-white/80 hover:bg-white/10'
+            }`}
+          >
+            <Lock className="w-4 h-4" />
+          </button>
 
           <button
             className={`md:hidden p-2.5 rounded-md transition-colors ${
@@ -122,6 +139,13 @@ export default function Navbar() {
               >
                 Book a Repair
               </Button>
+              <Button
+                variant="outline"
+                className="w-full border-violet-200 dark:border-violet-800 text-violet-700 dark:text-violet-400 hover:bg-violet-50 dark:hover:bg-violet-950/30"
+                onClick={() => { navigate('/careers'); setMobileOpen(false); }}
+              >
+                View Careers
+              </Button>
               <div className="flex gap-2">
                 <Button className="flex-1" onClick={() => { window.open('tel:+918088461724'); setMobileOpen(false); }}>
                   <PhoneCall className="w-4 h-4 mr-2" /> Call Now
@@ -130,6 +154,12 @@ export default function Navbar() {
                   <FaWhatsapp className="w-4 h-4 mr-2 text-green-500" /> WhatsApp
                 </Button>
               </div>
+              <button
+                onClick={() => { navigate('/admin'); setMobileOpen(false); }}
+                className="w-full flex items-center justify-center gap-2 text-xs text-muted-foreground hover:text-foreground py-2 transition-colors"
+              >
+                <Lock className="w-3 h-3" /> Admin Login
+              </button>
             </div>
           </nav>
         </div>

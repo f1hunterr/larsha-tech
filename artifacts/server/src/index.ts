@@ -3,6 +3,7 @@ import cors from 'cors';
 import db from './db';
 import leadsRouter from './routes/leads';
 import bookingsRouter from './routes/bookings';
+import applicationsRouter from './routes/applications';
 import { adminHtml } from './admin';
 
 const app = express();
@@ -30,6 +31,9 @@ app.use(express.json({ limit: '16kb' }));
 
 app.use('/api/leads', leadsRouter);
 app.use('/api/bookings', bookingsRouter);
+app.use('/api/applications', applicationsRouter);
+
+const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'admin';
 
 // Admin dashboard — HTTP Basic Auth
 app.get('/admin', (req: Request, res: Response) => {
@@ -39,17 +43,22 @@ app.get('/admin', (req: Request, res: Response) => {
     res.status(401).send('Login required');
     return;
   }
-  const [, pass] = Buffer.from(header.slice(6), 'base64').toString().split(':');
-  if (pass !== adminPassword) {
+  const decoded = Buffer.from(header.slice(6), 'base64').toString();
+  const colonIdx = decoded.indexOf(':');
+  const user = decoded.slice(0, colonIdx);
+  const pass = decoded.slice(colonIdx + 1);
+  if (user !== ADMIN_USERNAME || pass !== adminPassword) {
     res.setHeader('WWW-Authenticate', 'Basic realm="Larsha Tech Admin"');
     res.status(401).send('Invalid credentials');
     return;
   }
-  const leads    = db.prepare('SELECT * FROM leads    ORDER BY created_at DESC').all();
-  const bookings = db.prepare('SELECT * FROM bookings ORDER BY created_at DESC').all();
+  const leads        = db.prepare('SELECT * FROM leads        ORDER BY created_at DESC').all();
+  const bookings     = db.prepare('SELECT * FROM bookings     ORDER BY created_at DESC').all();
+  const applications = db.prepare('SELECT * FROM applications ORDER BY created_at DESC').all();
   res.send(adminHtml(
-    leads    as Parameters<typeof adminHtml>[0],
-    bookings as Parameters<typeof adminHtml>[1],
+    leads        as Parameters<typeof adminHtml>[0],
+    bookings     as Parameters<typeof adminHtml>[1],
+    applications as Parameters<typeof adminHtml>[2],
   ));
 });
 

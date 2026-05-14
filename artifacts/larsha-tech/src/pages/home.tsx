@@ -1,5 +1,6 @@
 import React from 'react';
-import { PhoneCall } from 'lucide-react';
+import { useLocation } from 'wouter';
+import { PhoneCall, Briefcase } from 'lucide-react';
 import { FaWhatsapp } from 'react-icons/fa';
 import { Button } from '@/components/ui/button';
 import UrgencyBanner from '@/components/UrgencyBanner';
@@ -16,6 +17,7 @@ import LeadForm from '@/components/sections/LeadForm';
 import Contact from '@/components/sections/Contact';
 
 export default function Home() {
+  const [, navigate] = useLocation();
   return (
     <div className="flex flex-col min-h-screen pb-20 md:pb-0">
       <UrgencyBanner />
@@ -30,6 +32,27 @@ export default function Home() {
         <Pricing />
         <HowWeWork />
         <About />
+
+        {/* Careers CTA */}
+        <section className="py-16 bg-gradient-to-r from-violet-700 to-blue-700">
+          <div className="container mx-auto px-4 text-center">
+            <div className="w-12 h-12 rounded-2xl bg-white/15 flex items-center justify-center mx-auto mb-4">
+              <Briefcase className="w-6 h-6 text-white" />
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-black text-white mb-3">Join Our Team</h2>
+            <p className="text-white/75 text-base mb-7 max-w-md mx-auto">
+              We're hiring passionate technicians and developers in Bangalore. No corporate nonsense — just real work and real growth.
+            </p>
+            <Button
+              size="lg"
+              className="bg-white text-violet-700 hover:bg-violet-50 font-bold shadow-xl"
+              onClick={() => navigate('/careers')}
+            >
+              View Open Positions
+            </Button>
+          </div>
+        </section>
+
         <FAQ />
         <Contact />
       </main>

@@ -1,9 +1,8 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import db from '../db';
+import { requireAdmin } from '../middleware/auth';
 
 const router = Router();
-
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'dev-only-changeme';
 
 // Max field lengths (must match frontend LeadForm validation)
 const MAX_LEN = { name: 100, phone: 20, service: 80, message: 2000 };
@@ -26,22 +25,6 @@ function rateLimit(req: Request, res: Response, next: NextFunction) {
     return;
   }
   entry.count++;
-  next();
-}
-
-function requireAdmin(req: Request, res: Response, next: NextFunction) {
-  const header = req.headers.authorization;
-  if (!header?.startsWith('Basic ')) {
-    res.setHeader('WWW-Authenticate', 'Basic realm="Larsha Tech Admin"');
-    res.status(401).json({ error: 'Authentication required' });
-    return;
-  }
-  const [, pass] = Buffer.from(header.slice(6), 'base64').toString().split(':');
-  if (pass !== ADMIN_PASSWORD) {
-    res.setHeader('WWW-Authenticate', 'Basic realm="Larsha Tech Admin"');
-    res.status(401).json({ error: 'Invalid credentials' });
-    return;
-  }
   next();
 }
 

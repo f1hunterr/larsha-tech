@@ -34,6 +34,20 @@ db.exec(`
     email          TEXT,
     status         TEXT NOT NULL DEFAULT 'new',
     created_at     TEXT DEFAULT (datetime('now', 'localtime'))
+  );
+
+  CREATE TABLE IF NOT EXISTS applications (
+    id                   INTEGER PRIMARY KEY AUTOINCREMENT,
+    name                 TEXT NOT NULL,
+    email                TEXT NOT NULL,
+    phone                TEXT NOT NULL,
+    position             TEXT NOT NULL,
+    experience           TEXT,
+    message              TEXT NOT NULL,
+    resume_path          TEXT,
+    resume_original_name TEXT,
+    status               TEXT NOT NULL DEFAULT 'new',
+    created_at           TEXT DEFAULT (datetime('now', 'localtime'))
   )
 `);
 
