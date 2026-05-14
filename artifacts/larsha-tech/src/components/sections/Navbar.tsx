@@ -6,6 +6,7 @@ import { useTheme } from '@/hooks/useTheme';
 import { Button } from '@/components/ui/button';
 
 const NAV_LINKS = [
+  { label: 'Home',      id: 'home'       },
   { label: 'Services',  id: 'services'   },
   { label: 'Pricing',   id: 'pricing'    },
   { label: 'Get Quote', id: 'get-quote'  },
@@ -28,6 +29,12 @@ export default function Navbar() {
   }, []);
 
   const scrollTo = (id: string) => {
+    if (id === 'home') {
+      navigate('/');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setMobileOpen(false);
+      return;
+    }
     if (!isHome) {
       navigate('/');
       setTimeout(() => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' }), 150);
