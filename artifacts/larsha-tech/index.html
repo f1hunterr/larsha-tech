@@ -74,6 +74,44 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+    <!-- Content protection: disable copy, right-click, drag, and save shortcuts -->
+    <script>
+      (function () {
+        var FORM_TAGS = { INPUT: 1, TEXTAREA: 1, SELECT: 1 };
+        function isFormEl(el) { return el && (FORM_TAGS[el.tagName] || el.isContentEditable); }
+        function isAdmin() { return window.location.pathname.indexOf('/admin') !== -1; }
+
+        document.addEventListener('contextmenu', function (e) {
+          if (isAdmin()) return;
+          if (!isFormEl(e.target)) e.preventDefault();
+        });
+
+        document.addEventListener('copy', function (e) {
+          if (isAdmin()) return;
+          if (!isFormEl(document.activeElement)) e.preventDefault();
+        });
+
+        document.addEventListener('cut', function (e) {
+          if (isAdmin()) return;
+          if (!isFormEl(document.activeElement)) e.preventDefault();
+        });
+
+        document.addEventListener('dragstart', function (e) {
+          if (isAdmin()) return;
+          e.preventDefault();
+        });
+
+        document.addEventListener('keydown', function (e) {
+          if (isAdmin()) return;
+          if (isFormEl(document.activeElement)) return;
+          var k = e.key.toLowerCase();
+          if (e.ctrlKey || e.metaKey) {
+            if (k === 'c' || k === 'a' || k === 's' || k === 'u') e.preventDefault();
+          }
+        });
+      }());
+    </script>
   </head>
   <body>
     <div id="root"></div>
