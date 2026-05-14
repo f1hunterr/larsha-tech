@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 
 const REPAIR_ITEMS = [
-  { service: 'Basic Diagnostics', range: '₹500 – ₹800', note: 'Complete hardware & software check. Written report before we proceed.' },
   { service: 'OS Installation', range: '₹800 – ₹1,200', note: 'Clean install with all drivers. Bring your license key or we help.' },
   { service: 'SSD Upgrade', range: '₹1,000 – ₹1,500', note: 'Data migration from old drive included. Files and apps stay intact.' },
   { service: 'Full Service & Deep Clean', range: '₹1,500 – ₹2,000', note: 'Internal cleaning, thermal paste, driver updates, startup tuning.' },
