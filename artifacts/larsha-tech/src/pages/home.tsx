@@ -3,10 +3,11 @@ import { motion } from 'framer-motion';
 import {
   Monitor, Code, Wrench, ShieldCheck, Globe, PhoneCall, MapPin,
   CheckCircle2, ArrowRight, Zap, Menu, X, MessageCircle,
-  ClipboardList, BadgeCheck, Headphones,
+  ClipboardList, BadgeCheck, Headphones, Sun, Moon,
 } from 'lucide-react';
 import { FaWhatsapp } from 'react-icons/fa';
 import { SiHtml5, SiJavascript, SiPhp, SiMysql, SiLinux, SiReact, SiTailwindcss } from 'react-icons/si';
+import { useTheme } from 'next-themes';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
@@ -25,13 +26,13 @@ const staggerContainer = {
 
 /* ─── static data ───────────────────────────────────────────────────────── */
 const TECH_ICONS = [
-  { icon: SiHtml5,      label: 'HTML5',      color: '#E34F26' },
-  { icon: SiJavascript, label: 'JavaScript',  color: '#F7DF1E' },
-  { icon: SiReact,      label: 'React',       color: '#61DAFB' },
-  { icon: SiPhp,        label: 'PHP',         color: '#777BB4' },
-  { icon: SiMysql,      label: 'MySQL',       color: '#4479A1' },
-  { icon: SiLinux,      label: 'Linux',       color: '#FCC624' },
-  { icon: SiTailwindcss,label: 'Tailwind CSS',color: '#06B6D4' },
+  { icon: SiHtml5,       label: 'HTML5',       color: '#E34F26' },
+  { icon: SiJavascript,  label: 'JavaScript',  color: '#F7DF1E' },
+  { icon: SiReact,       label: 'React',        color: '#61DAFB' },
+  { icon: SiPhp,         label: 'PHP',          color: '#777BB4' },
+  { icon: SiMysql,       label: 'MySQL',        color: '#4479A1' },
+  { icon: SiLinux,       label: 'Linux',        color: '#FCC624' },
+  { icon: SiTailwindcss, label: 'Tailwind CSS', color: '#06B6D4' },
 ];
 
 const BRAND_NAMES = ['Dell', 'HP', 'Lenovo', 'ASUS', 'Acer'];
@@ -39,35 +40,34 @@ const BRAND_NAMES = ['Dell', 'HP', 'Lenovo', 'ASUS', 'Acer'];
 const FAQS = [
   {
     q: 'Do you come to my home or office?',
-    a: 'Yes! We offer doorstep service across Bangalore — homes, offices, and shops. We also provide remote support for software issues via secure screen sharing. Just WhatsApp us your location and we\'ll schedule a visit at a time that suits you.',
+    a: "Yes! We offer doorstep service across Bangalore — homes, offices, and shops. We also provide remote support for software issues via secure screen sharing. Just WhatsApp us your location and we'll schedule a visit at a time that suits you.",
   },
   {
     q: 'How long does a repair take?',
-    a: 'Most software issues, OS installations, and optimizations are completed the same day. Hardware repairs usually take 24–48 hours. We always give you a clear timeline before starting any work — no surprises.',
+    a: "Most software issues, OS installations, and optimizations are completed the same day. Hardware repairs usually take 24–48 hours. We always give you a clear timeline before starting any work — no surprises.",
   },
   {
-    q: 'What if you can\'t fix the problem?',
-    a: 'You pay absolutely nothing. Our free diagnostics promise is simple: if we assess your device and cannot solve the problem, there\'s no charge. We\'d rather be honest than bill you for a failed attempt.',
+    q: "What if you can't fix the problem?",
+    a: "You pay absolutely nothing. Our free diagnostics promise is simple: if we assess your device and cannot solve the problem, there's no charge. We'd rather be honest than bill you for a failed attempt.",
   },
   {
     q: 'How do I know my data is safe?',
-    a: 'Data privacy is our top priority. We never access personal files unless required for the repair, and we always recommend taking a backup before any work begins. You\'re welcome to be present throughout the entire repair if you prefer.',
+    a: "Data privacy is our top priority. We never access personal files unless required for the repair, and we always recommend taking a backup before any work begins. You're welcome to be present throughout the entire repair if you prefer.",
   },
   {
     q: 'Do you offer a warranty on repairs?',
-    a: 'Yes — we provide a 30-day service warranty on all repairs. If the same issue recurs within 30 days, we fix it at no additional cost. This reflects our confidence in the quality of our work.',
+    a: "Yes — we provide a 30-day service warranty on all repairs. If the same issue recurs within 30 days, we fix it at no additional cost. This reflects our confidence in the quality of our work.",
   },
   {
     q: 'What payment methods do you accept?',
-    a: 'We accept cash, all UPI apps (GPay, PhonePe, Paytm), and bank transfers. Payment is collected only after the work is completed and you\'re fully satisfied — not before.',
+    a: "We accept cash, all UPI apps (GPay, PhonePe, Paytm), and bank transfers. Payment is collected only after the work is completed and you're fully satisfied — not before.",
   },
   {
     q: 'Can you build a website if I have no technical knowledge?',
-    a: 'Absolutely — that\'s exactly who we build for. Just share your business idea and what you want the website to do. We handle everything: design, development, domain registration, and hosting setup. No jargon, no technical knowledge needed from your side.',
+    a: "Absolutely — that's exactly who we build for. Just share your business idea and what you want the website to do. We handle everything: design, development, domain registration, and hosting setup. No jargon, no technical knowledge needed from your side.",
   },
 ];
 
-/* ─── marquee item list (duplicated inside JSX for seamless loop) ────────── */
 type MarqueeItem =
   | { type: 'brand'; label: string }
   | { type: 'tech'; label: string; icon: React.ElementType; color: string };
@@ -81,6 +81,9 @@ const MARQUEE_ITEMS: MarqueeItem[] = [
 export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { resolvedTheme, setTheme } = useTheme();
+
+  const isDark = resolvedTheme === 'dark';
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -102,7 +105,6 @@ export default function Home() {
   ];
 
   return (
-    /* pb-20 md:pb-0 ensures mobile content isn't hidden behind the sticky CTA bar */
     <div className="flex flex-col min-h-screen pb-20 md:pb-0">
 
       {/* ── Navbar ──────────────────────────────────────────────────────── */}
@@ -134,6 +136,19 @@ export default function Home() {
           </nav>
 
           <div className="flex items-center gap-2">
+            {/* Dark / light toggle */}
+            <button
+              onClick={() => setTheme(isDark ? 'light' : 'dark')}
+              aria-label="Toggle theme"
+              className={`p-2 rounded-lg transition-colors ${
+                scrolled
+                  ? 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                  : 'text-white/70 hover:text-white hover:bg-white/10'
+              }`}
+            >
+              {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            </button>
+
             <Button
               onClick={() => window.open('tel:+918088461724')}
               className={scrolled ? '' : 'bg-white text-slate-900 hover:bg-white/90'}
@@ -220,12 +235,11 @@ export default function Home() {
                 <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4">
                   <Button
                     size="lg"
-                    className="h-13 px-8 text-base bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-600/30 transition-all"
+                    className="h-13 px-8 text-base bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-600/30"
                     onClick={() => scrollTo('services')}
                     data-testid="button-hero-services"
                   >
-                    Explore Services
-                    <ArrowRight className="ml-2 w-4 h-4" />
+                    Explore Services <ArrowRight className="ml-2 w-4 h-4" />
                   </Button>
                   <Button
                     size="lg"
@@ -285,24 +299,23 @@ export default function Home() {
         </section>
 
         {/* ── Brands / Tech marquee ─────────────────────────────────────── */}
-        <section className="py-8 border-y bg-slate-50">
-          <p className="text-center text-xs font-bold text-slate-400 mb-5 uppercase tracking-[0.2em]">
+        <section className="py-8 border-y bg-muted">
+          <p className="text-center text-xs font-bold text-muted-foreground mb-5 uppercase tracking-[0.2em]">
             We repair all major brands &amp; build with modern tech
           </p>
           <div className="overflow-hidden relative">
-            {/* Fade edges */}
-            <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-slate-50 to-transparent z-10 pointer-events-none" />
-            <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-slate-50 to-transparent z-10 pointer-events-none" />
+            <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-muted to-transparent z-10 pointer-events-none" />
+            <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-muted to-transparent z-10 pointer-events-none" />
             <div className="flex animate-marquee w-max gap-12 items-center px-8">
               {[...MARQUEE_ITEMS, ...MARQUEE_ITEMS].map((item, i) =>
                 item.type === 'brand' ? (
-                  <span key={i} className="text-xs font-extrabold text-slate-400 tracking-[0.18em] uppercase whitespace-nowrap select-none">
+                  <span key={i} className="text-xs font-extrabold text-muted-foreground tracking-[0.18em] uppercase whitespace-nowrap select-none">
                     {item.label}
                   </span>
                 ) : (
                   <span key={i} className="flex items-center gap-1.5 whitespace-nowrap select-none">
                     <item.icon style={{ color: item.color }} className="w-4 h-4 shrink-0" />
-                    <span className="text-xs font-extrabold text-slate-400 tracking-[0.18em] uppercase">{item.label}</span>
+                    <span className="text-xs font-extrabold text-muted-foreground tracking-[0.18em] uppercase">{item.label}</span>
                   </span>
                 )
               )}
@@ -311,7 +324,7 @@ export default function Home() {
         </section>
 
         {/* ── Why Choose Us ────────────────────────────────────────────── */}
-        <section id="why-us" className="py-24 bg-white">
+        <section id="why-us" className="py-24 bg-background">
           <div className="container mx-auto px-4">
             <div className="text-center max-w-2xl mx-auto mb-14">
               <p className="text-primary font-bold text-sm uppercase tracking-widest mb-3">Why Larsha Tech</p>
@@ -321,10 +334,10 @@ export default function Home() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
-                { icon: Zap,          title: 'Quick & Fast',    desc: 'Same-day service for most repairs and fast turnarounds for websites.',           color: 'text-amber-500',  bg: 'bg-amber-50',  border: 'border-amber-100'  },
-                { icon: CheckCircle2, title: 'Affordable',      desc: 'Honest pricing with no hidden fees. Quality service that fits your budget.',       color: 'text-green-500',  bg: 'bg-green-50',  border: 'border-green-100'  },
-                { icon: MapPin,       title: 'Onsite & Remote', desc: 'We come to you, or fix software issues remotely via secure connection.',           color: 'text-blue-500',   bg: 'bg-blue-50',   border: 'border-blue-100'   },
-                { icon: ShieldCheck,  title: 'Reliable',        desc: 'Professional technicians ensuring your data is safe and systems run perfectly.',    color: 'text-purple-500', bg: 'bg-purple-50', border: 'border-purple-100' },
+                { icon: Zap,          title: 'Quick & Fast',    desc: 'Same-day service for most repairs and fast turnarounds for websites.',        color: 'text-amber-500',  bg: 'bg-amber-50 dark:bg-amber-950/40',  border: 'border-amber-100 dark:border-amber-900/50'  },
+                { icon: CheckCircle2, title: 'Affordable',      desc: 'Honest pricing with no hidden fees. Quality service that fits your budget.',   color: 'text-green-500',  bg: 'bg-green-50 dark:bg-green-950/40',  border: 'border-green-100 dark:border-green-900/50'  },
+                { icon: MapPin,       title: 'Onsite & Remote', desc: 'We come to you, or fix software issues remotely via secure connection.',       color: 'text-blue-500',   bg: 'bg-blue-50 dark:bg-blue-950/40',    border: 'border-blue-100 dark:border-blue-900/50'    },
+                { icon: ShieldCheck,  title: 'Reliable',        desc: 'Professional technicians ensuring your data is safe and systems run perfectly.',color: 'text-purple-500', bg: 'bg-purple-50 dark:bg-purple-950/40',border: 'border-purple-100 dark:border-purple-900/50'},
               ].map((f, i) => (
                 <motion.div
                   key={i}
@@ -332,7 +345,7 @@ export default function Home() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: '-80px' }}
                   transition={{ delay: i * 0.1, duration: 0.5 }}
-                  className="p-6 rounded-2xl bg-white border shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200"
+                  className="p-6 rounded-2xl bg-card border shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200"
                 >
                   <div className={`w-12 h-12 rounded-xl ${f.bg} border ${f.border} flex items-center justify-center ${f.color} mb-5`}>
                     <f.icon className="w-6 h-6" />
@@ -346,7 +359,7 @@ export default function Home() {
         </section>
 
         {/* ── Services ─────────────────────────────────────────────────── */}
-        <section id="services" className="py-24 bg-slate-50">
+        <section id="services" className="py-24 bg-muted">
           <div className="container mx-auto px-4">
             <div className="text-center max-w-2xl mx-auto mb-14">
               <p className="text-primary font-bold text-sm uppercase tracking-widest mb-3">What We Do</p>
@@ -361,11 +374,11 @@ export default function Home() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5 }}
-                className="bg-white rounded-3xl overflow-hidden shadow-sm border hover:shadow-md transition-shadow flex flex-col"
+                className="bg-card rounded-3xl overflow-hidden shadow-sm border hover:shadow-md transition-shadow flex flex-col"
               >
                 <div className="h-1.5 bg-gradient-to-r from-blue-500 to-cyan-400" />
                 <div className="p-8 lg:p-10 flex-1">
-                  <div className="w-13 h-13 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 mb-6">
+                  <div className="w-13 h-13 rounded-xl bg-blue-50 dark:bg-blue-950/40 border border-blue-100 dark:border-blue-900/50 flex items-center justify-center text-blue-600 dark:text-blue-400 mb-6">
                     <Wrench className="w-6 h-6" />
                   </div>
                   <h3 className="text-2xl font-black mb-3">Computer &amp; Laptop Repair</h3>
@@ -389,13 +402,13 @@ export default function Home() {
                   </ul>
                   <div className="flex flex-wrap gap-2">
                     {['Doorstep Service', 'Remote Support', 'Workshop Repair'].map(t => (
-                      <span key={t} className="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-semibold">{t}</span>
+                      <span key={t} className="px-3 py-1 bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 rounded-full text-xs font-semibold">{t}</span>
                     ))}
                   </div>
                 </div>
-                <div className="p-6 border-t bg-slate-50">
+                <div className="p-6 border-t bg-muted/50">
                   <Button
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white shadow-sm shadow-blue-200"
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white"
                     size="lg"
                     onClick={() => scrollTo('pricing')}
                     data-testid="button-service-repair"
@@ -411,11 +424,11 @@ export default function Home() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5 }}
-                className="bg-white rounded-3xl overflow-hidden shadow-sm border hover:shadow-md transition-shadow flex flex-col"
+                className="bg-card rounded-3xl overflow-hidden shadow-sm border hover:shadow-md transition-shadow flex flex-col"
               >
                 <div className="h-1.5 bg-gradient-to-r from-violet-500 to-purple-400" />
                 <div className="p-8 lg:p-10 flex-1">
-                  <div className="w-13 h-13 rounded-xl bg-purple-50 border border-purple-100 flex items-center justify-center text-purple-600 mb-6">
+                  <div className="w-13 h-13 rounded-xl bg-purple-50 dark:bg-purple-950/40 border border-purple-100 dark:border-purple-900/50 flex items-center justify-center text-purple-600 dark:text-purple-400 mb-6">
                     <Globe className="w-6 h-6" />
                   </div>
                   <h3 className="text-2xl font-black mb-3">Website Design &amp; Development</h3>
@@ -439,13 +452,13 @@ export default function Home() {
                   </ul>
                   <div className="flex flex-wrap gap-2">
                     {['HTML5', 'CSS3', 'JavaScript', 'PHP', 'MySQL'].map(t => (
-                      <span key={t} className="px-3 py-1 bg-purple-50 text-purple-700 rounded-full text-xs font-semibold">{t}</span>
+                      <span key={t} className="px-3 py-1 bg-purple-50 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 rounded-full text-xs font-semibold">{t}</span>
                     ))}
                   </div>
                 </div>
-                <div className="p-6 border-t bg-slate-50">
+                <div className="p-6 border-t bg-muted/50">
                   <Button
-                    className="w-full bg-purple-600 hover:bg-purple-700 text-white shadow-sm shadow-purple-200"
+                    className="w-full bg-purple-600 hover:bg-purple-700 text-white"
                     size="lg"
                     onClick={() => scrollTo('pricing')}
                     data-testid="button-service-web"
@@ -459,7 +472,7 @@ export default function Home() {
         </section>
 
         {/* ── Pricing ──────────────────────────────────────────────────── */}
-        <section id="pricing" className="py-24 bg-white">
+        <section id="pricing" className="py-24 bg-background">
           <div className="container mx-auto px-4">
             <div className="text-center max-w-2xl mx-auto mb-14">
               <p className="text-primary font-bold text-sm uppercase tracking-widest mb-3">Pricing</p>
@@ -472,8 +485,8 @@ export default function Home() {
               <Card className="border shadow-sm hover:shadow-md transition-shadow">
                 <CardHeader className="pb-6">
                   <div className="flex items-center gap-3 mb-1">
-                    <div className="w-10 h-10 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center">
-                      <Wrench className="w-5 h-5 text-blue-600" />
+                    <div className="w-10 h-10 rounded-lg bg-blue-50 dark:bg-blue-950/40 border border-blue-100 dark:border-blue-900/50 flex items-center justify-center">
+                      <Wrench className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                     </div>
                     <CardTitle className="text-xl">Computer Repair</CardTitle>
                   </div>
@@ -497,7 +510,7 @@ export default function Home() {
                 <CardFooter className="flex flex-col gap-3">
                   <Button
                     variant="outline"
-                    className="w-full h-11 text-blue-600 border-blue-200 hover:bg-blue-50"
+                    className="w-full h-11 text-blue-600 border-blue-200 dark:border-blue-800 hover:bg-blue-50 dark:hover:bg-blue-950/40"
                     onClick={() => window.open('tel:+918088461724')}
                     data-testid="button-price-repair"
                   >
@@ -559,7 +572,7 @@ export default function Home() {
         </section>
 
         {/* ── How We Work ──────────────────────────────────────────────── */}
-        <section id="how-we-work" className="py-24 bg-slate-50 border-t border-b">
+        <section id="how-we-work" className="py-24 bg-muted border-t border-b">
           <div className="container mx-auto px-4">
             <div className="text-center max-w-2xl mx-auto mb-14">
               <p className="text-primary font-bold text-sm uppercase tracking-widest mb-3">The Process</p>
@@ -572,10 +585,10 @@ export default function Home() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {[
-                  { step: '01', icon: MessageCircle, title: 'Contact Us',       desc: 'Reach out via WhatsApp or call. No technical knowledge needed.',               color: 'text-blue-600',   bg: 'bg-blue-50',   border: 'border-blue-100',   ring: 'ring-blue-200'   },
-                  { step: '02', icon: ClipboardList, title: 'Free Diagnosis',   desc: 'We assess the issue at zero cost and give you a clear honest quote.',           color: 'text-purple-600', bg: 'bg-purple-50', border: 'border-purple-100', ring: 'ring-purple-200' },
-                  { step: '03', icon: Wrench,        title: 'We Fix or Build',  desc: 'Repair or website done with care. You get updates throughout.',                 color: 'text-primary',    bg: 'bg-blue-50',   border: 'border-blue-100',   ring: 'ring-blue-200'   },
-                  { step: '04', icon: BadgeCheck,    title: "You're Satisfied", desc: "We hand over only when you're happy. Post-service support included.",           color: 'text-green-600',  bg: 'bg-green-50',  border: 'border-green-100',  ring: 'ring-green-200'  },
+                  { step: '01', icon: MessageCircle, title: 'Contact Us',       desc: 'Reach out via WhatsApp or call. No technical knowledge needed.',     color: 'text-blue-600 dark:text-blue-400',   bg: 'bg-blue-50 dark:bg-blue-950/40',    border: 'border-blue-100 dark:border-blue-900/50',    ring: 'ring-blue-200 dark:ring-blue-900'   },
+                  { step: '02', icon: ClipboardList, title: 'Free Diagnosis',   desc: 'We assess the issue at zero cost and give you a clear honest quote.',  color: 'text-purple-600 dark:text-purple-400',bg: 'bg-purple-50 dark:bg-purple-950/40',border: 'border-purple-100 dark:border-purple-900/50',ring: 'ring-purple-200 dark:ring-purple-900'},
+                  { step: '03', icon: Wrench,        title: 'We Fix or Build',  desc: 'Repair or website done with care. You get updates throughout.',       color: 'text-primary',                        bg: 'bg-blue-50 dark:bg-blue-950/40',    border: 'border-blue-100 dark:border-blue-900/50',    ring: 'ring-blue-200 dark:ring-blue-900'   },
+                  { step: '04', icon: BadgeCheck,    title: "You're Satisfied", desc: "We hand over only when you're happy. Post-service support included.", color: 'text-green-600 dark:text-green-400',  bg: 'bg-green-50 dark:bg-green-950/40',  border: 'border-green-100 dark:border-green-900/50',  ring: 'ring-green-200 dark:ring-green-900' },
                 ].map((item, i) => (
                   <motion.div
                     key={i}
@@ -583,9 +596,9 @@ export default function Home() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: '-60px' }}
                     transition={{ delay: i * 0.12, duration: 0.5 }}
-                    className="relative bg-white rounded-2xl p-6 border shadow-sm flex flex-col items-center text-center"
+                    className="relative bg-card rounded-2xl p-6 border shadow-sm flex flex-col items-center text-center"
                   >
-                    <div className={`relative z-10 w-14 h-14 rounded-full ${item.bg} border ${item.border} ring-4 ${item.ring} flex items-center justify-center ${item.color} mb-5 bg-white`}>
+                    <div className={`relative z-10 w-14 h-14 rounded-full ${item.bg} border ${item.border} ring-4 ${item.ring} flex items-center justify-center ${item.color} mb-5`}>
                       <item.icon className="w-6 h-6" />
                     </div>
                     <span className="text-xs font-black text-muted-foreground/40 tracking-widest mb-1">{item.step}</span>
@@ -600,7 +613,7 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="mt-12 max-w-xl mx-auto bg-white border shadow-sm rounded-2xl p-7 text-center"
+              className="mt-12 max-w-xl mx-auto bg-card border shadow-sm rounded-2xl p-7 text-center"
             >
               <Headphones className="w-8 h-8 text-primary mx-auto mb-3" />
               <h3 className="font-black text-xl mb-2">Free Diagnostics — Always</h3>
@@ -608,10 +621,7 @@ export default function Home() {
                 We diagnose your issue at zero cost. No fix, no fee.
                 You only pay when you're satisfied with the solution.
               </p>
-              <Button
-                onClick={() => window.open('https://wa.me/918088461724?text=Hi%2C%20I%20need%20a%20free%20diagnosis')}
-                data-testid="button-free-diag"
-              >
+              <Button onClick={() => window.open('https://wa.me/918088461724?text=Hi%2C%20I%20need%20a%20free%20diagnosis')} data-testid="button-free-diag">
                 <FaWhatsapp className="w-4 h-4 mr-2 text-green-400" />
                 Book a Free Diagnosis
               </Button>
@@ -620,11 +630,10 @@ export default function Home() {
         </section>
 
         {/* ── About / Founder ───────────────────────────────────────────── */}
-        <section id="about" className="py-24 bg-white">
+        <section id="about" className="py-24 bg-background">
           <div className="container mx-auto px-4">
             <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-14 items-center">
 
-              {/* Left — avatar card */}
               <motion.div
                 initial={{ opacity: 0, x: -24 }}
                 whileInView={{ opacity: 1, x: 0 }}
@@ -633,37 +642,34 @@ export default function Home() {
                 className="flex flex-col items-center md:items-start"
               >
                 <div className="relative mb-6">
-                  {/* Replace src with actual founder photo when available */}
+                  {/* Replace with an actual founder photo when available */}
                   <div className="w-48 h-48 rounded-3xl bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center text-white text-7xl font-black shadow-2xl shadow-blue-500/25 select-none">
                     H
                   </div>
-                  {/* Verified badge */}
-                  <div className="absolute -bottom-3 -right-3 bg-white border shadow-md rounded-xl px-3 py-2 flex items-center gap-2">
+                  <div className="absolute -bottom-3 -right-3 bg-card border shadow-md rounded-xl px-3 py-2 flex items-center gap-2">
                     <BadgeCheck className="w-4 h-4 text-blue-600 shrink-0" />
-                    <span className="text-xs font-bold text-foreground">Verified Tech</span>
+                    <span className="text-xs font-bold">Verified Tech</span>
                   </div>
                 </div>
 
                 <h3 className="text-2xl font-black mb-1">Hemanth K</h3>
                 <p className="text-primary font-semibold text-sm mb-4">Founder &amp; Tech Lead, Larsha Tech</p>
 
-                {/* Quick stats */}
                 <div className="grid grid-cols-2 gap-3 w-full max-w-xs">
                   {[
-                    { label: 'Service Area',  value: 'All Bangalore'  },
-                    { label: 'Response Time', value: 'Same Day'        },
-                    { label: 'Diagnostics',   value: 'Always Free'     },
-                    { label: 'Satisfaction',  value: 'Guaranteed'      },
+                    { label: 'Service Area',  value: 'All Bangalore' },
+                    { label: 'Response Time', value: 'Same Day'       },
+                    { label: 'Diagnostics',   value: 'Always Free'    },
+                    { label: 'Satisfaction',  value: 'Guaranteed'     },
                   ].map(({ label, value }) => (
-                    <div key={label} className="bg-slate-50 border rounded-xl p-3 text-center">
-                      <p className="font-black text-sm text-foreground">{value}</p>
+                    <div key={label} className="bg-muted border rounded-xl p-3 text-center">
+                      <p className="font-black text-sm">{value}</p>
                       <p className="text-xs text-muted-foreground mt-0.5">{label}</p>
                     </div>
                   ))}
                 </div>
               </motion.div>
 
-              {/* Right — bio */}
               <motion.div
                 initial={{ opacity: 0, x: 24 }}
                 whileInView={{ opacity: 1, x: 0 }}
@@ -684,20 +690,12 @@ export default function Home() {
                   with me — not an anonymous support agent. That means faster answers, better accountability,
                   and a service experience that actually feels personal.
                 </p>
-
                 <div className="flex flex-col sm:flex-row gap-3">
-                  <Button
-                    size="lg"
-                    onClick={() => window.open('https://wa.me/918088461724?text=Hi%20Hemanth%2C%20I%20need%20help%20with')}
-                  >
+                  <Button size="lg" onClick={() => window.open('https://wa.me/918088461724?text=Hi%20Hemanth%2C%20I%20need%20help%20with')}>
                     <FaWhatsapp className="w-4 h-4 mr-2 text-green-400" />
                     Chat with Me
                   </Button>
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    onClick={() => scrollTo('faq')}
-                  >
+                  <Button size="lg" variant="outline" onClick={() => scrollTo('faq')}>
                     Read FAQs
                   </Button>
                 </div>
@@ -708,7 +706,7 @@ export default function Home() {
         </section>
 
         {/* ── FAQ ──────────────────────────────────────────────────────── */}
-        <section id="faq" className="py-24 bg-slate-50">
+        <section id="faq" className="py-24 bg-muted">
           <div className="container mx-auto px-4">
             <div className="text-center max-w-2xl mx-auto mb-12">
               <p className="text-primary font-bold text-sm uppercase tracking-widest mb-3">FAQ</p>
@@ -721,7 +719,7 @@ export default function Home() {
                 <AccordionItem
                   key={i}
                   value={`faq-${i}`}
-                  className="border-0 bg-white rounded-xl shadow-sm px-6 overflow-hidden"
+                  className="border-0 bg-card rounded-xl shadow-sm px-6 overflow-hidden"
                 >
                   <AccordionTrigger className="text-base font-semibold py-5 hover:no-underline text-left">
                     {faq.q}
@@ -733,7 +731,6 @@ export default function Home() {
               ))}
             </Accordion>
 
-            {/* Still have questions CTA */}
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -741,10 +738,7 @@ export default function Home() {
               className="mt-10 text-center"
             >
               <p className="text-muted-foreground text-sm mb-4">Still have questions? We're one message away.</p>
-              <Button
-                variant="outline"
-                onClick={() => window.open('https://wa.me/918088461724')}
-              >
+              <Button variant="outline" onClick={() => window.open('https://wa.me/918088461724')}>
                 <FaWhatsapp className="w-4 h-4 mr-2 text-green-500" />
                 Ask on WhatsApp
               </Button>
@@ -827,7 +821,7 @@ export default function Home() {
       </main>
 
       {/* ── Footer ───────────────────────────────────────────────────────── */}
-      <footer className="bg-white border-t py-8">
+      <footer className="bg-background border-t py-8">
         <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2 font-bold text-lg">
             <Monitor className="w-5 h-5 text-primary" />
@@ -838,7 +832,7 @@ export default function Home() {
           </p>
           <a
             href="https://wa.me/918088461724"
-            className="flex items-center gap-1.5 text-sm font-semibold text-green-600 hover:text-green-700 transition-colors"
+            className="flex items-center gap-1.5 text-sm font-semibold text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 transition-colors"
           >
             <FaWhatsapp className="w-4 h-4" />
             WhatsApp Us
@@ -858,7 +852,7 @@ export default function Home() {
           </Button>
           <Button
             variant="outline"
-            className="flex-1 h-12 border-green-200 text-green-700 hover:bg-green-50"
+            className="flex-1 h-12 border-green-200 dark:border-green-800 text-green-700 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-950/30"
             onClick={() => window.open('https://wa.me/918088461724')}
           >
             <FaWhatsapp className="w-4 h-4 mr-2 text-green-500" />
