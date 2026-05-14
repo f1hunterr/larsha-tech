@@ -12,7 +12,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 
-import repairHeroImg from '../assets/repair-hero.jpg';
 
 /* ─── animation variants ────────────────────────────────────────────────── */
 const fadeInUp = {
@@ -263,21 +262,107 @@ export default function Home() {
                 </motion.div>
               </motion.div>
 
+              {/* ── Code editor illustration ── */}
               <motion.div
                 initial={{ opacity: 0, scale: 0.92 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.8, ease: 'easeOut' as const }}
                 className="relative hidden lg:block"
               >
-                <div className="relative rounded-2xl overflow-hidden shadow-2xl ring-1 ring-white/10 aspect-[4/3]">
-                  <img src={repairHeroImg} alt="Technician repairing laptop" className="object-cover w-full h-full" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent" />
-                  <div className="absolute bottom-5 left-5 right-5 flex items-center gap-2">
-                    <span className="w-2.5 h-2.5 rounded-full bg-green-400 animate-pulse" />
-                    <span className="text-white font-semibold text-xs tracking-widest uppercase">Currently accepting repairs</span>
+                {/* Ambient glow */}
+                <div className="absolute -inset-8 bg-blue-600/10 blur-3xl rounded-3xl pointer-events-none" />
+
+                {/* VS Code-style editor */}
+                <div className="relative bg-[#1e1e2e] rounded-2xl overflow-hidden shadow-2xl ring-1 ring-white/10 font-mono text-sm">
+                  {/* Title bar */}
+                  <div className="flex items-center gap-1.5 px-4 py-3 bg-[#181825] border-b border-white/5">
+                    <span className="w-3 h-3 rounded-full bg-[#f38ba8]" />
+                    <span className="w-3 h-3 rounded-full bg-[#f9e2af]" />
+                    <span className="w-3 h-3 rounded-full bg-[#a6e3a1]" />
+                    <span className="text-xs text-slate-500 ml-3">index.html — Larsha Tech</span>
+                  </div>
+                  {/* Tab bar */}
+                  <div className="flex bg-[#181825] border-b border-white/5 text-xs">
+                    <span className="px-4 py-2 bg-[#1e1e2e] text-[#89b4fa] border-t-2 border-[#89b4fa] border-r border-white/5">index.html</span>
+                    <span className="px-4 py-2 text-slate-500 border-r border-white/5">style.css</span>
+                    <span className="px-4 py-2 text-slate-500">script.js</span>
+                  </div>
+                  {/* Code body */}
+                  <div className="p-6 leading-7 space-y-0.5">
+                    <div><span className="text-[#585b70]">&lt;!-- Larsha Tech Website --&gt;</span></div>
+                    <div>
+                      <span className="text-[#89b4fa]">&lt;section</span>
+                      {' '}<span className="text-[#cba6f7]">class</span><span className="text-[#cdd6f4]">=</span><span className="text-[#a6e3a1]">"hero"</span>
+                      <span className="text-[#89b4fa]">&gt;</span>
+                    </div>
+                    <div className="pl-5">
+                      <span className="text-[#89b4fa]">&lt;h1</span>
+                      {' '}<span className="text-[#cba6f7]">class</span><span className="text-[#cdd6f4]">=</span><span className="text-[#a6e3a1]">"title"</span>
+                      <span className="text-[#89b4fa]">&gt;</span>
+                    </div>
+                    <div className="pl-10 text-[#cdd6f4]">Fast &amp; Reliable IT Services</div>
+                    <div className="pl-5"><span className="text-[#89b4fa]">&lt;/h1&gt;</span></div>
+                    <div className="pl-5">
+                      <span className="text-[#89b4fa]">&lt;p</span>
+                      {' '}<span className="text-[#cba6f7]">class</span><span className="text-[#cdd6f4]">=</span><span className="text-[#a6e3a1]">"subtitle"</span>
+                      <span className="text-[#89b4fa]">&gt;</span>
+                    </div>
+                    <div className="pl-10 text-[#cdd6f4]">Bangalore's trusted tech partner</div>
+                    <div className="pl-5"><span className="text-[#89b4fa]">&lt;/p&gt;</span></div>
+                    <div className="pl-5">
+                      <span className="text-[#89b4fa]">&lt;a</span>
+                      {' '}<span className="text-[#cba6f7]">href</span><span className="text-[#cdd6f4]">=</span>
+                      <span className="text-[#a6e3a1]">"tel:+918088461724"</span>
+                    </div>
+                    <div className="pl-10">
+                      <span className="text-[#cba6f7]">class</span><span className="text-[#cdd6f4]">=</span>
+                      <span className="text-[#a6e3a1]">"btn-cta"</span><span className="text-[#89b4fa]">&gt;</span>
+                    </div>
+                    <div className="pl-10 text-[#cdd6f4]">Call Now — Free Diagnosis</div>
+                    <div className="pl-5"><span className="text-[#89b4fa]">&lt;/a&gt;</span></div>
+                    <div><span className="text-[#89b4fa]">&lt;/section&gt;</span></div>
+                    {/* Blinking cursor */}
+                    <div className="inline-block w-2 h-[1.1em] bg-[#89b4fa] animate-pulse rounded-[1px] align-middle" />
+                  </div>
+                  {/* Status bar */}
+                  <div className="flex items-center gap-4 px-4 py-2 bg-[#181825] border-t border-white/5 text-xs text-slate-500">
+                    <span className="flex items-center gap-1.5 text-[#a6e3a1]">
+                      <span className="w-2 h-2 rounded-full bg-[#a6e3a1] animate-pulse" />
+                      Currently Accepting Repairs
+                    </span>
+                    <span className="ml-auto">HTML · UTF-8</span>
                   </div>
                 </div>
 
+                {/* Floating repair checklist (top right) */}
+                <motion.div
+                  initial={{ y: -12, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.5, duration: 0.5 }}
+                  className="absolute -top-4 -right-6 bg-slate-900 border border-white/10 rounded-xl p-4 shadow-2xl backdrop-blur-sm"
+                >
+                  <div className="flex items-center gap-2 mb-3">
+                    <Wrench className="w-4 h-4 text-blue-400" />
+                    <span className="text-xs font-bold text-white">System Repair</span>
+                  </div>
+                  <div className="space-y-2">
+                    {[
+                      { label: 'Virus Removal', done: true  },
+                      { label: 'SSD Upgrade',   done: true  },
+                      { label: 'OS Install',    done: false },
+                    ].map(({ label, done }) => (
+                      <div key={label} className="flex items-center gap-2">
+                        {done
+                          ? <CheckCircle2 className="w-3.5 h-3.5 text-green-400 shrink-0" />
+                          : <div className="w-3.5 h-3.5 rounded-full border-2 border-blue-400 border-t-transparent animate-spin shrink-0" />
+                        }
+                        <span className="text-xs text-slate-300">{label}</span>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+
+                {/* Floating Web Design badge (bottom left) */}
                 <motion.div
                   initial={{ y: 16, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
