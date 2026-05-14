@@ -98,9 +98,7 @@ export function adminHtml(leads: Lead[], bookings: Booking[], applications: Appl
       <thead><tr><th>#</th><th>Status</th><th>Name</th><th>Phone</th><th>Device</th><th>Issue</th><th>Urgency</th><th>Mode</th><th>Address</th><th>Slot</th><th>Date</th></tr></thead>
       <tbody>${bookings.map(b => `<tr>
         <td style="color:#475569">${b.id}</td>
-        <td><select class="status-select" onchange="updateStatus('bookings',${b.id},this.value)">
-          ${BOOKING_STATUSES.map(s => `<option value="${s}"${b.status===s?' selected':''}>${s}</option>`).join('')}
-        </select></td>
+        <td><span class="svc" style="background:${statusBg(b.status)};color:${statusFg(b.status)}">${esc(b.status)}</span></td>
         <td><strong>${esc(b.name)}</strong>${b.email?`<br><span style="color:#64748b;font-size:.75rem">${esc(b.email)}</span>`:''}</td>
         <td class="ph"><a href="tel:${encodeURI(String(b.phone))}">${esc(b.phone)}</a></td>
         <td><span class="svc" style="background:#1e3a5f;color:#60a5fa">${esc(b.device_type)}</span><br><span style="color:#94a3b8;font-size:.75rem">${esc(b.brand)}${b.model?' · '+esc(b.model):''}</span></td>
@@ -133,9 +131,7 @@ export function adminHtml(leads: Lead[], bookings: Booking[], applications: Appl
       <thead><tr><th>#</th><th>Status</th><th>Name</th><th>Contact</th><th>Position</th><th>Experience</th><th>Cover Letter</th><th>Resume</th><th>Date</th></tr></thead>
       <tbody>${applications.map(a => `<tr>
         <td style="color:#475569">${a.id}</td>
-        <td><select class="status-select" onchange="updateStatus('applications',${a.id},this.value)">
-          ${APP_STATUSES.map(s => `<option value="${s}"${a.status===s?' selected':''}>${s}</option>`).join('')}
-        </select></td>
+        <td><span class="svc" style="background:${statusBg(a.status)};color:${statusFg(a.status)}">${esc(a.status)}</span></td>
         <td><strong>${esc(a.name)}</strong></td>
         <td class="ph"><a href="tel:${encodeURI(String(a.phone))}">${esc(a.phone)}</a><br><span style="color:#64748b;font-size:.75rem">${esc(a.email)}</span></td>
         <td><span class="svc" style="background:#312e81;color:#a5b4fc">${esc(a.position)}</span></td>
@@ -153,12 +149,6 @@ export function adminHtml(leads: Lead[], bookings: Booking[], applications: Appl
       document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
       document.getElementById('tab-' + name).classList.add('active');
       btn.classList.add('active');
-    }
-    function updateStatus(resource, id, status) {
-      fetch('/api/' + resource + '/' + id + '/status', {
-        method: 'PATCH', headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({ status }),
-      }).catch(() => alert('Failed to update status.'));
     }
   </script>
 </body>

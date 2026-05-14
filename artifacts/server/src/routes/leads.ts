@@ -40,6 +40,10 @@ router.post('/', rateLimit, (req: Request, res: Response) => {
     res.status(400).json({ error: 'All fields are required' });
     return;
   }
+  if (!/^[6-9]\d{9}$/.test(phone.replace(/\s/g, ''))) {
+    res.status(400).json({ error: 'Enter a valid 10-digit Indian mobile number' });
+    return;
+  }
   if (name.length > MAX_LEN.name || phone.length > MAX_LEN.phone ||
       service.length > MAX_LEN.service || message.length > MAX_LEN.message) {
     res.status(400).json({ error: 'Input exceeds maximum allowed length' });

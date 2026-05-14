@@ -80,7 +80,7 @@ export default function Home() {
           <Button
             variant="outline"
             className="flex-1 h-12 border-green-200 dark:border-green-800 text-green-700 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-950/30"
-            onClick={() => window.open('https://wa.me/918088461724')}
+            onClick={() => window.open('https://wa.me/918088461724', '_blank')}
           >
             <FaWhatsapp className="w-4 h-4 mr-2 text-green-500" />
             WhatsApp

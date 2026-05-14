@@ -26,6 +26,7 @@ const allowedOrigins = process.env.ALLOWED_ORIGINS
   ? process.env.ALLOWED_ORIGINS.split(',').map(s => s.trim())
   : defaultOrigins;
 
+app.set('trust proxy', 1); // correctly read X-Forwarded-For behind Nginx
 app.use(cors({ origin: allowedOrigins, methods: ['GET', 'POST', 'PATCH'] }));
 app.use(express.json({ limit: '16kb' }));
 

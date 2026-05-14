@@ -104,7 +104,8 @@ router.get('/', requireAdmin, (_req: Request, res: Response) => {
 
 // PATCH /api/bookings/:id/status — update booking status (admin only)
 router.patch('/:id/status', requireAdmin, (req: Request, res: Response) => {
-  const id = Number(req.params.id);
+  const id = parseInt(req.params.id, 10);
+  if (!Number.isFinite(id)) { res.status(400).json({ error: 'Invalid booking ID' }); return; }
   const status = typeof req.body?.status === 'string' ? (req.body.status as string).trim() : '';
   const allowed = ['new', 'confirmed', 'in-progress', 'done', 'cancelled'];
   if (!allowed.includes(status)) {

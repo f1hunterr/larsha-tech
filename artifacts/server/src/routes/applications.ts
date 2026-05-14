@@ -1,6 +1,6 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import multer from 'multer';
-import { join, extname } from 'path';
+import { join, extname, basename } from 'path';
 import { mkdirSync } from 'fs';
 import { randomBytes } from 'crypto';
 import db from '../db';
@@ -11,13 +11,17 @@ const router = Router();
 const UPLOADS_DIR = process.env.UPLOADS_DIR || join(process.cwd(), 'uploads', 'resumes');
 mkdirSync(UPLOADS_DIR, { recursive: true });
 
-const ALLOWED_EXTS = new Set(['.pdf', '.doc', '.docx']);
+const ALLOWED_EXTS  = new Set(['.pdf', '.doc', '.docx']);
+const ALLOWED_MIMES = new Set([
+  'application/pdf',
+  'application/msword',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+]);
 
 const storage = multer.diskStorage({
   destination: (_req, _file, cb) => cb(null, UPLOADS_DIR),
-  filename: (_req, file, cb) => {
-    const ext = extname(file.originalname).toLowerCase();
-    cb(null, `${randomBytes(16).toString('hex')}${ext}`);
+  filename: (_req, _file, cb) => {
+    cb(null, `${randomBytes(16).toString('hex')}.bin`); // extension added after MIME check
   },
 });
 
@@ -26,8 +30,9 @@ const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 },
   fileFilter: (_req, file, cb) => {
     const ext = extname(file.originalname).toLowerCase();
-    if (ALLOWED_EXTS.has(ext)) { cb(null, true); }
-    else { cb(new Error('Only PDF, DOC, and DOCX files are allowed')); }
+    if (!ALLOWED_EXTS.has(ext))           { cb(new Error('Only PDF, DOC, and DOCX files are allowed')); return; }
+    if (!ALLOWED_MIMES.has(file.mimetype)) { cb(new Error('File type not allowed')); return; }
+    cb(null, true);
   },
 });
 
@@ -98,6 +103,10 @@ router.get('/:id/resume', requireAdmin, (req: Request, res: Response) => {
   const row = db.prepare('SELECT resume_path, resume_original_name FROM applications WHERE id = ?')
     .get(Number(req.params.id)) as { resume_path: string | null; resume_original_name: string | null } | undefined;
   if (!row?.resume_path) { res.status(404).json({ error: 'Resume not found' }); return; }
+  // Guard against path traversal: stored filename must contain no path separators
+  if (basename(row.resume_path) !== row.resume_path) {
+    res.status(400).json({ error: 'Invalid file reference' }); return;
+  }
   res.download(join(UPLOADS_DIR, row.resume_path), row.resume_original_name ?? row.resume_path, (err) => {
     if (err) res.status(404).json({ error: 'File not found on disk' });
   });
@@ -105,10 +114,12 @@ router.get('/:id/resume', requireAdmin, (req: Request, res: Response) => {
 
 // PATCH /api/applications/:id/status (admin only)
 router.patch('/:id/status', requireAdmin, (req: Request, res: Response) => {
+  const id = parseInt(req.params.id, 10);
+  if (!Number.isFinite(id)) { res.status(400).json({ error: 'Invalid application ID' }); return; }
   const status = typeof req.body?.status === 'string' ? (req.body.status as string).trim() : '';
   const allowed = ['new', 'reviewing', 'shortlisted', 'rejected', 'hired'];
   if (!allowed.includes(status)) { res.status(400).json({ error: 'Invalid status' }); return; }
-  const info = db.prepare('UPDATE applications SET status = ? WHERE id = ?').run(status, Number(req.params.id));
+  const info = db.prepare('UPDATE applications SET status = ? WHERE id = ?').run(status, id);
   if (info.changes === 0) { res.status(404).json({ error: 'Application not found' }); return; }
   res.json({ ok: true });
 });
