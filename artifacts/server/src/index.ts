@@ -4,6 +4,7 @@ import db from './db';
 import leadsRouter from './routes/leads';
 import bookingsRouter from './routes/bookings';
 import applicationsRouter from './routes/applications';
+import diagnosesRouter from './routes/diagnoses';
 import { adminHtml } from './admin';
 
 const app = express();
@@ -33,6 +34,7 @@ app.use(express.json({ limit: '16kb' }));
 app.use('/api/leads', leadsRouter);
 app.use('/api/bookings', bookingsRouter);
 app.use('/api/applications', applicationsRouter);
+app.use('/api/diagnoses', diagnosesRouter);
 
 const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'admin';
 
@@ -56,10 +58,12 @@ app.get('/admin', (req: Request, res: Response) => {
   const leads        = db.prepare('SELECT * FROM leads        ORDER BY created_at DESC').all();
   const bookings     = db.prepare('SELECT * FROM bookings     ORDER BY created_at DESC').all();
   const applications = db.prepare('SELECT * FROM applications ORDER BY created_at DESC').all();
+  const diagnoses    = db.prepare('SELECT * FROM diagnoses    ORDER BY created_at DESC').all();
   res.send(adminHtml(
     leads        as Parameters<typeof adminHtml>[0],
     bookings     as Parameters<typeof adminHtml>[1],
     applications as Parameters<typeof adminHtml>[2],
+    diagnoses    as Parameters<typeof adminHtml>[3],
   ));
 });
 

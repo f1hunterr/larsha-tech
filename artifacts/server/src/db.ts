@@ -48,6 +48,25 @@ db.exec(`
     resume_original_name TEXT,
     status               TEXT NOT NULL DEFAULT 'new',
     created_at           TEXT DEFAULT (datetime('now', 'localtime'))
+  );
+
+  CREATE TABLE IF NOT EXISTS diagnoses (
+    id             INTEGER PRIMARY KEY AUTOINCREMENT,
+    name           TEXT NOT NULL,
+    phone          TEXT NOT NULL,
+    email          TEXT,
+    device_type    TEXT NOT NULL,
+    brand          TEXT NOT NULL,
+    model          TEXT,
+    powers_on      TEXT NOT NULL,
+    display_status TEXT,
+    sounds         TEXT,
+    error_messages TEXT,
+    problem_start  TEXT,
+    description    TEXT NOT NULL,
+    tried          TEXT,
+    status         TEXT NOT NULL DEFAULT 'pending',
+    created_at     TEXT DEFAULT (datetime('now', 'localtime'))
   )
 `);
 

@@ -12,12 +12,19 @@ interface Application {
   experience: string; message: string; resume_original_name: string | null;
   status: string; created_at: string;
 }
+interface Diagnosis {
+  id: number; name: string; phone: string; email: string; device_type: string;
+  brand: string; model: string; powers_on: string; display_status: string;
+  sounds: string; error_messages: string; problem_start: string;
+  description: string; tried: string; status: string; created_at: string;
+}
 
-export function adminHtml(leads: Lead[], bookings: Booking[], applications: Application[]): string {
+export function adminHtml(leads: Lead[], bookings: Booking[], applications: Application[], diagnoses: Diagnosis[] = []): string {
   const now = Date.now();
   const leadsToday = leads.filter(l => new Date(l.created_at) > new Date(now - 86400000)).length;
   const bNew       = bookings.filter(b => b.status === 'new').length;
   const aNew       = applications.filter(a => a.status === 'new').length;
+  const dPending   = diagnoses.filter(d => d.status === 'pending').length;
 
   const BOOKING_STATUSES  = ['new','confirmed','in-progress','done','cancelled'];
   const APP_STATUSES      = ['new','reviewing','shortlisted','rejected','hired'];
@@ -27,6 +34,8 @@ export function adminHtml(leads: Lead[], bookings: Booking[], applications: Appl
     done: '#1c1917:#78716c', cancelled: '#450a0a:#f87171',
     reviewing: '#312e81:#a5b4fc', shortlisted: '#14532d:#4ade80',
     rejected: '#450a0a:#f87171', hired: '#064e3b:#34d399',
+    pending: '#4a1d4a:#f472b6', reviewed: '#1e3a5f:#60a5fa',
+    contacted: '#422006:#fb923c', resolved: '#064e3b:#34d399',
   };
   function statusBg(s: string) {
     return (STATUS_COLORS[s] ?? '#1e293b:#94a3b8').split(':')[0];
@@ -74,7 +83,7 @@ export function adminHtml(leads: Lead[], bookings: Booking[], applications: Appl
   <header>
     <h1>Larsha <span class="t">Tech</span></h1>
     <span class="badge">Admin</span>
-    <span class="count">${leads.length} leads · ${bookings.length} bookings · ${applications.length} applications</span>
+    <span class="count">${leads.length} leads · ${bookings.length} bookings · ${applications.length} applications · ${diagnoses.length} diagnoses</span>
   </header>
   <main>
     <div class="stats">
@@ -82,6 +91,8 @@ export function adminHtml(leads: Lead[], bookings: Booking[], applications: Appl
       <div class="stat"><div class="sv">${leadsToday}</div><div class="sl">Leads Today</div></div>
       <div class="stat"><div class="sv">${bookings.length}</div><div class="sl">Total Bookings</div></div>
       <div class="stat"><div class="sv" style="color:#4ade80">${bNew}</div><div class="sl">New Bookings</div></div>
+      <div class="stat"><div class="sv">${diagnoses.length}</div><div class="sl">Diagnoses</div></div>
+      <div class="stat"><div class="sv" style="color:#f472b6">${dPending}</div><div class="sl">Pending Diagnoses</div></div>
       <div class="stat"><div class="sv">${applications.length}</div><div class="sl">Applications</div></div>
       <div class="stat"><div class="sv" style="color:#a5b4fc">${aNew}</div><div class="sl">New Applications</div></div>
     </div>
@@ -89,6 +100,7 @@ export function adminHtml(leads: Lead[], bookings: Booking[], applications: Appl
     <div class="tabs">
       <button class="tab active" onclick="switchTab('bookings',this)">Repair Bookings</button>
       <button class="tab" onclick="switchTab('leads',this)">Quick Leads</button>
+      <button class="tab" onclick="switchTab('diagnoses',this)">Free Diagnoses</button>
       <button class="tab" onclick="switchTab('applications',this)">Job Applications</button>
     </div>
 
@@ -122,6 +134,26 @@ export function adminHtml(leads: Lead[], bookings: Booking[], applications: Appl
         <td><span class="svc" style="background:#1e3a5f;color:#60a5fa">${esc(l.service)}</span></td>
         <td class="msg">${esc(l.message)}</td>
         <td class="dt">${new Date(l.created_at).toLocaleString('en-IN',{timeZone:'Asia/Kolkata'})}</td>
+      </tr>`).join('')}</tbody></table></div>`}
+    </div>
+
+    <!-- Diagnoses -->
+    <div id="tab-diagnoses" class="tab-panel">
+      ${diagnoses.length === 0 ? '<div class="empty">No diagnosis requests yet.</div>' : `<div style="overflow-x:auto"><table>
+      <thead><tr><th>#</th><th>Status</th><th>Name</th><th>Phone</th><th>Device</th><th>Powers On</th><th>Display</th><th>Sounds</th><th>Problem Start</th><th>Description</th><th>Tried</th><th>Date</th></tr></thead>
+      <tbody>${diagnoses.map(d => `<tr>
+        <td style="color:#475569">${d.id}</td>
+        <td><span class="svc" style="background:${statusBg(d.status)};color:${statusFg(d.status)}">${esc(d.status)}</span></td>
+        <td><strong>${esc(d.name)}</strong>${d.email?`<br><span style="color:#64748b;font-size:.75rem">${esc(d.email)}</span>`:''}</td>
+        <td class="ph"><a href="tel:${encodeURI(String(d.phone))}">${esc(d.phone)}</a></td>
+        <td><span class="svc" style="background:#1e3a5f;color:#60a5fa">${esc(d.device_type)}</span><br><span style="color:#94a3b8;font-size:.75rem">${esc(d.brand)}${d.model?' · '+esc(d.model):''}</span></td>
+        <td style="font-size:.8rem">${esc(d.powers_on||'—')}</td>
+        <td style="font-size:.8rem;color:#94a3b8">${d.display_status?esc(d.display_status):'—'}</td>
+        <td style="font-size:.8rem;color:#94a3b8">${d.sounds?esc(d.sounds):'—'}</td>
+        <td style="font-size:.75rem;color:#94a3b8;white-space:nowrap">${d.problem_start?esc(d.problem_start):'—'}</td>
+        <td class="msg">${esc(d.description)}</td>
+        <td class="msg" style="color:#64748b">${d.tried?esc(d.tried):'—'}</td>
+        <td class="dt">${new Date(d.created_at).toLocaleString('en-IN',{timeZone:'Asia/Kolkata'})}</td>
       </tr>`).join('')}</tbody></table></div>`}
     </div>
 

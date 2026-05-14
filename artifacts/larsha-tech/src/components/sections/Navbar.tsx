@@ -134,6 +134,12 @@ export default function Navbar() {
             Careers
           </Button>
           <Button
+            className={`hidden sm:flex bg-pink-600 hover:bg-pink-700 text-white border-0`}
+            onClick={() => { navigate('/free-diagnosis'); setMobileOpen(false); }}
+          >
+            Free Diagnosis
+          </Button>
+          <Button
             variant="outline"
             className={`hidden sm:flex ${scrolled ? '' : 'border-white/30 text-white bg-white/10 hover:bg-white/20'}`}
             onClick={() => { navigate('/book-repair'); setMobileOpen(false); }}
@@ -190,6 +196,12 @@ export default function Navbar() {
               );
             })}
             <div className="pt-2 border-t mt-2 space-y-2">
+              <Button
+                className="w-full bg-pink-600 hover:bg-pink-700 text-white"
+                onClick={() => { navigate('/free-diagnosis'); setMobileOpen(false); }}
+              >
+                Free Diagnosis
+              </Button>
               <Button
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white"
                 onClick={() => { navigate('/book-repair'); setMobileOpen(false); }}

@@ -6,6 +6,7 @@ import NotFound from "@/pages/not-found";
 import Home from "@/pages/home";
 import BookRepair from "@/pages/book-repair";
 import Careers from "@/pages/careers";
+import FreeDiagnosis from "@/pages/free-diagnosis";
 import AdminPage from "@/pages/admin";
 
 const queryClient = new QueryClient();
@@ -16,6 +17,7 @@ function Router() {
       <Route path="/">{() => <Home />}</Route>
       <Route path="/book-repair">{() => <BookRepair />}</Route>
       <Route path="/careers">{() => <Careers />}</Route>
+      <Route path="/free-diagnosis">{() => <FreeDiagnosis />}</Route>
       <Route path="/admin">{() => <AdminPage />}</Route>
       <Route>{() => <NotFound />}</Route>
     </Switch>

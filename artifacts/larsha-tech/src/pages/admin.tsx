@@ -12,11 +12,18 @@ interface Application {
   id: number; name: string; email: string; phone: string; position: string;
   experience: string; message: string; resume_original_name: string | null; status: string; created_at: string;
 }
+interface Diagnosis {
+  id: number; name: string; phone: string; email: string; device_type: string;
+  brand: string; model: string; powers_on: string; display_status: string;
+  sounds: string; error_messages: string; problem_start: string;
+  description: string; tried: string; status: string; created_at: string;
+}
 
-type Tab = 'bookings' | 'leads' | 'applications';
+type Tab = 'bookings' | 'leads' | 'applications' | 'diagnoses';
 
 const BOOKING_STATUSES  = ['new','confirmed','in-progress','done','cancelled'];
 const APP_STATUSES      = ['new','reviewing','shortlisted','rejected','hired'];
+const DIAG_STATUSES     = ['pending','reviewed','contacted','resolved'];
 
 const STATUS_COLOR: Record<string, string> = {
   new: 'bg-blue-900/60 text-blue-300', confirmed: 'bg-green-900/60 text-green-300',
@@ -24,6 +31,8 @@ const STATUS_COLOR: Record<string, string> = {
   cancelled: 'bg-red-900/60 text-red-400', reviewing: 'bg-indigo-900/60 text-indigo-300',
   shortlisted: 'bg-emerald-900/60 text-emerald-300', rejected: 'bg-red-900/60 text-red-400',
   hired: 'bg-teal-900/60 text-teal-300',
+  pending: 'bg-pink-900/60 text-pink-300', reviewed: 'bg-blue-900/60 text-blue-300',
+  contacted: 'bg-orange-900/60 text-orange-300', resolved: 'bg-teal-900/60 text-teal-300',
 };
 
 function Badge({ s }: { s: string }) {
@@ -49,6 +58,7 @@ export default function AdminPage() {
   const [leads, setLeads] = useState<Lead[]>([]);
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [applications, setApplications] = useState<Application[]>([]);
+  const [diagnoses, setDiagnoses] = useState<Diagnosis[]>([]);
   const [dataLoading, setDataLoading] = useState(false);
   const [tab, setTab] = useState<Tab>('bookings');
 
@@ -57,15 +67,17 @@ export default function AdminPage() {
   const fetchAll = async (auth: string) => {
     setDataLoading(true);
     try {
-      const [bRes, lRes, aRes] = await Promise.all([
+      const [bRes, lRes, aRes, dRes] = await Promise.all([
         fetch(`${apiUrl}/api/bookings`,     { headers: headers(auth) }),
         fetch(`${apiUrl}/api/leads`,        { headers: headers(auth) }),
         fetch(`${apiUrl}/api/applications`, { headers: headers(auth) }),
+        fetch(`${apiUrl}/api/diagnoses`,    { headers: headers(auth) }),
       ]);
       if (!bRes.ok) throw new Error('auth');
-      setBookings(    await bRes.json() as Booking[]);
-      setLeads(       lRes.ok ? await lRes.json() as Lead[] : []);
+      setBookings(  await bRes.json() as Booking[]);
+      setLeads(     lRes.ok ? await lRes.json() as Lead[] : []);
       setApplications(aRes.ok ? await aRes.json() as Application[] : []);
+      setDiagnoses(   dRes.ok ? await dRes.json() as Diagnosis[] : []);
     } finally {
       setDataLoading(false);
     }
@@ -88,12 +100,14 @@ export default function AdminPage() {
       sessionStorage.setItem('admin-auth', auth);
       setAuthHeader(auth);
       setBookings(await res.json() as Booking[]);
-      const [lRes, aRes] = await Promise.all([
+      const [lRes, aRes, dRes] = await Promise.all([
         fetch(`${apiUrl}/api/leads`,        { headers: headers(auth) }),
         fetch(`${apiUrl}/api/applications`, { headers: headers(auth) }),
+        fetch(`${apiUrl}/api/diagnoses`,    { headers: headers(auth) }),
       ]);
       setLeads(       lRes.ok ? await lRes.json() as Lead[] : []);
       setApplications(aRes.ok ? await aRes.json() as Application[] : []);
+      setDiagnoses(   dRes.ok ? await dRes.json() as Diagnosis[] : []);
     } catch {
       setLoginError('Could not reach the server. Check your connection.');
     }
@@ -103,7 +117,7 @@ export default function AdminPage() {
   const logout = () => {
     sessionStorage.removeItem('admin-auth');
     setAuthHeader(null);
-    setLeads([]); setBookings([]); setApplications([]);
+    setLeads([]); setBookings([]); setApplications([]); setDiagnoses([]);
   };
 
   const updateStatus = async (resource: string, id: number, status: string) => {
@@ -196,14 +210,16 @@ export default function AdminPage() {
 
       <main className="p-6 max-w-7xl mx-auto">
         {/* Stats */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-6">
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3 mb-6">
           {[
-            { label: 'Total Leads',       value: leads.length,                          color: '' },
-            { label: 'Total Bookings',    value: bookings.length,                       color: '' },
-            { label: 'New Bookings',      value: bookings.filter(b=>b.status==='new').length, color: 'text-blue-500' },
-            { label: 'Total Apps',        value: applications.length,                   color: '' },
-            { label: 'New Apps',          value: applications.filter(a=>a.status==='new').length, color: 'text-indigo-400' },
-            { label: 'Shortlisted',       value: applications.filter(a=>a.status==='shortlisted').length, color: 'text-green-500' },
+            { label: 'Total Leads',    value: leads.length,                                           color: '' },
+            { label: 'Total Bookings', value: bookings.length,                                        color: '' },
+            { label: 'New Bookings',   value: bookings.filter(b=>b.status==='new').length,            color: 'text-blue-500' },
+            { label: 'Diagnoses',      value: diagnoses.length,                                       color: '' },
+            { label: 'Pending Diag.', value: diagnoses.filter(d=>d.status==='pending').length,        color: 'text-pink-400' },
+            { label: 'Total Apps',     value: applications.length,                                    color: '' },
+            { label: 'New Apps',       value: applications.filter(a=>a.status==='new').length,        color: 'text-indigo-400' },
+            { label: 'Shortlisted',    value: applications.filter(a=>a.status==='shortlisted').length,color: 'text-green-500' },
           ].map(s => (
             <div key={s.label} className="bg-card border rounded-xl p-4 text-center">
               <p className={`text-2xl font-black ${s.color || 'text-foreground'}`}>{s.value}</p>
@@ -213,9 +229,10 @@ export default function AdminPage() {
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-2 mb-6">
-          <button className={tabClass('bookings')} onClick={() => setTab('bookings')}>Repair Bookings ({bookings.length})</button>
-          <button className={tabClass('leads')}    onClick={() => setTab('leads')}>Leads ({leads.length})</button>
+        <div className="flex flex-wrap gap-2 mb-6">
+          <button className={tabClass('bookings')}    onClick={() => setTab('bookings')}>Repair Bookings ({bookings.length})</button>
+          <button className={tabClass('leads')}       onClick={() => setTab('leads')}>Leads ({leads.length})</button>
+          <button className={tabClass('diagnoses')}   onClick={() => setTab('diagnoses')}>Free Diagnoses ({diagnoses.length})</button>
           <button className={tabClass('applications')} onClick={() => setTab('applications')}>Applications ({applications.length})</button>
         </div>
 
@@ -278,6 +295,47 @@ export default function AdminPage() {
                           <td className={tdCls}><Badge s={l.service} /></td>
                           <td className={tdCls + ' max-w-[220px] text-muted-foreground text-xs'}>{l.message}</td>
                           <td className={tdCls + ' text-xs text-muted-foreground whitespace-nowrap'}>{fmt(l.created_at)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+          )}
+
+          {/* DIAGNOSES */}
+          {tab === 'diagnoses' && (
+            diagnoses.length === 0
+              ? <p className="text-center py-16 text-muted-foreground">No diagnosis requests yet.</p>
+              : <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead><tr>
+                      {['#','Status','Name','Phone','Device','Powers On','Display','Problem Start','Description','Tried','Date'].map(h => <th key={h} className={thCls}>{h}</th>)}
+                    </tr></thead>
+                    <tbody>
+                      {diagnoses.map(d => (
+                        <tr key={d.id} className="hover:bg-muted/30 transition-colors">
+                          <td className={tdCls + ' text-muted-foreground'}>{d.id}</td>
+                          <td className={tdCls}>
+                            <select
+                              value={d.status}
+                              onChange={e => updateStatus('diagnoses', d.id, e.target.value)}
+                              className="text-xs bg-background border border-border rounded-lg px-2 py-1 cursor-pointer"
+                            >
+                              {DIAG_STATUSES.map(s => <option key={s} value={s}>{s}</option>)}
+                            </select>
+                          </td>
+                          <td className={tdCls}>
+                            <p className="font-semibold">{d.name}</p>
+                            {d.email && <p className="text-xs text-muted-foreground">{d.email}</p>}
+                          </td>
+                          <td className={tdCls}><a href={`tel:${d.phone}`} className="text-green-600 dark:text-green-400 hover:underline">{d.phone}</a></td>
+                          <td className={tdCls}><p className="font-medium">{d.device_type}</p><p className="text-xs text-muted-foreground">{d.brand}{d.model ? ' · ' + d.model : ''}</p></td>
+                          <td className={tdCls}><Badge s={d.powers_on} /></td>
+                          <td className={tdCls + ' text-xs text-muted-foreground'}>{d.display_status || '—'}</td>
+                          <td className={tdCls + ' text-xs text-muted-foreground whitespace-nowrap'}>{d.problem_start || '—'}</td>
+                          <td className={tdCls + ' max-w-[200px] text-xs text-muted-foreground'}>{d.description.slice(0, 120)}{d.description.length > 120 ? '…' : ''}</td>
+                          <td className={tdCls + ' max-w-[160px] text-xs text-muted-foreground'}>{d.tried || '—'}</td>
+                          <td className={tdCls + ' text-xs text-muted-foreground whitespace-nowrap'}>{fmt(d.created_at)}</td>
                         </tr>
                       ))}
                     </tbody>
