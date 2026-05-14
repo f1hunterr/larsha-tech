@@ -28,7 +28,7 @@ export default function About() {
           >
             <div className="relative mb-6">
               <img
-                src="/hemanth.jpg"
+                src={`${import.meta.env.BASE_URL}hemanth.jpg`}
                 alt="Hemanth K — Founder, Larsha Tech"
                 className="w-48 h-48 rounded-3xl object-cover shadow-2xl shadow-blue-500/25"
               />

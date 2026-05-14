@@ -37,7 +37,7 @@ export default function Navbar() {
 
         {/* Logo */}
         <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="flex items-center gap-2">
-          <img src="/logo.png" alt="Larsha Tech" className="h-9 w-auto object-contain" />
+          <img src={`${import.meta.env.BASE_URL}logo.png`} alt="Larsha Tech" className="h-9 w-auto object-contain" />
         </button>
 
         {/* Desktop nav */}
