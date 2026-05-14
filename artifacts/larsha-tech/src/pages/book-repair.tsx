@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { ArrowLeft, Loader2, CheckCircle2, PhoneCall, Laptop, Monitor, MapPin, Clock, Calendar } from 'lucide-react';
-import { FaWhatsapp } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import Navbar from '@/components/sections/Navbar';
@@ -86,39 +85,6 @@ function validate(f: FormState): Errors {
   return e;
 }
 
-function buildWhatsApp(f: FormState): string {
-  const serviceLabel = SERVICE_MODES.find(s => s.value === f.serviceMode)?.label ?? f.serviceMode;
-  const urgencyLabel = URGENCY_OPTIONS.find(u => u.value === f.urgency)?.label ?? f.urgency;
-  const lines = [
-    `Hi Larsha Tech! 🔧 I'd like to book a repair.`,
-    ``,
-    `📱 *DEVICE*`,
-    `Type: ${f.deviceType}`,
-    `Brand: ${f.brand}`,
-    f.model        ? `Model: ${f.model}`        : null,
-    f.deviceAge    ? `Age: ${f.deviceAge}`      : null,
-    ``,
-    `🔴 *PROBLEM*`,
-    `Issue: ${f.issue}`,
-    `Urgency: ${urgencyLabel}`,
-    `Details: ${f.description}`,
-    ``,
-    `🔧 *SERVICE*`,
-    `Mode: ${serviceLabel}`,
-    f.address      ? `Address: ${f.address}`           : null,
-    f.preferredDate ? `Date: ${f.preferredDate}`       : null,
-    f.preferredSlot ? `Time: ${f.preferredSlot}`       : null,
-    ``,
-    `👤 *MY DETAILS*`,
-    `Name: ${f.name}`,
-    `Phone: ${f.phone}`,
-    f.email        ? `Email: ${f.email}`        : null,
-    ``,
-    `Please confirm my booking. Thank you! 🙏`,
-  ].filter(l => l !== null).join('\n');
-  return `https://wa.me/918088461724?text=${encodeURIComponent(lines)}`;
-}
-
 // ─── Sub-components ────────────────────────────────────────────────────────────
 
 function SectionTitle({ step, title, subtitle }: { step: number; title: string; subtitle?: string }) {
@@ -151,11 +117,11 @@ export default function BookRepair() {
   const [, navigate] = useLocation();
   const [form, setForm] = useState<FormState>(EMPTY);
 
-  // Scroll to top when this page mounts — the browser preserves the
-  // scroll offset from wherever the user was on the previous page
   useEffect(() => { window.scrollTo(0, 0); }, []);
   const [errors, setErrors] = useState<Errors>({});
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success'>('idle');
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [bookingId, setBookingId] = useState<number | null>(null);
+  const [errorMsg, setErrorMsg] = useState('');
 
   const set = (field: keyof FormState) =>
     (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -168,7 +134,7 @@ export default function BookRepair() {
     if (errors[field]) setErrors(prev => ({ ...prev, [field]: undefined }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const errs = validate(form);
     if (Object.keys(errs).length) {
@@ -178,30 +144,50 @@ export default function BookRepair() {
       return;
     }
     setStatus('loading');
+    setErrorMsg('');
 
-    const payload = {
-      name: form.name, phone: form.phone, service: `Repair: ${form.issue}`,
-      message: `Device: ${form.deviceType} ${form.brand}${form.model ? ' ' + form.model : ''}. Problem: ${form.description}. Mode: ${form.serviceMode}.`,
-    };
-    const formspreeId = import.meta.env.VITE_FORMSPREE_ID as string | undefined;
-    if (formspreeId) {
-      fetch(`https://formspree.io/f/${formspreeId}`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...payload, ...form }),
-      }).catch(() => {});
-    }
-    const apiUrl = import.meta.env.VITE_API_URL as string | undefined;
-    if (apiUrl) {
-      fetch(`${apiUrl}/api/leads`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      }).catch(() => {});
+    const apiUrl = (import.meta.env.VITE_API_URL as string | undefined) ?? '';
+    if (!apiUrl) {
+      setStatus('error');
+      setErrorMsg('Booking service is not configured. Please call us directly.');
+      return;
     }
 
-    setTimeout(() => {
-      window.open(buildWhatsApp(form), '_blank');
+    try {
+      const res = await fetch(`${apiUrl}/api/bookings`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          deviceType:    form.deviceType,
+          brand:         form.brand,
+          model:         form.model,
+          deviceAge:     form.deviceAge,
+          issue:         form.issue,
+          description:   form.description,
+          urgency:       form.urgency,
+          serviceMode:   form.serviceMode,
+          address:       form.address,
+          preferredDate: form.preferredDate,
+          preferredSlot: form.preferredSlot,
+          name:          form.name,
+          phone:         form.phone,
+          email:         form.email,
+        }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({})) as { error?: string };
+        setStatus('error');
+        setErrorMsg(data.error ?? 'Something went wrong. Please try again or call us directly.');
+        return;
+      }
+      const data = await res.json() as { id: number };
+      setBookingId(data.id);
       setStatus('success');
-    }, 500);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch {
+      setStatus('error');
+      setErrorMsg('Could not reach the server. Please check your connection or call us directly.');
+    }
   };
 
   const today = new Date().toISOString().split('T')[0];
@@ -225,7 +211,7 @@ export default function BookRepair() {
             Book a Repair
           </h1>
           <p className="text-slate-400 text-base leading-relaxed">
-            Fill in the details below. We'll confirm your booking on WhatsApp within 1 hour.
+            Fill in the details below. We'll confirm your booking within 1 hour (Mon–Sat, 9 am–7 pm).
           </p>
         </div>
       </div>
@@ -241,12 +227,15 @@ export default function BookRepair() {
             <div className="w-20 h-20 rounded-full bg-green-100 dark:bg-green-950/40 flex items-center justify-center mx-auto mb-5">
               <CheckCircle2 className="w-10 h-10 text-green-600 dark:text-green-400" />
             </div>
-            <h2 className="text-2xl font-black mb-3">Booking Request Sent!</h2>
+            <h2 className="text-2xl font-black mb-3">Booking Confirmed!</h2>
+            {bookingId && (
+              <p className="text-xs font-mono text-muted-foreground mb-2">Booking #{bookingId}</p>
+            )}
             <p className="text-muted-foreground leading-relaxed max-w-sm mx-auto mb-6">
-              Your WhatsApp was opened with all the details pre-filled. We'll confirm your slot within <strong>1 hour</strong> (Mon–Sat, 9 am–7 pm).
+              Your repair request has been saved. We'll call you on <strong>{form.phone}</strong> to confirm your slot within <strong>1 hour</strong> (Mon–Sat, 9 am–7 pm).
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Button variant="outline" onClick={() => { setForm(EMPTY); setStatus('idle'); }}>
+              <Button variant="outline" onClick={() => { setForm(EMPTY); setStatus('idle'); setBookingId(null); }}>
                 Book Another Repair
               </Button>
               <Button onClick={() => navigate('/')}>
@@ -506,15 +495,20 @@ export default function BookRepair() {
               initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}
               className="space-y-3"
             >
+              {status === 'error' && (
+                <div className="px-4 py-3 rounded-xl bg-destructive/10 border border-destructive/30 text-destructive text-sm text-center">
+                  {errorMsg}
+                </div>
+              )}
               <Button
                 type="submit"
                 size="lg"
-                className="w-full h-14 text-base bg-green-600 hover:bg-green-700 text-white shadow-lg shadow-green-600/20"
+                className="w-full h-14 text-base bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-600/20"
                 disabled={status === 'loading'}
               >
                 {status === 'loading'
-                  ? <><Loader2 className="w-5 h-5 mr-2 animate-spin" /> Preparing your booking…</>
-                  : <><FaWhatsapp className="w-5 h-5 mr-2" /> Confirm Booking via WhatsApp</>
+                  ? <><Loader2 className="w-5 h-5 mr-2 animate-spin" /> Saving your booking…</>
+                  : 'Confirm Booking Request'
                 }
               </Button>
               <div className="flex flex-wrap justify-center gap-4 text-xs text-muted-foreground">
@@ -525,9 +519,9 @@ export default function BookRepair() {
                 ))}
               </div>
               <p className="text-center text-xs text-muted-foreground">
-                Alternatively,{' '}
+                Prefer to call?{' '}
                 <a href="tel:+918088461724" className="text-primary font-semibold hover:underline">
-                  <PhoneCall className="w-3 h-3 inline mr-0.5" />call +91 80884 61724
+                  <PhoneCall className="w-3 h-3 inline mr-0.5" />+91 80884 61724
                 </a>
               </p>
             </motion.div>

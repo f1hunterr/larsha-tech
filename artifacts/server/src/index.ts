@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import cors from 'cors';
 import db from './db';
 import leadsRouter from './routes/leads';
+import bookingsRouter from './routes/bookings';
 import { adminHtml } from './admin';
 
 const app = express();
@@ -24,10 +25,11 @@ const allowedOrigins = process.env.ALLOWED_ORIGINS
   ? process.env.ALLOWED_ORIGINS.split(',').map(s => s.trim())
   : defaultOrigins;
 
-app.use(cors({ origin: allowedOrigins, methods: ['GET', 'POST'] }));
+app.use(cors({ origin: allowedOrigins, methods: ['GET', 'POST', 'PATCH'] }));
 app.use(express.json({ limit: '16kb' }));
 
 app.use('/api/leads', leadsRouter);
+app.use('/api/bookings', bookingsRouter);
 
 // Admin dashboard — HTTP Basic Auth
 app.get('/admin', (req: Request, res: Response) => {
@@ -43,8 +45,12 @@ app.get('/admin', (req: Request, res: Response) => {
     res.status(401).send('Invalid credentials');
     return;
   }
-  const leads = db.prepare('SELECT * FROM leads ORDER BY created_at DESC').all();
-  res.send(adminHtml(leads as Parameters<typeof adminHtml>[0]));
+  const leads    = db.prepare('SELECT * FROM leads    ORDER BY created_at DESC').all();
+  const bookings = db.prepare('SELECT * FROM bookings ORDER BY created_at DESC').all();
+  res.send(adminHtml(
+    leads    as Parameters<typeof adminHtml>[0],
+    bookings as Parameters<typeof adminHtml>[1],
+  ));
 });
 
 app.get('/health', (_req, res) => res.json({ ok: true }));
