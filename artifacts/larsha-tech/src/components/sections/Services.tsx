@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLocation } from 'wouter';
 import { motion } from 'framer-motion';
 import { Wrench, Globe, CheckCircle2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -6,6 +7,7 @@ import { Button } from '@/components/ui/button';
 const scrollTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
 export default function Services() {
+  const [, navigate] = useLocation();
   return (
     <section id="services" className="py-14 sm:py-24 bg-muted">
       <div className="container mx-auto px-4">
@@ -58,10 +60,10 @@ export default function Services() {
               <Button
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white"
                 size="lg"
-                onClick={() => scrollTo('pricing')}
+                onClick={() => navigate('/book-repair')}
                 data-testid="button-service-repair"
               >
-                View Repair Pricing
+                Book a Repair
               </Button>
             </div>
           </motion.div>
@@ -111,7 +113,7 @@ export default function Services() {
                 onClick={() => scrollTo('pricing')}
                 data-testid="button-service-web"
               >
-                View Web Dev Pricing
+                View Pricing
               </Button>
             </div>
           </motion.div>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'wouter';
 import { PhoneCall, Menu, X, Sun, Moon } from 'lucide-react';
 import { FaWhatsapp } from 'react-icons/fa';
 import { useTheme } from '@/hooks/useTheme';
@@ -17,6 +18,8 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { isDark, toggle: toggleTheme } = useTheme();
+  const [location, navigate] = useLocation();
+  const isHome = location === '/';
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -25,7 +28,12 @@ export default function Navbar() {
   }, []);
 
   const scrollTo = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    if (!isHome) {
+      navigate('/');
+      setTimeout(() => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' }), 150);
+    } else {
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    }
     setMobileOpen(false);
   };
 
@@ -69,6 +77,13 @@ export default function Navbar() {
           </button>
 
           <Button
+            variant="outline"
+            className={`hidden sm:flex ${scrolled ? '' : 'border-white/30 text-white bg-white/10 hover:bg-white/20'}`}
+            onClick={() => { navigate('/book-repair'); setMobileOpen(false); }}
+          >
+            Book Repair
+          </Button>
+          <Button
             onClick={() => window.open('tel:+918088461724')}
             className={scrolled ? '' : 'bg-white text-slate-900 hover:bg-white/90'}
           >
@@ -100,13 +115,21 @@ export default function Navbar() {
                 {label}
               </button>
             ))}
-            <div className="pt-2 border-t mt-2 flex gap-2">
-              <Button className="flex-1" onClick={() => { window.open('tel:+918088461724'); setMobileOpen(false); }}>
-                <PhoneCall className="w-4 h-4 mr-2" /> Call Now
+            <div className="pt-2 border-t mt-2 space-y-2">
+              <Button
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                onClick={() => { navigate('/book-repair'); setMobileOpen(false); }}
+              >
+                Book a Repair
               </Button>
-              <Button variant="outline" className="flex-1" onClick={() => { window.open('https://wa.me/918088461724'); setMobileOpen(false); }}>
-                <FaWhatsapp className="w-4 h-4 mr-2 text-green-500" /> WhatsApp
-              </Button>
+              <div className="flex gap-2">
+                <Button className="flex-1" onClick={() => { window.open('tel:+918088461724'); setMobileOpen(false); }}>
+                  <PhoneCall className="w-4 h-4 mr-2" /> Call Now
+                </Button>
+                <Button variant="outline" className="flex-1" onClick={() => { window.open('https://wa.me/918088461724'); setMobileOpen(false); }}>
+                  <FaWhatsapp className="w-4 h-4 mr-2 text-green-500" /> WhatsApp
+                </Button>
+              </div>
             </div>
           </nav>
         </div>
