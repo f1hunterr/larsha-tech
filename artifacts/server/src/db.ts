@@ -1,7 +1,9 @@
 import Database from 'better-sqlite3';
-import { join } from 'path';
+import { join, dirname } from 'path';
+import { mkdirSync } from 'fs';
 
 const dbPath = process.env.DB_PATH || join(process.cwd(), 'leads.db');
+mkdirSync(dirname(dbPath), { recursive: true });
 const db = new Database(dbPath);
 
 db.exec(`

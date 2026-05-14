@@ -1,4 +1,13 @@
-export function adminHtml(leads: any[]): string {
+interface Lead {
+  id: number;
+  name: string;
+  phone: string;
+  service: string;
+  message: string;
+  created_at: string;
+}
+
+export function adminHtml(leads: Lead[]): string {
   const today = leads.filter(l => new Date(l.created_at) > new Date(Date.now() - 86400000)).length;
   const week  = leads.filter(l => new Date(l.created_at) > new Date(Date.now() - 7 * 86400000)).length;
 
@@ -50,7 +59,7 @@ export function adminHtml(leads: any[]): string {
         ${leads.map(l => `<tr>
           <td style="color:#475569">${l.id}</td>
           <td><strong>${esc(l.name)}</strong></td>
-          <td class="ph"><a href="tel:${esc(l.phone)}">${esc(l.phone)}</a></td>
+          <td class="ph"><a href="tel:${encodeURI(String(l.phone))}">${esc(l.phone)}</a></td>
           <td><span class="svc">${esc(l.service)}</span></td>
           <td class="msg">${esc(l.message)}</td>
           <td class="dt">${new Date(l.created_at).toLocaleString('en-IN',{timeZone:'Asia/Kolkata'})}</td>

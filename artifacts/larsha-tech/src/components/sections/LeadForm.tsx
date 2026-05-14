@@ -150,6 +150,7 @@ export default function LeadForm() {
                         placeholder="e.g. Ravi Kumar"
                         value={form.name}
                         onChange={set('name')}
+                        maxLength={100}
                         className={`w-full px-4 py-3 rounded-xl border bg-background text-sm outline-none transition-colors focus:ring-2 focus:ring-primary/30 focus:border-primary ${errors.name ? 'border-destructive' : 'border-input'}`}
                       />
                       {errors.name && <p className="text-destructive text-xs mt-1">{errors.name}</p>}
@@ -197,6 +198,7 @@ export default function LeadForm() {
                       placeholder="e.g. My laptop is running very slow and shutting down randomly. It's a Dell Inspiron, 3 years old..."
                       value={form.message}
                       onChange={set('message')}
+                      maxLength={2000}
                       className={`w-full px-4 py-3 rounded-xl border bg-background text-sm outline-none transition-colors focus:ring-2 focus:ring-primary/30 focus:border-primary resize-none ${errors.message ? 'border-destructive' : 'border-input'}`}
                     />
                     {errors.message && <p className="text-destructive text-xs mt-1">{errors.message}</p>}

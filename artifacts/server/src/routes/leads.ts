@@ -3,7 +3,31 @@ import db from '../db';
 
 const router = Router();
 
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'changeme';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'dev-only-changeme';
+
+// Max field lengths (must match frontend LeadForm validation)
+const MAX_LEN = { name: 100, phone: 20, service: 80, message: 2000 };
+
+// Simple in-memory rate limiter: 5 lead submissions per IP per 10 minutes
+const rateMap = new Map<string, { count: number; resetAt: number }>();
+function rateLimit(req: Request, res: Response, next: NextFunction) {
+  const ip = req.ip ?? 'unknown';
+  const now = Date.now();
+  const WINDOW = 10 * 60 * 1000;
+  const LIMIT = 5;
+  const entry = rateMap.get(ip);
+  if (!entry || entry.resetAt < now) {
+    rateMap.set(ip, { count: 1, resetAt: now + WINDOW });
+    next();
+    return;
+  }
+  if (entry.count >= LIMIT) {
+    res.status(429).json({ error: 'Too many requests. Please try again later.' });
+    return;
+  }
+  entry.count++;
+  next();
+}
 
 function requireAdmin(req: Request, res: Response, next: NextFunction) {
   const header = req.headers.authorization;
@@ -22,14 +46,25 @@ function requireAdmin(req: Request, res: Response, next: NextFunction) {
 }
 
 // POST /api/leads — save a new lead
-router.post('/', (req: Request, res: Response) => {
-  const { name, phone, service, message } = req.body as Record<string, string>;
+router.post('/', rateLimit, (req: Request, res: Response) => {
+  const body = req.body as Record<string, unknown>;
+  const name    = typeof body.name    === 'string' ? body.name.trim()    : '';
+  const phone   = typeof body.phone   === 'string' ? body.phone.trim()   : '';
+  const service = typeof body.service === 'string' ? body.service.trim() : '';
+  const message = typeof body.message === 'string' ? body.message.trim() : '';
+
   if (!name || !phone || !service || !message) {
     res.status(400).json({ error: 'All fields are required' });
     return;
   }
-  const stmt = db.prepare('INSERT INTO leads (name, phone, service, message) VALUES (?, ?, ?, ?)');
-  const result = stmt.run(name.trim(), phone.trim(), service.trim(), message.trim());
+  if (name.length > MAX_LEN.name || phone.length > MAX_LEN.phone ||
+      service.length > MAX_LEN.service || message.length > MAX_LEN.message) {
+    res.status(400).json({ error: 'Input exceeds maximum allowed length' });
+    return;
+  }
+
+  const result = db.prepare('INSERT INTO leads (name, phone, service, message) VALUES (?, ?, ?, ?)')
+    .run(name, phone, service, message);
   res.status(201).json({ id: result.lastInsertRowid });
 });
 
