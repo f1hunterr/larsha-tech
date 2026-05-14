@@ -47,8 +47,8 @@ export default function Navbar() {
         .filter((e): e is { id: string; top: number } => e !== null)
         .sort((a, b) => a.top - b.top);
 
-      // Last section whose absolute top has passed the trigger (64 px navbar + 16 px buffer)
-      const trigger = scrollY + 80;
+      // Last section whose top has entered the upper 40% of the viewport
+      const trigger = scrollY + window.innerHeight * 0.4;
       let current = 'home';
       for (const { id, top } of entries) {
         if (top <= trigger) current = id;
