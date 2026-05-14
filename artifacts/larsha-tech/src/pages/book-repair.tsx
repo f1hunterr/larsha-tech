@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { ArrowLeft, Loader2, CheckCircle2, PhoneCall, Laptop, Monitor, MapPin, Clock, Calendar } from 'lucide-react';
 import { FaWhatsapp } from 'react-icons/fa';
@@ -150,6 +150,10 @@ const inputCls = (err?: string) =>
 export default function BookRepair() {
   const [, navigate] = useLocation();
   const [form, setForm] = useState<FormState>(EMPTY);
+
+  // Scroll to top when this page mounts — the browser preserves the
+  // scroll offset from wherever the user was on the previous page
+  useEffect(() => { window.scrollTo(0, 0); }, []);
   const [errors, setErrors] = useState<Errors>({});
   const [status, setStatus] = useState<'idle' | 'loading' | 'success'>('idle');
 
