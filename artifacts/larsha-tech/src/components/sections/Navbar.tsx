@@ -36,9 +36,13 @@ export default function Navbar() {
     const detect = () => {
       if (window.scrollY < 80) { setActiveSection('home'); return; }
       let current = 'home';
+      let best = -Infinity;
       for (const id of SECTION_IDS) {
         const el = document.getElementById(id);
-        if (el && el.getBoundingClientRect().top <= 100) current = id;
+        if (!el) continue;
+        const top = el.getBoundingClientRect().top;
+        // Pick the section whose top is closest to (but still ≤) 120px
+        if (top <= 120 && top > best) { best = top; current = id; }
       }
       setActiveSection(current);
     };
