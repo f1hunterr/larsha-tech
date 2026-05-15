@@ -85,7 +85,7 @@ export default function Navbar() {
 
         {/* Logo */}
         <button onClick={() => isHome ? window.scrollTo({ top: 0, behavior: 'smooth' }) : navigate('/')} className="flex items-center gap-2 font-bold text-lg sm:text-xl tracking-tight">
-          <img src={`${import.meta.env.BASE_URL}logo.png`} alt="" className="h-9 w-auto object-contain" />
+          <img src={`${import.meta.env.BASE_URL}logo.svg`} alt="" className="h-9 w-auto object-contain" />
           <span className={scrolled ? 'text-foreground' : 'text-white'}>
             Larsha <span className="text-primary">Tech</span>
           </span>

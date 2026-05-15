@@ -7,7 +7,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN pnpm install --no-frozen-lockfile
+RUN pnpm install --frozen-lockfile
 
 ENV PORT=3000 BASE_PATH=/ NODE_ENV=production
 

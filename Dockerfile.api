@@ -1,12 +1,19 @@
 # Larsha Tech — API server (Express + SQLite)
 FROM node:24-slim
 
+# Build tools required by better-sqlite3 (native C++ addon)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3 make g++ \
+ && rm -rf /var/lib/apt/lists/*
+
 RUN corepack enable && corepack prepare pnpm@10 --activate
 
 WORKDIR /app
 COPY . .
 
-RUN pnpm install --no-frozen-lockfile
+ENV NODE_ENV=production
+
+RUN pnpm install --frozen-lockfile
 
 WORKDIR /app/artifacts/server
 
