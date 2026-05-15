@@ -57,19 +57,21 @@ export default function Navbar() {
   }, [isHome]);
 
   const scrollTo = (id: string) => {
+    // Close drawer first so its height is gone before we measure scroll position
+    setMobileOpen(false);
     if (id === 'home') {
       navigate('/');
       window.scrollTo({ top: 0, behavior: 'smooth' });
-      setMobileOpen(false);
       return;
     }
+    const doScroll = () => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
     if (!isHome) {
       navigate('/');
-      setTimeout(() => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' }), 150);
+      setTimeout(doScroll, 200);
     } else {
-      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+      // Small delay lets the mobile drawer finish closing before scroll fires
+      setTimeout(doScroll, 80);
     }
-    setMobileOpen(false);
   };
 
   return (
