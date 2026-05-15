@@ -35,9 +35,9 @@ export default function Hero() {
           <motion.div initial="hidden" animate="visible" variants={staggerContainer}>
             <motion.span
               variants={fadeInUp}
-              className="inline-flex items-center gap-2 py-1.5 px-3 sm:px-4 rounded-full bg-white/10 text-blue-300 font-semibold text-xs sm:text-sm mb-5 sm:mb-6 border border-white/10 backdrop-blur-sm"
+              className="inline-flex items-center gap-2 py-1.5 px-3 sm:px-4 rounded-full bg-green-500/10 text-green-300 font-semibold text-xs sm:text-sm mb-5 sm:mb-6 border border-green-400/40 backdrop-blur-sm shadow-[0_0_16px_rgba(74,222,128,0.55),0_0_32px_rgba(74,222,128,0.25)]"
             >
-              <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
               Your Local Tech Partner · Bangalore
             </motion.span>
 
