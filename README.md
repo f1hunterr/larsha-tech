@@ -96,16 +96,105 @@ Admin endpoints use HTTP Basic Auth. Credentials are set via environment variabl
 
 For the GitHub Pages deploy, set `VITE_API_URL` as a repository secret in **Settings → Secrets and variables → Actions**.
 
-## Self-hosting the backend
+## Docker Deploy (self-hosted, full stack)
 
-The backend is packaged as a Docker image via `Dockerfile.api`.
+Runs two containers:
+- **web** — Nginx serving the built React frontend on port `3000`
+- **api** — Express + SQLite API server (internal, port `4000`)
+
+### Prerequisites
+
+- [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/) installed on the server
+
+### 1. Clone the repo
 
 ```bash
-# Build and run with docker-compose
-ADMIN_PASSWORD=your-strong-password docker-compose up -d
+git clone https://github.com/Larsha-tech/larsha-tech.git
+cd larsha-tech
 ```
 
-The `docker-compose.yml` runs the API on port 4000 and persists the SQLite database in a named volume (`leads_data`). Put Nginx in front with SSL (certbot) and proxy `/api` to `localhost:4000`.
+### 2. Create the `.env` file
+
+```bash
+cat > .env <<EOF
+ADMIN_PASSWORD=your_strong_password_here
+EOF
+```
+
+> The API container **refuses to start** if `ADMIN_PASSWORD` is missing — it is required, not optional.
+
+### 3. Start the stack
+
+```bash
+docker compose up -d --build
+```
+
+First build takes ~3–5 minutes (compiles native SQLite dependencies).  
+Subsequent starts are fast — Docker caches the layers.
+
+### 4. Open the site
+
+```
+http://your-server-ip:3000
+```
+
+The frontend communicates with the API automatically — no extra config needed.
+
+---
+
+### Useful commands
+
+| Command | Description |
+|---|---|
+| `docker compose up -d --build` | Build images and start in background |
+| `docker compose down` | Stop and remove containers |
+| `docker compose logs -f api` | Stream API logs |
+| `docker compose logs -f web` | Stream Nginx logs |
+| `docker compose ps` | Show running containers and their status |
+| `docker compose restart api` | Restart only the API container |
+
+### Data persistence
+
+Leads, bookings, and applications are stored in a SQLite database inside a Docker volume (`leads_data`). Data survives container restarts and image rebuilds.
+
+**Backup the database:**
+
+```bash
+docker run --rm \
+  -v larsha-tech_leads_data:/data \
+  -v $(pwd):/backup \
+  alpine tar czf /backup/leads-backup.tar.gz /data
+```
+
+### Putting it behind a domain with SSL
+
+Install [Nginx](https://nginx.org/) and [Certbot](https://certbot.eff.org/) on the host, then proxy traffic to the Docker containers:
+
+```nginx
+server {
+    listen 443 ssl;
+    server_name yourdomain.com;
+
+    ssl_certificate     /etc/letsencrypt/live/yourdomain.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/yourdomain.com/privkey.pem;
+
+    # Frontend
+    location / {
+        proxy_pass http://localhost:3000;
+    }
+
+    # Backend API
+    location /api/ {
+        proxy_pass http://localhost:4000;
+    }
+}
+```
+
+Then obtain an SSL certificate:
+
+```bash
+sudo certbot --nginx -d yourdomain.com
+```
 
 ## CI / Deployment
 
