@@ -1,6 +1,12 @@
 # ── Build stage ──────────────────────────────────────────────────────────────
 FROM node:24-slim AS builder
 
+# better-sqlite3 (server workspace) is a native C++ addon — needs build tools
+# even in the frontend build stage because pnpm installs the whole monorepo
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3 make g++ \
+ && rm -rf /var/lib/apt/lists/*
+
 RUN corepack enable && corepack prepare pnpm@10 --activate
 
 WORKDIR /app
