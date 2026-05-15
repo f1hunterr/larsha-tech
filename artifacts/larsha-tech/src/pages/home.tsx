@@ -34,21 +34,7 @@ export default function Home() {
         <Contact />
       </main>
 
-      {/* Floating WhatsApp — desktop only */}
-      <a
-        href="https://wa.me/918088461724"
-        target="_blank"
-        rel="noreferrer"
-        className="hidden md:flex fixed bottom-6 right-6 w-14 h-14 bg-[#25D366] text-white rounded-full items-center justify-center shadow-2xl shadow-green-500/30 hover:scale-110 transition-all z-50 group"
-        data-testid="link-floating-whatsapp"
-      >
-        <FaWhatsapp className="w-7 h-7" />
-        <span className="absolute right-full mr-4 bg-slate-900 text-white text-xs font-bold px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-          Chat with us
-        </span>
-      </a>
-
-      {/* Footer */}
+{/* Footer */}
       <footer className="bg-background border-t py-8">
         <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
