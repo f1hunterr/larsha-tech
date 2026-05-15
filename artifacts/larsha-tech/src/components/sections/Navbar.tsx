@@ -83,8 +83,8 @@ export default function Navbar() {
           onClick={() => isHome ? window.scrollTo({ top: 0, behavior: 'smooth' }) : navigate('/')}
           className="flex-shrink-0 flex items-center gap-2 font-bold text-lg tracking-tight"
         >
-          <span className="flex-shrink-0 w-9 h-9 rounded-full bg-white flex items-center justify-center shadow-sm">
-            <img src={`${import.meta.env.BASE_URL}logo.svg`} alt="" className="h-6 w-6 object-contain" />
+          <span className="flex-shrink-0 w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-sm">
+            <img src={`${import.meta.env.BASE_URL}logo.svg`} alt="" className="h-8 w-8 object-contain" />
           </span>
           <span className={scrolled ? 'text-foreground' : 'text-white'}>
             Larsha <span className="text-primary">Tech</span>
