@@ -194,7 +194,9 @@ export default function AdminPage() {
       {/* Header */}
       <header className="bg-slate-950 border-b border-slate-800 px-6 py-4 flex items-center gap-4">
         <div className="flex items-center gap-2">
-          <img src={`${import.meta.env.BASE_URL}logo.svg`} alt="" className="h-7 w-auto" />
+          <span className="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-sm flex-shrink-0">
+            <img src={`${import.meta.env.BASE_URL}logo.svg`} alt="" className="h-5 w-5 object-contain" />
+          </span>
           <span className="font-black text-white">Larsha <span className="text-blue-400">Tech</span></span>
           <span className="text-xs bg-blue-900/60 text-blue-300 px-2 py-0.5 rounded-full font-bold">Admin</span>
         </div>

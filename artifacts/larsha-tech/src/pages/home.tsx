@@ -52,7 +52,9 @@ export default function Home() {
       <footer className="bg-background border-t py-8">
         <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <img src={`${import.meta.env.BASE_URL}logo.svg`} alt="Larsha Tech" className="h-8 w-auto object-contain" />
+            <span className="w-9 h-9 rounded-full bg-white flex items-center justify-center shadow-sm flex-shrink-0">
+              <img src={`${import.meta.env.BASE_URL}logo.svg`} alt="Larsha Tech" className="h-6 w-6 object-contain" />
+            </span>
           </div>
           <p className="text-muted-foreground text-sm">
             © {new Date().getFullYear()} Larsha Technologies · Bangalore, Karnataka
