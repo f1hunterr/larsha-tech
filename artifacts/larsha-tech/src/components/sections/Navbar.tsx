@@ -36,9 +36,6 @@ export default function Navbar() {
     const detect = () => {
       const scrollY = window.scrollY;
       if (scrollY < 80) { setActiveSection('home'); return; }
-
-      // Compute absolute document position for each section, then sort by it.
-      // This way nav-link order never affects the result.
       const entries = SECTION_IDS
         .map(id => {
           const el = document.getElementById(id);
@@ -46,8 +43,6 @@ export default function Navbar() {
         })
         .filter((e): e is { id: string; top: number } => e !== null)
         .sort((a, b) => a.top - b.top);
-
-      // Last section whose top has entered the upper 40% of the viewport
       const trigger = scrollY + window.innerHeight * 0.4;
       let current = 'home';
       for (const { id, top } of entries) {
@@ -81,25 +76,28 @@ export default function Navbar() {
     <header className={`sticky top-0 z-50 w-full transition-all duration-300 ${
       scrolled ? 'bg-background/95 backdrop-blur-md border-b shadow-sm' : 'bg-slate-950 border-b border-transparent'
     }`}>
-      <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+      <div className="container mx-auto px-4 h-16 flex items-center justify-between gap-4">
 
-        {/* Logo */}
-        <button onClick={() => isHome ? window.scrollTo({ top: 0, behavior: 'smooth' }) : navigate('/')} className="flex items-center gap-2 font-bold text-lg sm:text-xl tracking-tight">
-          <img src={`${import.meta.env.BASE_URL}logo.svg`} alt="" className="h-9 w-auto object-contain" />
+        {/* Logo — flex-shrink-0 prevents it from being squeezed */}
+        <button
+          onClick={() => isHome ? window.scrollTo({ top: 0, behavior: 'smooth' }) : navigate('/')}
+          className="flex-shrink-0 flex items-center gap-2 font-bold text-lg tracking-tight"
+        >
+          <img src={`${import.meta.env.BASE_URL}logo.svg`} alt="" className="h-8 w-auto object-contain" />
           <span className={scrolled ? 'text-foreground' : 'text-white'}>
             Larsha <span className="text-primary">Tech</span>
           </span>
         </button>
 
-        {/* Desktop nav */}
-        <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
+        {/* Desktop nav — only at lg (1024px+) so buttons have room below that */}
+        <nav className="hidden lg:flex items-center gap-4 xl:gap-6 text-sm font-medium">
           {NAV_LINKS.map(({ label, id }) => {
             const isActive = activeSection === id;
             return (
               <button
                 key={id}
                 onClick={() => scrollTo(id)}
-                className={`relative transition-colors hover:text-primary ${
+                className={`relative whitespace-nowrap transition-colors hover:text-primary ${
                   isActive
                     ? 'text-primary font-semibold'
                     : scrolled ? 'text-muted-foreground' : 'text-white/80'
@@ -114,57 +112,74 @@ export default function Navbar() {
           })}
         </nav>
 
-        {/* Actions */}
-        <div className="flex items-center gap-2">
+        {/* Actions — graduated visibility by breakpoint */}
+        <div className="flex items-center gap-1.5 xl:gap-2 flex-shrink-0">
+
+          {/* Theme toggle — always visible */}
           <button
             onClick={toggleTheme}
             aria-label="Toggle theme"
-            className={`p-2.5 rounded-lg transition-colors ${
+            className={`p-2 rounded-lg transition-colors ${
               scrolled ? 'text-muted-foreground hover:text-foreground hover:bg-muted' : 'text-white/70 hover:text-white hover:bg-white/10'
             }`}
           >
-            {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
           </button>
 
+          {/* Free Diagnosis — sm (640px+): primary CTA, always near */}
           <Button
-            variant="outline"
-            className={`hidden sm:flex ${scrolled ? '' : 'border-white/30 text-white bg-white/10 hover:bg-white/20'}`}
-            onClick={() => { navigate('/careers'); setMobileOpen(false); }}
-          >
-            Careers
-          </Button>
-          <Button
+            size="sm"
             className={`hidden sm:flex bg-pink-600 hover:bg-pink-700 text-white border-0`}
             onClick={() => { navigate('/free-diagnosis'); setMobileOpen(false); }}
           >
             Free Diagnosis
           </Button>
+
+          {/* Book Repair — md (768px+) */}
           <Button
+            size="sm"
             variant="outline"
-            className={`hidden sm:flex ${scrolled ? '' : 'border-white/30 text-white bg-white/10 hover:bg-white/20'}`}
+            className={`hidden md:flex ${scrolled ? '' : 'border-white/30 text-white bg-white/10 hover:bg-white/20'}`}
             onClick={() => { navigate('/book-repair'); setMobileOpen(false); }}
           >
             Book Repair
           </Button>
+
+          {/* Careers — xl (1280px+) */}
           <Button
+            size="sm"
+            variant="outline"
+            className={`hidden xl:flex ${scrolled ? '' : 'border-white/30 text-white bg-white/10 hover:bg-white/20'}`}
+            onClick={() => { navigate('/careers'); setMobileOpen(false); }}
+          >
+            Careers
+          </Button>
+
+          {/* Call Now — always visible; icon-only on mobile, full label on sm+ */}
+          <Button
+            size="sm"
             onClick={() => window.open('tel:+918088461724')}
             className={scrolled ? '' : 'bg-white text-slate-900 hover:bg-white/90'}
           >
-            <PhoneCall className="w-4 h-4 mr-2" /> Call Now
+            <PhoneCall className="w-4 h-4 sm:mr-2" />
+            <span className="hidden sm:inline">Call Now</span>
           </Button>
+
+          {/* Admin lock — xl (1280px+) */}
           <button
             onClick={() => { navigate('/admin'); setMobileOpen(false); }}
             aria-label="Admin login"
             title="Admin login"
-            className={`hidden sm:flex p-2.5 rounded-lg transition-colors ${
+            className={`hidden xl:flex p-2 rounded-lg transition-colors ${
               scrolled ? 'text-muted-foreground hover:text-foreground hover:bg-muted' : 'text-white/50 hover:text-white/80 hover:bg-white/10'
             }`}
           >
             <Lock className="w-4 h-4" />
           </button>
 
+          {/* Hamburger — lg:hidden (below 1024px) */}
           <button
-            className={`md:hidden p-2.5 rounded-md transition-colors ${
+            className={`lg:hidden p-2 rounded-md transition-colors ${
               scrolled ? 'text-muted-foreground hover:text-foreground' : 'text-white/80 hover:text-white'
             }`}
             onClick={() => setMobileOpen(v => !v)}
@@ -175,9 +190,9 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile drawer */}
+      {/* Mobile / tablet drawer — lg:hidden */}
       {mobileOpen && (
-        <div className="md:hidden border-t bg-background shadow-lg">
+        <div className="lg:hidden border-t bg-background shadow-lg">
           <nav className="container mx-auto px-4 py-4 flex flex-col gap-1">
             {NAV_LINKS.map(({ label, id }) => {
               const isActive = activeSection === id;
