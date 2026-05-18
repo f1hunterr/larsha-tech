@@ -145,6 +145,11 @@
   * {
     @apply border-border;
   }
+  /* Kill horizontal scroll on every device — use clip so position:sticky still works */
+  html {
+    overflow-x: clip;
+    width: 100%;
+  }
   /* Offset scroll targets by the sticky navbar height so headings aren't hidden behind it */
   section[id] {
     scroll-margin-top: 4.5rem;
@@ -154,6 +159,8 @@
     scroll-behavior: smooth;
     -webkit-user-select: none;
     user-select: none;
+    overflow-x: hidden;
+    width: 100%;
   }
   /* Pointer cursor on all interactive elements */
   button, [role="button"], a, label[for], select {

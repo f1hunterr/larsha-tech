@@ -17,7 +17,7 @@ import Contact from '@/components/sections/Contact';
 
 export default function Home() {
   return (
-    <div className="flex flex-col min-h-screen pb-20 md:pb-0">
+    <div className="flex flex-col min-h-screen pb-20 md:pb-0 w-full max-w-full">
       <UrgencyBanner />
       <Navbar />
 
