@@ -13,6 +13,7 @@ import HowWeWork from '@/components/sections/HowWeWork';
 import About from '@/components/sections/About';
 import FAQ from '@/components/sections/FAQ';
 import LeadForm from '@/components/sections/LeadForm';
+import ServiceAreas from '@/components/sections/ServiceAreas';
 import Contact from '@/components/sections/Contact';
 
 export default function Home() {
@@ -34,6 +35,7 @@ export default function Home() {
           <LeadForm />
           <HowWeWork />
           <About />
+          <ServiceAreas />
           <FAQ />
           <Contact />
         </main>
