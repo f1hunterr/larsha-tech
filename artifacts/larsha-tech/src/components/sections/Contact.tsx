@@ -43,13 +43,12 @@ export default function Contact() {
             </Button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 border-t border-white/10 pt-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 border-t border-white/10 pt-10 max-w-lg mx-auto">
             {[
-              { label: 'Email Us',      value: 'support@larshatech.com', href: 'mailto:support@larshatech.com' },
-              { label: 'Location',      value: 'Bangalore, Karnataka',   href: null },
-              { label: 'WhatsApp',      value: 'wa.me/918088461724',      href: 'https://wa.me/918088461724' },
+              { label: 'Email Us', value: 'support@larshatech.com', href: 'mailto:support@larshatech.com' },
+              { label: 'Location', value: 'Bangalore, Karnataka',   href: null },
             ].map(({ label, value, href }) => (
-              <div key={label} className="text-center md:text-left">
+              <div key={label} className="text-center">
                 <div className="text-slate-500 text-xs font-bold uppercase tracking-widest mb-1">{label}</div>
                 {href
                   ? <a href={href} className="text-white font-semibold hover:text-primary transition-colors">{value}</a>
