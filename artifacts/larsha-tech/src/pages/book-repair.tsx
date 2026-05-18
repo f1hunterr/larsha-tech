@@ -216,11 +216,6 @@ export default function BookRepair() {
     setErrorMsg('');
 
     const apiUrl = (import.meta.env.VITE_API_URL as string | undefined) ?? '';
-    if (!apiUrl) {
-      setStatus('error');
-      setErrorMsg('Booking service is not configured. Please call us directly.');
-      return;
-    }
 
     try {
       const fd = new FormData();

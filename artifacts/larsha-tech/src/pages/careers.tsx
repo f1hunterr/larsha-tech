@@ -107,11 +107,6 @@ export default function Careers() {
     setErrorMsg('');
 
     const apiUrl = (import.meta.env.VITE_API_URL as string | undefined) ?? '';
-    if (!apiUrl) {
-      setStatus('error');
-      setErrorMsg('Application service is not configured. Please email us directly.');
-      return;
-    }
 
     try {
       const fd = new FormData();

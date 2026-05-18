@@ -84,12 +84,11 @@ export default function AdminPage() {
   };
 
   useEffect(() => {
-    if (authHeader && apiUrl) fetchAll(authHeader);
+    if (authHeader) fetchAll(authHeader);
   }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!apiUrl) { setLoginError('VITE_API_URL is not configured.'); return; }
     setLoginLoading(true);
     setLoginError('');
     const auth = btoa(`${loginForm.username}:${loginForm.password}`);
