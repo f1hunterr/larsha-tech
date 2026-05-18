@@ -2,8 +2,8 @@
   "name": "Larsha Tech — Computer Repair Bangalore",
   "short_name": "Larsha Tech",
   "description": "Same-day laptop & computer repair in Bangalore. Book a repair or get a free diagnosis.",
-  "start_url": "/larsha-tech/",
-  "scope": "/larsha-tech/",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#0f172a",
   "theme_color": "#0f172a",
@@ -21,13 +21,13 @@
     {
       "name": "Book a Repair",
       "short_name": "Book Repair",
-      "url": "/larsha-tech/book-repair",
+      "url": "/book-repair",
       "description": "Book a same-day laptop or computer repair"
     },
     {
       "name": "Free Diagnosis",
       "short_name": "Diagnosis",
-      "url": "/larsha-tech/free-diagnosis",
+      "url": "/free-diagnosis",
       "description": "Get a free diagnosis for your device issue"
     }
   ]
