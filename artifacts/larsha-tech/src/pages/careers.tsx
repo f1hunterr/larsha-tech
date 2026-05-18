@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'wouter';
+import { usePageMeta } from '@/hooks/usePageMeta';
 import { ArrowLeft, Loader2, CheckCircle2, Upload, X, Briefcase, Users, Zap, Heart } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -65,6 +66,12 @@ const inputCls = (err?: string) =>
 export default function Careers() {
   const [, navigate] = useLocation();
   const [form, setForm] = useState<FormState>(EMPTY);
+
+  usePageMeta({
+    title: 'Careers — Join Larsha Tech',
+    description: 'Join the Larsha Tech team in Bangalore. We are hiring computer repair technicians and junior web developers. Apply online with your resume.',
+    path: '/careers',
+  });
   const [resume, setResume] = useState<File | null>(null);
   const [errors, setErrors] = useState<Errors>({});
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');

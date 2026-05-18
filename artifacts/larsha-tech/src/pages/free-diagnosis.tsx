@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation } from 'wouter';
+import { usePageMeta } from '@/hooks/usePageMeta';
 import { CheckCircle, ChevronLeft, Loader2, Stethoscope } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Navbar from '@/components/sections/Navbar';
@@ -31,6 +32,12 @@ const EMPTY: Form = {
 export default function FreeDiagnosis() {
   const [, navigate] = useLocation();
   const [form, setForm] = useState<Form>(EMPTY);
+
+  usePageMeta({
+    title: 'Free Computer Diagnosis — Larsha Tech',
+    description: 'Get a free diagnosis for your laptop or computer problem in Bangalore. Describe your issue and our technician will contact you within hours. No charge, no commitment.',
+    path: '/free-diagnosis',
+  });
   const [errors, setErrors] = useState<Partial<Form>>({});
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState('');

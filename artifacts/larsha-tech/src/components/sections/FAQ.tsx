@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FaWhatsapp } from 'react-icons/fa';
 import { Button } from '@/components/ui/button';
@@ -36,6 +36,23 @@ const FAQS = [
 ];
 
 export default function FAQ() {
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.id = 'faq-schema';
+    script.textContent = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: FAQS.map(faq => ({
+        '@type': 'Question',
+        name: faq.q,
+        acceptedAnswer: { '@type': 'Answer', text: faq.a },
+      })),
+    });
+    document.head.appendChild(script);
+    return () => { document.getElementById('faq-schema')?.remove(); };
+  }, []);
+
   return (
     <section id="faq" className="py-14 sm:py-24 bg-muted">
       <div className="container mx-auto px-4">

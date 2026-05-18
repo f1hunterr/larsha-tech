@@ -1,8 +1,13 @@
+import { useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { Button } from '@/components/ui/button';
 
 export default function NotFound() {
   const [, navigate] = useLocation();
+
+  useEffect(() => {
+    document.title = 'Page Not Found | Larsha Tech';
+  }, []);
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-background px-4">
       <div className="text-center max-w-sm">

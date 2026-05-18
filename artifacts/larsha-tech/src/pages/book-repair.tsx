@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
+import { usePageMeta } from '@/hooks/usePageMeta';
 import { ArrowLeft, Loader2, CheckCircle2, PhoneCall, Laptop, Monitor, MapPin, Clock, Calendar } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -116,6 +117,12 @@ const inputCls = (err?: string) =>
 export default function BookRepair() {
   const [, navigate] = useLocation();
   const [form, setForm] = useState<FormState>(EMPTY);
+
+  usePageMeta({
+    title: 'Book a Repair',
+    description: 'Book a same-day laptop or computer repair in Bangalore. Free diagnosis, no hidden fees. Drop off or doorstep service available — call +91 80884 61724.',
+    path: '/book-repair',
+  });
 
   useEffect(() => { window.scrollTo(0, 0); }, []);
   const [errors, setErrors] = useState<Errors>({});

@@ -43,7 +43,7 @@ export default function Home() {
             </span>
           </div>
           <p className="text-muted-foreground text-sm">
-            © {new Date().getFullYear()} Larsha Technologies · Bangalore, Karnataka
+            © {new Date().getFullYear()} Larsha Tech · Bangalore, Karnataka
           </p>
           <a
             href="https://wa.me/918088461724"

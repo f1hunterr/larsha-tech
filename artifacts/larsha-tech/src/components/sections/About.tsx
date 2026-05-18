@@ -30,6 +30,8 @@ export default function About() {
               <img
                 src={`${import.meta.env.BASE_URL}hemanth.jpg`}
                 alt="Hemanth K — Founder, Larsha Tech"
+                loading="lazy"
+                decoding="async"
                 className="w-36 h-36 sm:w-48 sm:h-48 rounded-3xl object-cover shadow-2xl shadow-blue-500/25"
               />
               <div className="absolute -bottom-3 -right-3 bg-card border shadow-md rounded-xl px-3 py-2 flex items-center gap-2">
