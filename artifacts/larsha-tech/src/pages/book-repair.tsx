@@ -9,7 +9,28 @@ import Navbar from '@/components/sections/Navbar';
 // ─── Data ──────────────────────────────────────────────────────────────────────
 
 const DEVICE_TYPES = ['Laptop', 'Desktop PC', 'Mac / MacBook', 'Tablet', 'Other'];
-const BRANDS = ['Dell', 'HP', 'Lenovo', 'ASUS', 'Acer', 'Apple', 'Samsung', 'MSI', 'Other'];
+
+const DEVICE_BRANDS: Record<string, string[]> = {
+  'Laptop':        ['Dell', 'HP', 'Lenovo', 'ASUS', 'Acer', 'Samsung', 'MSI', 'Other'],
+  'Desktop PC':    ['Dell', 'HP', 'Lenovo', 'ASUS', 'Acer', 'MSI', 'Other'],
+  'Mac / MacBook': ['Apple'],
+  'Tablet':        ['Apple (iPad)', 'Samsung', 'Lenovo', 'ASUS', 'Other'],
+  'Other':         ['Other'],
+};
+
+const BRAND_MODELS: Record<string, string[]> = {
+  'Dell':          ['Inspiron', 'XPS', 'Latitude', 'Vostro', 'G-Series Gaming', 'Other'],
+  'HP':            ['Pavilion', 'Envy', 'ProBook', 'EliteBook', 'Omen Gaming', 'Other'],
+  'Lenovo':        ['IdeaPad', 'ThinkPad', 'Legion', 'Yoga', 'Other'],
+  'ASUS':          ['VivoBook', 'ZenBook', 'ROG', 'TUF Gaming', 'ExpertBook', 'Other'],
+  'Acer':          ['Aspire', 'Swift', 'Nitro', 'Predator', 'Other'],
+  'Samsung':       ['Galaxy Book', 'Galaxy Tab S', 'Galaxy Tab A', 'Other'],
+  'MSI':           ['GS Series', 'GE Series', 'GP Series', 'Creator', 'Stealth', 'Other'],
+  'Apple':         ['MacBook Air (M1)', 'MacBook Air (M2)', 'MacBook Air (M3)', 'MacBook Pro 13"', 'MacBook Pro 14"', 'MacBook Pro 16"', 'iMac', 'Mac Mini', 'Mac Studio', 'Other'],
+  'Apple (iPad)':  ['iPad (standard)', 'iPad Air', 'iPad Pro 11"', 'iPad Pro 13"', 'iPad Mini', 'Other'],
+  'Other':         [],
+};
+
 const DEVICE_AGES = ['Less than 1 year', '1–2 years', '3–5 years', '5+ years', 'Not sure'];
 const ISSUES = [
   'Slow Performance / Freezing',
@@ -70,7 +91,8 @@ const EMPTY: FormState = {
 function validate(f: FormState): Errors {
   const e: Errors = {};
   if (!f.deviceType) e.deviceType = 'Please select your device type';
-  if (!f.brand)      e.brand      = 'Please select the brand';
+  const brandsForDevice = DEVICE_BRANDS[f.deviceType] ?? [];
+  if (brandsForDevice.length > 1 && !f.brand) e.brand = 'Please select the brand';
   if (!f.issue)      e.issue      = 'Please select the main issue';
   if (!f.description.trim()) e.description = 'Please describe the problem';
   if (!f.urgency)    e.urgency    = 'Please select urgency';
@@ -137,9 +159,17 @@ export default function BookRepair() {
     };
 
   const pick = (field: keyof FormState, value: string) => {
-    setForm(prev => ({ ...prev, [field]: value }));
+    setForm(prev => {
+      const next = { ...prev, [field]: value };
+      if (field === 'deviceType') { next.brand = ''; next.model = ''; }
+      if (field === 'brand')      { next.model = ''; }
+      return next;
+    });
     if (errors[field]) setErrors(prev => ({ ...prev, [field]: undefined }));
   };
+
+  const availableBrands = form.deviceType ? (DEVICE_BRANDS[form.deviceType] ?? []) : [];
+  const availableModels = form.brand ? (BRAND_MODELS[form.brand] ?? []) : [];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -282,45 +312,77 @@ export default function BookRepair() {
                   <FieldError msg={errors.deviceType} />
                 </div>
 
-                {/* Brand */}
-                <div id="field-brand">
-                  <label className="block text-sm font-semibold mb-2">Brand <span className="text-destructive">*</span></label>
-                  <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
-                    {BRANDS.map(b => (
-                      <button
-                        key={b} type="button"
-                        onClick={() => pick('brand', b)}
-                        className={`px-3 py-2.5 rounded-xl border text-sm font-medium transition-all ${
-                          form.brand === b
-                            ? 'bg-primary text-primary-foreground border-primary shadow-sm'
-                            : 'bg-background border-input hover:border-primary/50'
-                        }`}
-                      >
-                        {b}
-                      </button>
-                    ))}
-                  </div>
-                  <FieldError msg={errors.brand} />
-                </div>
+                {/* Brand — only shown after device type selected */}
+                {availableBrands.length > 0 && (
+                  <motion.div
+                    key={form.deviceType}
+                    initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }}
+                    id="field-brand"
+                  >
+                    <label className="block text-sm font-semibold mb-2">Brand <span className="text-destructive">*</span></label>
+                    <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+                      {availableBrands.map(b => (
+                        <button
+                          key={b} type="button"
+                          onClick={() => pick('brand', b)}
+                          className={`px-3 py-2.5 rounded-xl border text-sm font-medium transition-all ${
+                            form.brand === b
+                              ? 'bg-primary text-primary-foreground border-primary shadow-sm'
+                              : 'bg-background border-input hover:border-primary/50'
+                          }`}
+                        >
+                          {b}
+                        </button>
+                      ))}
+                    </div>
+                    <FieldError msg={errors.brand} />
+                  </motion.div>
+                )}
 
-                {/* Model + Age */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-semibold mb-1.5">Model <span className="text-muted-foreground font-normal">(optional)</span></label>
-                    <input
-                      type="text" placeholder="e.g. Inspiron 15 5000"
-                      value={form.model} onChange={set('model')} maxLength={80}
-                      className={inputCls()}
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-semibold mb-1.5">Approximate Age</label>
-                    <select value={form.deviceAge} onChange={set('deviceAge')} className={inputCls()}>
-                      <option value="">Select age...</option>
-                      {DEVICE_AGES.map(a => <option key={a} value={a}>{a}</option>)}
-                    </select>
-                  </div>
-                </div>
+                {/* Model — chips when known, free text otherwise */}
+                {form.brand && (
+                  <motion.div
+                    key={form.brand}
+                    initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }}
+                    className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+                  >
+                    <div>
+                      <label className="block text-sm font-semibold mb-1.5">
+                        Model <span className="text-muted-foreground font-normal">(optional)</span>
+                      </label>
+                      {availableModels.length > 0 ? (
+                        <div className="flex flex-wrap gap-2">
+                          {availableModels.map(m => (
+                            <button
+                              key={m} type="button"
+                              onClick={() => pick('model', m)}
+                              className={`px-3 py-2 rounded-lg border text-xs font-medium transition-all ${
+                                form.model === m
+                                  ? 'bg-primary text-primary-foreground border-primary shadow-sm'
+                                  : 'bg-background border-input hover:border-primary/50'
+                              }`}
+                            >
+                              {m}
+                            </button>
+                          ))}
+                        </div>
+                      ) : (
+                        <input
+                          type="text" placeholder="Enter model name"
+                          value={form.model} onChange={set('model')} maxLength={80}
+                          className={inputCls()}
+                        />
+                      )}
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold mb-1.5">Approximate Age</label>
+                      <select value={form.deviceAge} onChange={set('deviceAge')} className={inputCls()}>
+                        <option value="">Select age...</option>
+                        {DEVICE_AGES.map(a => <option key={a} value={a}>{a}</option>)}
+                      </select>
+                    </div>
+                  </motion.div>
+                )}
               </div>
             </motion.div>
 
