@@ -77,6 +77,7 @@ export default function Careers() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [appId, setAppId] = useState<number | null>(null);
   const [errorMsg, setErrorMsg] = useState('');
+  const [phoneTouched, setPhoneTouched] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => { window.scrollTo(0, 0); }, []);
@@ -223,8 +224,23 @@ export default function Careers() {
               </div>
               <div id="field-phone">
                 <label className="block text-sm font-semibold mb-1.5">Phone Number <span className="text-destructive">*</span></label>
-                <input type="tel" placeholder="e.g. 9876543210" value={form.phone} onChange={set('phone')} maxLength={10} className={inputCls(errors.phone)} />
-                <FieldError msg={errors.phone} />
+                <div className="relative">
+                  <input
+                    type="tel"
+                    placeholder="e.g. 9876543210"
+                    value={form.phone}
+                    onChange={set('phone')}
+                    onBlur={() => setPhoneTouched(true)}
+                    maxLength={10}
+                    className={`${inputCls(errors.phone || (phoneTouched && form.phone.length > 0 && !/^[6-9]\d{9}$/.test(form.phone.replace(/\s/g,'')) ? 'err' : undefined))} pr-10`}
+                  />
+                  {/^[6-9]\d{9}$/.test(form.phone.replace(/\s/g, '')) && (
+                    <CheckCircle2 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-green-500 pointer-events-none" />
+                  )}
+                </div>
+                {(errors.phone || (phoneTouched && form.phone.length > 0 && !/^[6-9]\d{9}$/.test(form.phone.replace(/\s/g, '')))) && (
+                  <p className="text-destructive text-xs mt-1">{errors.phone ?? 'Enter a valid 10-digit Indian mobile number'}</p>
+                )}
               </div>
             </div>
 

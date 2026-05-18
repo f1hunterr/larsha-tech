@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 function readDark(): boolean {
   try {
@@ -22,12 +22,34 @@ function applyDark(next: boolean) {
 }
 
 export function useTheme() {
-  // Initialize synchronously — avoids the useEffect delay and stale-closure bug
   const [isDark, setIsDark] = useState<boolean>(readDark);
 
+  useEffect(() => {
+    // Sync across browser tabs
+    const onStorage = (e: StorageEvent) => {
+      if (e.key !== 'theme') return;
+      const next = e.newValue === 'dark';
+      applyDark(next);
+      setIsDark(next);
+    };
+    window.addEventListener('storage', onStorage);
+
+    // Follow OS preference changes when user has no explicit preference saved
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    const onMedia = (e: MediaQueryListEvent) => {
+      if (localStorage.getItem('theme') != null) return;
+      applyDark(e.matches);
+      setIsDark(e.matches);
+    };
+    mq.addEventListener('change', onMedia);
+
+    return () => {
+      window.removeEventListener('storage', onStorage);
+      mq.removeEventListener('change', onMedia);
+    };
+  }, []);
+
   const toggle = () => {
-    // Functional update ensures we always invert the real current value,
-    // not a potentially stale closure copy
     setIsDark(prev => {
       const next = !prev;
       applyDark(next);

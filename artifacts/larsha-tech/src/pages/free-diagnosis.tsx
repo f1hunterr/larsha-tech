@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useLocation } from 'wouter';
 import { usePageMeta } from '@/hooks/usePageMeta';
-import { CheckCircle, ChevronLeft, Loader2, Stethoscope } from 'lucide-react';
+import { CheckCircle, CheckCircle2, ChevronLeft, Loader2, Stethoscope } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Navbar from '@/components/sections/Navbar';
 
@@ -39,6 +39,7 @@ export default function FreeDiagnosis() {
     path: '/free-diagnosis',
   });
   const [errors, setErrors] = useState<Partial<Form>>({});
+  const [phoneTouched, setPhoneTouched] = useState(false);
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState('');
   const [success, setSuccess] = useState<{ id: number; name: string } | null>(null);
@@ -160,8 +161,23 @@ export default function FreeDiagnosis() {
               </div>
               <div>
                 <label className={labelCls}>Phone Number <span className="text-destructive">*</span></label>
-                <input className={fieldCls('phone')} placeholder="10-digit mobile number" value={form.phone} onChange={set('phone')} maxLength={15} inputMode="tel" />
-                {errors.phone && <p className={errCls}>{errors.phone}</p>}
+                <div className="relative">
+                  <input
+                    className={`${fieldCls('phone')} pr-10`}
+                    placeholder="10-digit mobile number"
+                    value={form.phone}
+                    onChange={set('phone')}
+                    onBlur={() => setPhoneTouched(true)}
+                    maxLength={10}
+                    inputMode="tel"
+                  />
+                  {/^[6-9]\d{9}$/.test(form.phone.replace(/\s/g, '')) && (
+                    <CheckCircle2 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-green-500 pointer-events-none" />
+                  )}
+                </div>
+                {(errors.phone || (phoneTouched && form.phone.length > 0 && !/^[6-9]\d{9}$/.test(form.phone.replace(/\s/g, '')))) && (
+                  <p className={errCls}>{errors.phone ?? 'Enter a valid 10-digit Indian mobile number'}</p>
+                )}
               </div>
             </div>
             <div>

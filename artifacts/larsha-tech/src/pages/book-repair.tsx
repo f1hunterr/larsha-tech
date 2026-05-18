@@ -1,7 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'wouter';
 import { usePageMeta } from '@/hooks/usePageMeta';
-import { ArrowLeft, Loader2, CheckCircle2, PhoneCall, Laptop, Monitor, MapPin, Clock, Calendar } from 'lucide-react';
+import {
+  ArrowLeft, Loader2, CheckCircle2, PhoneCall,
+  Laptop, Monitor, MapPin, Clock, Calendar,
+  ImagePlus, X,
+} from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import Navbar from '@/components/sections/Navbar';
@@ -48,35 +52,27 @@ const ISSUES = [
   'Other / Not Sure',
 ];
 const URGENCY_OPTIONS = [
-  { value: 'today',    label: 'Today — Urgent!',     desc: 'Need it fixed ASAP'         },
-  { value: '2-3days',  label: 'Within 2–3 days',     desc: 'Can wait a couple of days'  },
-  { value: 'thisweek', label: 'This week',            desc: 'Sometime before the weekend'},
-  { value: 'flexible', label: 'Flexible',             desc: 'No rush, any time works'    },
+  { value: 'today',    label: 'Today — Urgent!',     desc: 'Need it fixed ASAP'          },
+  { value: '2-3days',  label: 'Within 2–3 days',     desc: 'Can wait a couple of days'   },
+  { value: 'thisweek', label: 'This week',            desc: 'Sometime before the weekend' },
+  { value: 'flexible', label: 'Flexible',             desc: 'No rush, any time works'     },
 ];
 const SERVICE_MODES = [
-  { value: 'doorstep', icon: MapPin,   label: 'Doorstep Visit',        desc: 'We come to your home or office in Bangalore' },
-  { value: 'dropoff',  icon: Laptop,   label: 'Drop-off at Workshop',  desc: 'You bring the device to our workshop'        },
-  { value: 'remote',   icon: Monitor,  label: 'Remote Support',        desc: 'Online fix via secure screen sharing'        },
+  { value: 'doorstep', icon: MapPin,  label: 'Doorstep Visit',       desc: 'We come to your home or office in Bangalore' },
+  { value: 'dropoff',  icon: Laptop,  label: 'Drop-off at Workshop', desc: 'You bring the device to our workshop'        },
+  { value: 'remote',   icon: Monitor, label: 'Remote Support',       desc: 'Online fix via secure screen sharing'        },
 ];
 const TIME_SLOTS = ['Morning  (9 am – 12 pm)', 'Afternoon  (12 pm – 3 pm)', 'Evening  (3 pm – 7 pm)'];
+
+const PHONE_RE = /^[6-9]\d{9}$/;
 
 // ─── Form state ────────────────────────────────────────────────────────────────
 
 interface FormState {
-  deviceType: string;
-  brand: string;
-  model: string;
-  deviceAge: string;
-  issue: string;
-  description: string;
-  urgency: string;
-  serviceMode: string;
-  address: string;
-  preferredDate: string;
-  preferredSlot: string;
-  name: string;
-  phone: string;
-  email: string;
+  deviceType: string; brand: string; model: string; deviceAge: string;
+  issue: string; description: string; urgency: string;
+  serviceMode: string; address: string; preferredDate: string; preferredSlot: string;
+  name: string; phone: string; email: string;
 }
 
 type Errors = Partial<Record<keyof FormState, string>>;
@@ -93,16 +89,16 @@ function validate(f: FormState): Errors {
   if (!f.deviceType) e.deviceType = 'Please select your device type';
   const brandsForDevice = DEVICE_BRANDS[f.deviceType] ?? [];
   if (brandsForDevice.length > 1 && !f.brand) e.brand = 'Please select the brand';
-  if (!f.issue)      e.issue      = 'Please select the main issue';
+  if (!f.issue)      e.issue       = 'Please select the main issue';
   if (!f.description.trim()) e.description = 'Please describe the problem';
-  if (!f.urgency)    e.urgency    = 'Please select urgency';
+  if (!f.urgency)    e.urgency     = 'Please select urgency';
   if (!f.serviceMode) e.serviceMode = 'Please choose a service option';
   if (f.serviceMode === 'doorstep' && !f.address.trim())
     e.address = 'Please enter your address or area for doorstep service';
   if (!f.name.trim()) e.name = 'Your name is required';
   if (!f.phone.trim()) {
     e.phone = 'Phone number is required';
-  } else if (!/^[6-9]\d{9}$/.test(f.phone.replace(/\s/g, ''))) {
+  } else if (!PHONE_RE.test(f.phone.replace(/\s/g, ''))) {
     e.phone = 'Enter a valid 10-digit Indian mobile number';
   }
   return e;
@@ -147,10 +143,21 @@ export default function BookRepair() {
   });
 
   useEffect(() => { window.scrollTo(0, 0); }, []);
+
+  const [photos, setPhotos] = useState<Array<{ file: File; url: string }>>([]);
   const [errors, setErrors] = useState<Errors>({});
+  const [phoneTouched, setPhoneTouched] = useState(false);
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [bookingId, setBookingId] = useState<number | null>(null);
   const [errorMsg, setErrorMsg] = useState('');
+  const photoRef = useRef<HTMLInputElement>(null);
+  const photosRef = useRef(photos);
+  photosRef.current = photos;
+
+  // Revoke object URLs on unmount to avoid memory leaks
+  useEffect(() => {
+    return () => photosRef.current.forEach(p => URL.revokeObjectURL(p.url));
+  }, []);
 
   const set = (field: keyof FormState) =>
     (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -171,8 +178,33 @@ export default function BookRepair() {
   const availableBrands = form.deviceType ? (DEVICE_BRANDS[form.deviceType] ?? []) : [];
   const availableModels = form.brand ? (BRAND_MODELS[form.brand] ?? []) : [];
 
+  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files ?? []);
+    const items = files.map(f => ({ file: f, url: URL.createObjectURL(f) }));
+    setPhotos(prev => {
+      const combined = [...prev, ...items];
+      if (combined.length > 3) combined.slice(3).forEach(p => URL.revokeObjectURL(p.url));
+      return combined.slice(0, 3);
+    });
+    if (photoRef.current) photoRef.current.value = '';
+  };
+
+  const removePhoto = (i: number) => {
+    setPhotos(prev => {
+      URL.revokeObjectURL(prev[i].url);
+      return prev.filter((_, j) => j !== i);
+    });
+  };
+
+  // Real-time phone validation state
+  const phoneRaw    = form.phone.replace(/\s/g, '');
+  const phoneValid  = PHONE_RE.test(phoneRaw);
+  const showPhoneOk = phoneValid;
+  const showPhoneErr = phoneTouched && phoneRaw.length > 0 && !phoneValid;
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setPhoneTouched(true);
     const errs = validate(form);
     if (Object.keys(errs).length) {
       setErrors(errs);
@@ -191,26 +223,24 @@ export default function BookRepair() {
     }
 
     try {
-      const res = await fetch(`${apiUrl}/api/bookings`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          deviceType:    form.deviceType,
-          brand:         form.brand,
-          model:         form.model,
-          deviceAge:     form.deviceAge,
-          issue:         form.issue,
-          description:   form.description,
-          urgency:       form.urgency,
-          serviceMode:   form.serviceMode,
-          address:       form.address,
-          preferredDate: form.preferredDate,
-          preferredSlot: form.preferredSlot,
-          name:          form.name,
-          phone:         form.phone,
-          email:         form.email,
-        }),
-      });
+      const fd = new FormData();
+      fd.append('deviceType',    form.deviceType);
+      fd.append('brand',         form.brand);
+      fd.append('model',         form.model);
+      fd.append('deviceAge',     form.deviceAge);
+      fd.append('issue',         form.issue);
+      fd.append('description',   form.description);
+      fd.append('urgency',       form.urgency);
+      fd.append('serviceMode',   form.serviceMode);
+      fd.append('address',       form.address);
+      fd.append('preferredDate', form.preferredDate);
+      fd.append('preferredSlot', form.preferredSlot);
+      fd.append('name',          form.name);
+      fd.append('phone',         form.phone);
+      fd.append('email',         form.email);
+      photos.forEach(p => fd.append('photos', p.file));
+
+      const res = await fetch(`${apiUrl}/api/bookings`, { method: 'POST', body: fd });
       if (!res.ok) {
         const data = await res.json().catch(() => ({})) as { error?: string };
         setStatus('error');
@@ -272,12 +302,10 @@ export default function BookRepair() {
               Your repair request has been saved. We'll call you on <strong>{form.phone}</strong> to confirm your slot within <strong>1 hour</strong> (Mon–Sat, 9 am–7 pm).
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Button variant="outline" onClick={() => { setForm(EMPTY); setStatus('idle'); setBookingId(null); }}>
+              <Button variant="outline" onClick={() => { setForm(EMPTY); setPhotos([]); setStatus('idle'); setBookingId(null); setPhoneTouched(false); }}>
                 Book Another Repair
               </Button>
-              <Button onClick={() => navigate('/')}>
-                Back to Home
-              </Button>
+              <Button onClick={() => navigate('/')}>Back to Home</Button>
             </div>
           </motion.div>
         ) : (
@@ -312,7 +340,7 @@ export default function BookRepair() {
                   <FieldError msg={errors.deviceType} />
                 </div>
 
-                {/* Brand — only shown after device type selected */}
+                {/* Brand */}
                 {availableBrands.length > 0 && (
                   <motion.div
                     key={form.deviceType}
@@ -339,7 +367,7 @@ export default function BookRepair() {
                   </motion.div>
                 )}
 
-                {/* Model — chips when known, free text otherwise */}
+                {/* Model + Age */}
                 {form.brand && (
                   <motion.div
                     key={form.brand}
@@ -418,6 +446,50 @@ export default function BookRepair() {
                   <FieldError msg={errors.description} />
                 </div>
 
+                {/* Photo upload */}
+                <div>
+                  <label className="block text-sm font-semibold mb-1.5">
+                    Photos{' '}
+                    <span className="text-muted-foreground font-normal text-xs">
+                      (optional · up to 3 · JPG, PNG, WebP · max 5 MB each)
+                    </span>
+                  </label>
+                  <input
+                    ref={photoRef}
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp"
+                    multiple
+                    onChange={handlePhotoChange}
+                    className="hidden"
+                  />
+                  {photos.length > 0 && (
+                    <div className="grid grid-cols-3 gap-2 mb-2">
+                      {photos.map((p, i) => (
+                        <div key={i} className="relative aspect-square rounded-xl overflow-hidden border border-input bg-muted">
+                          <img src={p.url} alt="" className="w-full h-full object-cover" />
+                          <button
+                            type="button"
+                            onClick={() => removePhoto(i)}
+                            className="absolute top-1 right-1 w-5 h-5 rounded-full bg-black/60 text-white flex items-center justify-center hover:bg-black/80 transition-colors"
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  {photos.length < 3 && (
+                    <button
+                      type="button"
+                      onClick={() => photoRef.current?.click()}
+                      className="w-full flex items-center justify-center gap-2 px-4 py-6 rounded-xl border-2 border-dashed border-input text-muted-foreground text-sm font-medium hover:border-primary/50 hover:text-foreground transition-colors"
+                    >
+                      <ImagePlus className="w-4 h-4" />
+                      {photos.length === 0 ? 'Add a photo of the problem' : 'Add another photo'}
+                    </button>
+                  )}
+                </div>
+
                 {/* Urgency */}
                 <div id="field-urgency">
                   <label className="block text-sm font-semibold mb-2">How Urgent Is It? <span className="text-destructive">*</span></label>
@@ -450,7 +522,6 @@ export default function BookRepair() {
               <SectionTitle step={3} title="Service Preference" subtitle="How would you like us to help?" />
 
               <div className="space-y-5">
-                {/* Service mode */}
                 <div id="field-serviceMode">
                   <div className="space-y-2">
                     {SERVICE_MODES.map(({ value, icon: Icon, label, desc }) => (
@@ -474,7 +545,6 @@ export default function BookRepair() {
                   <FieldError msg={errors.serviceMode} />
                 </div>
 
-                {/* Address — only when doorstep */}
                 {form.serviceMode === 'doorstep' && (
                   <motion.div
                     initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }}
@@ -493,7 +563,6 @@ export default function BookRepair() {
                   </motion.div>
                 )}
 
-                {/* Preferred date + time (optional) */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-semibold mb-1.5">
@@ -538,16 +607,35 @@ export default function BookRepair() {
                     />
                     <FieldError msg={errors.name} />
                   </div>
+
+                  {/* Phone with real-time validation */}
                   <div id="field-phone">
                     <label className="block text-sm font-semibold mb-1.5">Phone Number <span className="text-destructive">*</span></label>
-                    <input
-                      type="tel" placeholder="e.g. 9876543210"
-                      value={form.phone} onChange={set('phone')} maxLength={10}
-                      className={inputCls(errors.phone)}
-                    />
-                    <FieldError msg={errors.phone} />
+                    <div className="relative">
+                      <input
+                        type="tel"
+                        placeholder="e.g. 9876543210"
+                        value={form.phone}
+                        onChange={e => {
+                          setForm(prev => ({ ...prev, phone: e.target.value }));
+                          if (errors.phone) setErrors(prev => ({ ...prev, phone: undefined }));
+                        }}
+                        onBlur={() => setPhoneTouched(true)}
+                        maxLength={10}
+                        className={`${inputCls(errors.phone || (showPhoneErr ? 'err' : undefined))} pr-10`}
+                      />
+                      {showPhoneOk && (
+                        <CheckCircle2 className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-green-500 pointer-events-none" />
+                      )}
+                    </div>
+                    {(errors.phone || showPhoneErr) && (
+                      <p className="text-destructive text-xs mt-1">
+                        {errors.phone ?? 'Enter a valid 10-digit Indian mobile number'}
+                      </p>
+                    )}
                   </div>
                 </div>
+
                 <div>
                   <label className="block text-sm font-semibold mb-1.5">Email <span className="text-muted-foreground font-normal">(optional — we'll send updates here)</span></label>
                   <input

@@ -70,4 +70,12 @@ db.exec(`
   )
 `);
 
+// Migrations for columns added after initial deploy
+const migrations: string[] = [
+  'ALTER TABLE bookings ADD COLUMN photo_paths TEXT',
+];
+for (const sql of migrations) {
+  try { db.exec(sql); } catch { /* column already exists */ }
+}
+
 export default db;
