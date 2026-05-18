@@ -125,7 +125,7 @@ export default function LeadForm() {
                 </div>
                 <h3 className="text-2xl font-black">Message Sent!</h3>
                 <p className="text-muted-foreground leading-relaxed max-w-sm">
-                  Your WhatsApp was opened with a pre-filled message. We typically respond within <strong>1 hour</strong> during working hours (Mon–Sat, 9 am–7 pm).
+                  Your WhatsApp was opened with a pre-filled message. We typically respond within <strong>1 hour</strong>.
                 </p>
                 <div className="flex gap-3 mt-2">
                   <Button variant="outline" onClick={reset}>Submit Another</Button>
@@ -229,7 +229,7 @@ export default function LeadForm() {
 
           {/* Trust chips */}
           <div className="mt-6 flex flex-wrap justify-center gap-4 text-xs text-muted-foreground font-medium">
-            {['No spam, ever', 'Free consultation', 'No commitment required', 'Mon–Sat, 9 am–7 pm'].map(t => (
+            {['No spam, ever', 'Free consultation', 'No commitment required'].map(t => (
               <span key={t} className="flex items-center gap-1.5">
                 <CheckCircle2 className="w-3.5 h-3.5 text-green-500" /> {t}
               </span>

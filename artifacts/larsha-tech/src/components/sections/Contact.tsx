@@ -47,7 +47,7 @@ export default function Contact() {
             {[
               { label: 'Email Us',      value: 'support@larshatech.com', href: 'mailto:support@larshatech.com' },
               { label: 'Location',      value: 'Bangalore, Karnataka',   href: null },
-              { label: 'Working Hours', value: 'Mon – Sat, 9 am – 7 pm', href: null },
+              { label: 'WhatsApp',      value: 'wa.me/918088461724',      href: 'https://wa.me/918088461724' },
             ].map(({ label, value, href }) => (
               <div key={label} className="text-center md:text-left">
                 <div className="text-slate-500 text-xs font-bold uppercase tracking-widest mb-1">{label}</div>

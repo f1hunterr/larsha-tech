@@ -273,7 +273,7 @@ export default function BookRepair() {
             Book a Repair
           </h1>
           <p className="text-slate-400 text-base leading-relaxed">
-            Fill in the details below. We'll confirm your booking within 1 hour (Mon–Sat, 9 am–7 pm).
+            Fill in the details below. We'll confirm your booking within 1 hour .
           </p>
         </div>
       </div>
@@ -294,7 +294,7 @@ export default function BookRepair() {
               <p className="text-xs font-mono text-muted-foreground mb-2">Booking #{bookingId}</p>
             )}
             <p className="text-muted-foreground leading-relaxed max-w-sm mx-auto mb-6">
-              Your repair request has been saved. We'll call you on <strong>{form.phone}</strong> to confirm your slot within <strong>1 hour</strong> (Mon–Sat, 9 am–7 pm).
+              Your repair request has been saved. We'll call you on <strong>{form.phone}</strong> to confirm your slot within <strong>1 hour</strong> .
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Button variant="outline" onClick={() => { setForm(EMPTY); setPhotos([]); setStatus('idle'); setBookingId(null); setPhoneTouched(false); }}>
