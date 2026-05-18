@@ -9,4 +9,4 @@ Crawl-delay: 10
 User-agent: SemrushBot
 Crawl-delay: 10
 
-Sitemap: https://larsha-tech.github.io/larsha-tech/sitemap.xml
+Sitemap: https://larsha.com/sitemap.xml
