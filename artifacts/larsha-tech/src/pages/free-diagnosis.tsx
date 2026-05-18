@@ -99,7 +99,7 @@ export default function FreeDiagnosis() {
     return (
       <div className="min-h-screen bg-background flex flex-col">
         <Navbar />
-        <div className="flex-1 flex items-center justify-center px-4 py-16">
+        <div className="flex-1 flex items-center justify-center px-4 pt-20 pb-16">
           <div className="max-w-md w-full text-center">
             <div className="w-20 h-20 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center mx-auto mb-6">
               <CheckCircle className="w-10 h-10 text-green-600 dark:text-green-400" />
@@ -135,8 +135,8 @@ export default function FreeDiagnosis() {
     <div className="min-h-screen bg-background flex flex-col">
       <Navbar />
 
-      {/* Hero */}
-      <div className="bg-slate-950 text-white py-14 px-4 text-center">
+      {/* Hero — pt-30 = pt-16 (fixed navbar) + pt-14 (design padding) */}
+      <div className="bg-slate-950 text-white pt-[7.5rem] pb-14 px-4 text-center">
         <div className="inline-flex items-center gap-2 bg-pink-500/20 text-pink-300 text-xs font-bold px-3 py-1 rounded-full mb-4">
           <Stethoscope className="w-3.5 h-3.5" /> FREE SERVICE
         </div>

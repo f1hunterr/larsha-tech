@@ -66,7 +66,7 @@ export default function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-slate-950/95 backdrop-blur-md border-b border-white/10 shadow-[0_1px_12px_rgba(0,0,0,0.4)]">
+    <header className="fixed top-0 left-0 right-0 z-50 w-full bg-slate-950/95 backdrop-blur-md border-b border-white/10 shadow-[0_1px_12px_rgba(0,0,0,0.4)]">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between gap-4">
 
         {/* Logo */}

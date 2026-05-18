@@ -143,8 +143,8 @@ export default function Careers() {
     <div className="min-h-screen bg-background">
       <Navbar />
 
-      {/* Hero */}
-      <div className="bg-slate-950 pt-12 pb-16 px-4 relative overflow-hidden">
+      {/* Hero — pt-28 = pt-16 (fixed navbar) + pt-12 (design padding) */}
+      <div className="bg-slate-950 pt-28 pb-16 px-4 relative overflow-hidden">
         <div className="absolute top-0 right-1/4 w-[500px] h-[300px] bg-violet-600/15 rounded-full blur-[80px] pointer-events-none" />
         <div className="container mx-auto relative z-10 max-w-3xl">
           <button

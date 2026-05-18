@@ -203,8 +203,8 @@ export default function BookRepair() {
     <div className="min-h-screen bg-background">
       <Navbar />
 
-      {/* Hero header */}
-      <div className="bg-slate-950 pt-12 pb-14 px-4 relative overflow-hidden">
+      {/* Hero header — pt-28 = pt-16 (fixed navbar) + pt-12 (design padding) */}
+      <div className="bg-slate-950 pt-28 pb-14 px-4 relative overflow-hidden">
         <div className="absolute top-0 left-1/4 w-[500px] h-[300px] bg-blue-600/15 rounded-full blur-[80px] pointer-events-none" />
         <div className="container mx-auto relative z-10 max-w-2xl">
           <button

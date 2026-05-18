@@ -18,42 +18,46 @@ import Contact from '@/components/sections/Contact';
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen pb-20 md:pb-0 w-full max-w-full">
-      <UrgencyBanner />
+      {/* Navbar is fixed — rendered first so its z-index sits above everything */}
       <Navbar />
 
-      <main className="flex-1">
-        <Hero />
-        <BrandStrip />
-        <WhyUs />
-        <Services />
-        <Pricing />
-        <LeadForm />
-        <HowWeWork />
-        <About />
-        <FAQ />
-        <Contact />
-      </main>
+      {/* pt-16 pushes all content below the fixed navbar (h-16 = 64 px) */}
+      <div className="pt-16 flex flex-col flex-1">
+        <UrgencyBanner />
 
-{/* Footer */}
-      <footer className="bg-background border-t py-8">
-        <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <span className="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-sm flex-shrink-0">
-              <img src={`${import.meta.env.BASE_URL}logo.svg`} alt="Larsha Tech" className="h-8 w-8 object-contain" />
-            </span>
+        <main className="flex-1">
+          <Hero />
+          <BrandStrip />
+          <WhyUs />
+          <Services />
+          <Pricing />
+          <LeadForm />
+          <HowWeWork />
+          <About />
+          <FAQ />
+          <Contact />
+        </main>
+
+        <footer className="bg-background border-t py-8">
+          <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <span className="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-sm flex-shrink-0">
+                <img src={`${import.meta.env.BASE_URL}logo.svg`} alt="Larsha Tech" className="h-8 w-8 object-contain" />
+              </span>
+            </div>
+            <p className="text-muted-foreground text-sm">
+              © {new Date().getFullYear()} Larsha Tech · Bangalore, Karnataka
+            </p>
+            <a
+              href="https://wa.me/918088461724"
+              className="flex items-center gap-1.5 text-sm font-semibold text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 transition-colors"
+            >
+              <FaWhatsapp className="w-4 h-4" />
+              WhatsApp Us
+            </a>
           </div>
-          <p className="text-muted-foreground text-sm">
-            © {new Date().getFullYear()} Larsha Tech · Bangalore, Karnataka
-          </p>
-          <a
-            href="https://wa.me/918088461724"
-            className="flex items-center gap-1.5 text-sm font-semibold text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 transition-colors"
-          >
-            <FaWhatsapp className="w-4 h-4" />
-            WhatsApp Us
-          </a>
-        </div>
-      </footer>
+        </footer>
+      </div>
 
       {/* Mobile sticky CTA bar */}
       <div className="fixed bottom-0 left-0 right-0 z-40 md:hidden bg-background/95 backdrop-blur-md border-t shadow-lg">
