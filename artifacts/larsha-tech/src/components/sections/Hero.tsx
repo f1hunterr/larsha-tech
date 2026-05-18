@@ -20,7 +20,7 @@ export default function Hero() {
   const { track } = useAnalytics();
 
   return (
-    <section id="hero" className="relative min-h-[92vh] flex items-center overflow-hidden bg-slate-950">
+    <section id="hero" className="relative min-h-[75vh] sm:min-h-[92vh] flex items-start sm:items-center overflow-hidden bg-slate-950">
       <div className="absolute top-[-10%] left-[-5%] w-[600px] h-[600px] rounded-full bg-blue-600/20 blur-[120px] pointer-events-none" />
       <div className="absolute bottom-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full bg-blue-500/10 blur-[100px] pointer-events-none" />
       <div
@@ -28,7 +28,7 @@ export default function Hero() {
         style={{ backgroundImage: 'radial-gradient(circle, #94a3b8 1px, transparent 1px)', backgroundSize: '32px 32px' }}
       />
 
-      <div className="container mx-auto px-4 py-24 relative z-10 w-full">
+      <div className="container mx-auto px-4 pt-12 pb-16 sm:py-24 relative z-10 w-full">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 
           {/* Left — copy */}
