@@ -22,14 +22,24 @@ if (!ADMIN_PASSWORD) {
 const adminPassword = ADMIN_PASSWORD || 'dev-only-changeme';
 
 // Restrict CORS to known origins (set ALLOWED_ORIGINS in production)
-const defaultOrigins = ['http://localhost:3000', 'http://localhost:5173', 'https://larsha-tech.github.io'];
+const defaultOrigins = ['http://localhost:3000', 'http://localhost:5173'];
 const allowedOrigins = process.env.ALLOWED_ORIGINS
   ? process.env.ALLOWED_ORIGINS.split(',').map(s => s.trim())
   : defaultOrigins;
 
-app.set('trust proxy', 1); // correctly read X-Forwarded-For behind Nginx
+app.set('trust proxy', 1);
 app.use(cors({ origin: allowedOrigins, methods: ['GET', 'POST', 'PATCH'] }));
 app.use(express.json({ limit: '16kb' }));
+
+// Security headers
+app.use((_req, res, next) => {
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+  next();
+});
 
 app.use('/api/leads', leadsRouter);
 app.use('/api/bookings', bookingsRouter);
@@ -38,8 +48,35 @@ app.use('/api/diagnoses', diagnosesRouter);
 
 const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'admin';
 
+// Simple rate limiter for admin endpoint
+const adminRateMap = new Map<string, { count: number; resetAt: number }>();
+setInterval(() => {
+  const now = Date.now();
+  for (const [ip, entry] of adminRateMap.entries()) {
+    if (entry.resetAt < now) adminRateMap.delete(ip);
+  }
+}, 60_000);
+
+function adminRateLimit(req: Request, res: Response, next: () => void) {
+  const ip = req.ip ?? 'unknown';
+  const now = Date.now();
+  const WINDOW = 15 * 60 * 1000;
+  const LIMIT = 10;
+  const entry = adminRateMap.get(ip);
+  if (!entry || entry.resetAt < now) {
+    adminRateMap.set(ip, { count: 1, resetAt: now + WINDOW });
+    next(); return;
+  }
+  if (entry.count >= LIMIT) {
+    res.status(429).send('Too many login attempts. Try again later.');
+    return;
+  }
+  entry.count++;
+  next();
+}
+
 // Admin dashboard — HTTP Basic Auth
-app.get('/admin', (req: Request, res: Response) => {
+app.get('/admin', adminRateLimit, (req: Request, res: Response) => {
   const header = req.headers.authorization;
   if (!header?.startsWith('Basic ')) {
     res.setHeader('WWW-Authenticate', 'Basic realm="Larsha Tech Admin"');

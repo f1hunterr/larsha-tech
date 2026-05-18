@@ -9,6 +9,12 @@ const MAX_LEN = { name: 100, phone: 20, service: 80, message: 2000 };
 
 // Simple in-memory rate limiter: 5 lead submissions per IP per 10 minutes
 const rateMap = new Map<string, { count: number; resetAt: number }>();
+setInterval(() => {
+  const now = Date.now();
+  for (const [ip, entry] of rateMap.entries()) {
+    if (entry.resetAt < now) rateMap.delete(ip);
+  }
+}, 60_000);
 function rateLimit(req: Request, res: Response, next: NextFunction) {
   const ip = req.ip ?? 'unknown';
   const now = Date.now();

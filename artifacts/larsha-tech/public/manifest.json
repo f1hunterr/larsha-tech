@@ -11,7 +11,7 @@
   "categories": ["business", "utilities"],
   "icons": [
     {
-      "src": "/larsha-tech/logo.svg",
+      "src": "/logo.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any"

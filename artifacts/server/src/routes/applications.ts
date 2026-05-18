@@ -39,6 +39,12 @@ const upload = multer({
 const MAX_LEN = { name: 100, email: 120, phone: 20, position: 80, experience: 30, message: 3000 };
 
 const rateMap = new Map<string, { count: number; resetAt: number }>();
+setInterval(() => {
+  const now = Date.now();
+  for (const [ip, entry] of rateMap.entries()) {
+    if (entry.resetAt < now) rateMap.delete(ip);
+  }
+}, 60_000);
 function rateLimit(req: Request, res: Response, next: NextFunction) {
   const ip = req.ip ?? 'unknown';
   const now = Date.now();
@@ -70,7 +76,7 @@ router.post('/', rateLimit, (req: Request, res: Response) => {
     if (!name || !email || !phone || !position || !message) {
       res.status(400).json({ error: 'Required fields are missing' }); return;
     }
-    if (!email.includes('@')) { res.status(400).json({ error: 'Invalid email address' }); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { res.status(400).json({ error: 'Invalid email address' }); return; }
     if (!/^[6-9]\d{9}$/.test(phone.replace(/\s/g, ''))) {
       res.status(400).json({ error: 'Enter a valid 10-digit Indian mobile number' }); return;
     }

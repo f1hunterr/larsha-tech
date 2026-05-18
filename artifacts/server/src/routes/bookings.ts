@@ -40,6 +40,12 @@ const MAX_LEN = {
 };
 
 const rateMap = new Map<string, { count: number; resetAt: number }>();
+setInterval(() => {
+  const now = Date.now();
+  for (const [ip, entry] of rateMap.entries()) {
+    if (entry.resetAt < now) rateMap.delete(ip);
+  }
+}, 60_000);
 function rateLimit(req: Request, res: Response, next: NextFunction) {
   const ip = req.ip ?? 'unknown';
   const now = Date.now();
