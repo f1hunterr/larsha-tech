@@ -2,7 +2,20 @@
 
 Company website for **Larsha Tech** — an IT services business in Bangalore offering laptop/computer repair and professional web development.
 
-Live site: [larsha-tech.github.io/larsha-tech](https://larsha-tech.github.io/larsha-tech/)
+Live site: [f1hunterr.github.io/larsha-tech](https://f1hunterr.github.io/larsha-tech/)
+
+## Features
+
+- Laptop & computer repair booking with status tracking
+- Free diagnosis request form
+- Web development services showcase with pricing
+- Service areas section (Bangalore localities)
+- Job application portal with resume upload
+- Admin dashboard for managing leads, bookings, and applications
+- Live chat via Tawk.to
+- Google Analytics 4 with real event tracking
+- PWA support with offline capability
+- Docker-ready for self-hosted full-stack deployment
 
 ## Stack
 
@@ -36,8 +49,9 @@ nginx.conf
 
 | Route | Description |
 |---|---|
-| `/` | Home — services, pricing, lead form, FAQ, contact |
+| `/` | Home — services, pricing, service areas, lead form, FAQ, contact |
 | `/book-repair` | Repair booking form (submits to API) |
+| `/free-diagnosis` | Free diagnosis request form |
 | `/careers` | Job application form with resume upload |
 | `/admin` | Admin dashboard (requires login) |
 
@@ -109,7 +123,7 @@ Runs two containers:
 ### 1. Clone the repo
 
 ```bash
-git clone https://github.com/Larsha-tech/larsha-tech.git
+git clone https://github.com/f1hunterr/larsha-tech.git
 cd larsha-tech
 ```
 
@@ -200,3 +214,4 @@ sudo certbot --nginx -d yourdomain.com
 
 - **CI** (`ci.yml`): runs typecheck and full build on every push and pull request to `main`.
 - **Deploy** (`deploy.yml`): builds the frontend and deploys to GitHub Pages on every push to `main`. Requires `VITE_API_URL` to be set as a repository secret.
+- **Update lockfile** (`update-lockfile.yml`): manually triggered workflow to regenerate `pnpm-lock.yaml` after dependency catalog changes.
