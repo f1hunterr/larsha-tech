@@ -127,6 +127,27 @@
   --ring: 221 83% 60%;
 }
 
+@keyframes spin-once {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.animate-spin-once {
+  animation: spin-once 0.4s ease-in-out;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-8px); }
+}
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+  animation-delay: 1.2s;
+}
+.animate-float-slow {
+  animation: float 3.8s ease-in-out infinite;
+  animation-delay: 1.6s;
+}
+
 @keyframes marquee {
   from { transform: translateX(0); }
   to   { transform: translateX(-50%); }
@@ -157,8 +178,6 @@
   body {
     @apply font-sans antialiased bg-background text-foreground;
     scroll-behavior: smooth;
-    -webkit-user-select: none;
-    user-select: none;
     overflow-x: hidden;
     width: 100%;
   }
@@ -183,11 +202,6 @@
   }
   .dark select {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%2394a3b8'%3E%3Cpath fill-rule='evenodd' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z' clip-rule='evenodd'/%3E%3C/svg%3E");
-  }
-  /* Prevent image dragging */
-  img {
-    -webkit-user-drag: none;
-    user-drag: none;
   }
   /* Smoother scrollbar — hide arrow buttons, keep thumb only */
   ::-webkit-scrollbar { width: 6px; }

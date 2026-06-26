@@ -4,13 +4,17 @@ import { X, Zap } from 'lucide-react';
 
 export default function UrgencyBanner() {
   const [dismissed, setDismissed] = useState(() => {
-    try { return localStorage.getItem('urgency-dismissed') === '1'; }
-    catch { return false; }
+    try {
+      const ts = localStorage.getItem('urgency-dismissed-at');
+      if (!ts) return false;
+      const sevenDays = 7 * 24 * 60 * 60 * 1000;
+      return Date.now() - Number(ts) < sevenDays;
+    } catch { return false; }
   });
 
   const dismiss = () => {
     setDismissed(true);
-    try { localStorage.setItem('urgency-dismissed', '1'); } catch {}
+    try { localStorage.setItem('urgency-dismissed-at', String(Date.now())); } catch {}
   };
 
   return (

@@ -1,11 +1,25 @@
 import React from 'react';
+import { useLocation } from 'wouter';
+import { motion } from 'framer-motion';
 import { Wrench, Globe, CheckCircle2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 
+const cardVariants = {
+  hidden: { opacity: 0, y: 40 },
+  visible: (i: number) => ({
+    opacity: 1, y: 0,
+    transition: { duration: 0.55, ease: 'easeOut', delay: i * 0.15 },
+  }),
+};
+
 const REPAIR_ITEMS = [
   { service: 'OS Installation', range: '₹800 – ₹1,200', note: 'Clean install with all drivers. Bring your license key or we help.' },
   { service: 'SSD Upgrade', range: '₹1,000 – ₹1,500', note: 'Data migration from old drive included. Files and apps stay intact.' },
+  { service: 'Virus & Malware Removal', range: '₹800 – ₹1,500', note: 'Full system scan, cleanup, and security hardening.' },
+  { service: 'RAM Upgrade', range: '₹500 – ₹800', note: 'Labour charge. RAM cost depends on spec — we help you pick the right one.' },
+  { service: 'Screen Replacement', range: '₹2,500 – ₹6,000', note: 'Genuine replacement screens for most laptop brands. Quote after diagnosis.' },
+  { service: 'Data Recovery', range: '₹1,500 – ₹4,000', note: 'Deleted files, crashed drives, formatted storage — we recover what we can.' },
   { service: 'Full Service & Deep Clean', range: '₹1,500 – ₹2,000', note: 'Internal cleaning, thermal paste, driver updates, startup tuning.' },
 ];
 
@@ -16,6 +30,7 @@ const WEB_ITEMS = [
 ];
 
 export default function Pricing() {
+  const [, navigate] = useLocation();
   return (
     <section id="pricing" className="py-14 sm:py-24 bg-background">
       <div className="container mx-auto px-4">
@@ -25,9 +40,10 @@ export default function Pricing() {
           <p className="text-muted-foreground text-lg">Honest rates. No surprises, ever.</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto items-start">
 
           {/* Repair Card */}
+          <motion.div custom={0} variants={cardVariants} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-60px' }}>
           <Card className="border shadow-sm hover:shadow-md transition-shadow">
             <CardHeader className="pb-6">
               <div className="flex items-center gap-3 mb-1">
@@ -55,7 +71,7 @@ export default function Pricing() {
               <Button
                 variant="outline"
                 className="w-full h-11 text-blue-600 border-blue-200 dark:border-blue-800 hover:bg-blue-50 dark:hover:bg-blue-950/40"
-                onClick={() => window.open('tel:+918088461724')}
+                onClick={() => navigate('/book-repair')}
                 data-testid="button-price-repair"
               >
                 Book Repair
@@ -66,8 +82,10 @@ export default function Pricing() {
               </p>
             </CardFooter>
           </Card>
+          </motion.div>
 
           {/* Web Dev Card — featured */}
+          <motion.div custom={1} variants={cardVariants} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-60px' }}>
           <div className="relative">
             <div className="absolute -inset-0.5 rounded-2xl bg-gradient-to-br from-blue-500 to-violet-600 opacity-60 blur-sm" />
             <Card className="relative border-0 shadow-xl">
@@ -110,6 +128,7 @@ export default function Pricing() {
               </CardFooter>
             </Card>
           </div>
+          </motion.div>
 
         </div>
       </div>

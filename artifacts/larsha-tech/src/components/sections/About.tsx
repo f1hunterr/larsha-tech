@@ -10,7 +10,7 @@ const STATS = [
   { label: 'Service Area',  value: 'All Bangalore' },
   { label: 'Response Time', value: 'Same Day'       },
   { label: 'Diagnostics',   value: 'Always Free'    },
-  { label: 'Satisfaction',  value: 'Guaranteed'     },
+  { label: 'Warranty',      value: '30 Days'        },
 ];
 
 export default function About() {

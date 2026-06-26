@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLocation } from 'wouter';
 import { motion } from 'framer-motion';
 import { Code, Wrench, PhoneCall, CheckCircle2, ArrowRight } from 'lucide-react';
 import { FaWhatsapp } from 'react-icons/fa';
@@ -14,10 +15,9 @@ const staggerContainer = {
   visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
 };
 
-const scrollTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
-
 export default function Hero() {
   const { track } = useAnalytics();
+  const [, navigate] = useLocation();
 
   return (
     <section id="hero" className="relative min-h-[75vh] sm:min-h-[92vh] flex items-start sm:items-center overflow-hidden bg-slate-950">
@@ -60,7 +60,7 @@ export default function Hero() {
               <Button
                 size="lg"
                 className="h-13 px-8 text-base bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-600/30"
-                onClick={() => { track('hero_cta_services'); scrollTo('get-quote'); }}
+                onClick={() => { track('hero_cta_services'); navigate('/free-diagnosis'); }}
                 data-testid="button-hero-quote"
               >
                 Get Free Diagnosis <ArrowRight className="ml-2 w-4 h-4" />
@@ -149,7 +149,7 @@ export default function Hero() {
               initial={{ y: -12, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.5, duration: 0.5 }}
-              className="absolute -top-4 -right-6 bg-slate-900 border border-white/10 rounded-xl p-4 shadow-2xl backdrop-blur-sm"
+              className="absolute -top-4 -right-6 bg-slate-900 border border-white/10 rounded-xl p-4 shadow-2xl backdrop-blur-sm animate-float"
             >
               <div className="flex items-center gap-2 mb-3">
                 <Wrench className="w-4 h-4 text-blue-400" />
@@ -173,7 +173,7 @@ export default function Hero() {
               initial={{ y: 16, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.6, duration: 0.5 }}
-              className="absolute -bottom-5 -left-5 bg-slate-900 border border-white/10 rounded-xl p-4 shadow-2xl flex items-center gap-3 backdrop-blur-sm"
+              className="absolute -bottom-5 -left-5 bg-slate-900 border border-white/10 rounded-xl p-4 shadow-2xl flex items-center gap-3 backdrop-blur-sm animate-float-slow"
             >
               <div className="w-11 h-11 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400">
                 <Code className="w-5 h-5" />

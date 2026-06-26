@@ -13,8 +13,8 @@ self.addEventListener('activate', e => {
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
   const url = new URL(e.request.url);
-  // Skip cross-origin and API requests
-  if (url.origin !== self.location.origin || url.pathname.startsWith('/api/')) return;
+  // Skip cross-origin, API requests, and the SW script itself
+  if (url.origin !== self.location.origin || url.pathname.startsWith('/api/') || url.pathname === '/sw.js') return;
 
   e.respondWith(
     caches.open(CACHE).then(cache =>

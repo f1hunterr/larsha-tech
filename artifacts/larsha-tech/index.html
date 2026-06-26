@@ -21,6 +21,7 @@
     <meta property="og:image" content="https://larsha.com/opengraph.jpg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Larsha Tech — Laptop & Computer Repair | Web Development Bangalore" />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -80,6 +81,14 @@
         "latitude": "12.9716",
         "longitude": "77.5946"
       },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
+          "opens": "09:00",
+          "closes": "19:00"
+        }
+      ],
       "priceRange": "₹800 - ₹20000",
       "currenciesAccepted": "INR",
       "paymentAccepted": "Cash, UPI, Bank Transfer",
@@ -174,20 +183,6 @@
       }catch(e){}}());
     </script>
 
-    <!--Start of Tawk.to Script-->
-    <script type="text/javascript">
-    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-    (function(){
-    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-    s1.async=true;
-    s1.src='https://embed.tawk.to/6a0b4c2ceb0b261c33c84258/1jou2349h';
-    s1.charset='UTF-8';
-    s1.setAttribute('crossorigin','*');
-    s0.parentNode.insertBefore(s1,s0);
-    })();
-    </script>
-    <!--End of Tawk.to Script-->
-
     <!-- Google Analytics GA4 -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-0TR23J78ZV"></script>
     <script>
@@ -209,47 +204,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-
-    <!-- Content protection: disable copy, right-click, drag, and save shortcuts -->
-    <script>
-      (function () {
-        var FORM_TAGS = { INPUT: 1, TEXTAREA: 1, SELECT: 1 };
-        function isFormEl(el) { return el && (FORM_TAGS[el.tagName] || el.isContentEditable); }
-        function isAdmin() { return window.location.pathname.indexOf('/admin') !== -1; }
-
-        document.addEventListener('contextmenu', function (e) {
-          if (isAdmin()) return;
-          if (!isFormEl(e.target)) e.preventDefault();
-        });
-
-        document.addEventListener('copy', function (e) {
-          if (isAdmin()) return;
-          if (!isFormEl(document.activeElement)) e.preventDefault();
-        });
-
-        document.addEventListener('cut', function (e) {
-          if (isAdmin()) return;
-          if (!isFormEl(document.activeElement)) e.preventDefault();
-        });
-
-        document.addEventListener('dragstart', function (e) {
-          if (isAdmin()) return;
-          e.preventDefault();
-        });
-
-        document.addEventListener('keydown', function (e) {
-          if (isAdmin()) return;
-          if (isFormEl(document.activeElement)) return;
-          var k = e.key.toLowerCase();
-          if (e.ctrlKey || e.metaKey) {
-            if (k === 'c' || k === 'a' || k === 's' || k === 'u') e.preventDefault();
-          }
-        });
-      }());
-    </script>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+
   </body>
 </html>

@@ -4,7 +4,7 @@ import { usePageMeta } from '@/hooks/usePageMeta';
 import {
   ArrowLeft, Loader2, CheckCircle2, PhoneCall,
   Laptop, Monitor, MapPin, Clock, Calendar,
-  ImagePlus, X,
+  ImagePlus, X, Wrench, AlertCircle, Settings, User,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -104,6 +104,47 @@ function validate(f: FormState): Errors {
   return e;
 }
 
+// ─── Progress bar ──────────────────────────────────────────────────────────────
+
+const PROGRESS_STEPS = [
+  { label: 'Device',   icon: Wrench        },
+  { label: 'Problem',  icon: AlertCircle   },
+  { label: 'Service',  icon: Settings      },
+  { label: 'Details',  icon: User          },
+];
+
+function FormProgress({ activeStep }: { activeStep: number }) {
+  return (
+    <div className="sticky top-16 z-30 bg-background/95 backdrop-blur border-b shadow-sm -mx-4 px-4 py-3 mb-6">
+      <div className="flex items-center justify-between max-w-2xl mx-auto">
+        {PROGRESS_STEPS.map(({ label, icon: Icon }, i) => {
+          const done    = i < activeStep;
+          const current = i === activeStep;
+          return (
+            <React.Fragment key={i}>
+              <div className="flex flex-col items-center gap-1 min-w-[3rem]">
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
+                  done    ? 'bg-green-500 text-white' :
+                  current ? 'bg-primary text-primary-foreground ring-4 ring-primary/20' :
+                            'bg-muted text-muted-foreground'
+                }`}>
+                  {done ? <CheckCircle2 className="w-4 h-4" /> : <Icon className="w-4 h-4" />}
+                </div>
+                <span className={`text-[10px] font-semibold hidden sm:block ${current ? 'text-foreground' : 'text-muted-foreground'}`}>
+                  {label}
+                </span>
+              </div>
+              {i < PROGRESS_STEPS.length - 1 && (
+                <div className={`flex-1 h-0.5 mx-1 rounded-full transition-colors ${done ? 'bg-green-500' : 'bg-border'}`} />
+              )}
+            </React.Fragment>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 // ─── Sub-components ────────────────────────────────────────────────────────────
 
 function SectionTitle({ step, title, subtitle }: { step: number; title: string; subtitle?: string }) {
@@ -150,9 +191,24 @@ export default function BookRepair() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [bookingId, setBookingId] = useState<number | null>(null);
   const [errorMsg, setErrorMsg] = useState('');
+  const [activeStep, setActiveStep] = useState(0);
   const photoRef = useRef<HTMLInputElement>(null);
   const photosRef = useRef(photos);
   photosRef.current = photos;
+  const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    const observers = sectionRefs.current.map((el, i) => {
+      if (!el) return null;
+      const obs = new IntersectionObserver(
+        ([entry]) => { if (entry.isIntersecting) setActiveStep(i); },
+        { rootMargin: '-40% 0px -40% 0px', threshold: 0 }
+      );
+      obs.observe(el);
+      return obs;
+    });
+    return () => observers.forEach(o => o?.disconnect());
+  }, [status]);
 
   // Revoke object URLs on unmount to avoid memory leaks
   useEffect(() => {
@@ -280,6 +336,7 @@ export default function BookRepair() {
 
       {/* Form */}
       <div className="container mx-auto px-4 py-10 max-w-2xl">
+        {status !== 'success' && <FormProgress activeStep={activeStep} />}
         {status === 'success' ? (
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
@@ -308,6 +365,7 @@ export default function BookRepair() {
 
             {/* ── Section 1: Device ── */}
             <motion.div
+              ref={el => { sectionRefs.current[0] = el; }}
               initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }}
               className="bg-card border rounded-2xl p-6 sm:p-8 shadow-sm"
             >
@@ -411,6 +469,7 @@ export default function BookRepair() {
 
             {/* ── Section 2: Problem ── */}
             <motion.div
+              ref={el => { sectionRefs.current[1] = el; }}
               initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
               className="bg-card border rounded-2xl p-6 sm:p-8 shadow-sm"
             >
@@ -511,6 +570,7 @@ export default function BookRepair() {
 
             {/* ── Section 3: Service ── */}
             <motion.div
+              ref={el => { sectionRefs.current[2] = el; }}
               initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}
               className="bg-card border rounded-2xl p-6 sm:p-8 shadow-sm"
             >
@@ -586,6 +646,7 @@ export default function BookRepair() {
 
             {/* ── Section 4: Contact ── */}
             <motion.div
+              ref={el => { sectionRefs.current[3] = el; }}
               initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
               className="bg-card border rounded-2xl p-6 sm:p-8 shadow-sm"
             >

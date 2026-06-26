@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'wouter';
-import { PhoneCall, Menu, X, Sun, Moon, Lock } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { PhoneCall, Menu, X, Sun, Moon } from 'lucide-react';
 import { FaWhatsapp } from 'react-icons/fa';
 import { useTheme } from '@/hooks/useTheme';
 import { Button } from '@/components/ui/button';
@@ -20,7 +21,13 @@ const SECTION_IDS = NAV_LINKS.map(l => l.id).filter(id => id !== 'home');
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
+  const [spinning, setSpinning] = useState(false);
   const { isDark, toggle: toggleTheme } = useTheme();
+
+  const handleToggleTheme = () => {
+    setSpinning(true);
+    toggleTheme();
+  };
   const [location, navigate] = useLocation();
   const isHome = location === '/';
 
@@ -66,7 +73,12 @@ export default function Navbar() {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 w-full bg-slate-950/95 backdrop-blur-md border-b border-white/10 shadow-[0_1px_12px_rgba(0,0,0,0.4)]">
+    <motion.header
+      initial={{ y: -64, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.4, ease: 'easeOut' }}
+      className="fixed top-0 left-0 right-0 z-50 w-full bg-slate-950/95 backdrop-blur-md border-b border-white/10 shadow-[0_1px_12px_rgba(0,0,0,0.4)]"
+    >
       <div className="container mx-auto px-4 h-16 flex items-center justify-between gap-4">
 
         {/* Logo */}
@@ -110,9 +122,10 @@ export default function Navbar() {
 
           {/* Theme toggle */}
           <button
-            onClick={toggleTheme}
+            onClick={handleToggleTheme}
+            onAnimationEnd={() => setSpinning(false)}
             aria-label="Toggle theme"
-            className="p-2 rounded-lg text-white/60 hover:text-white hover:bg-white/10 transition-colors"
+            className={`p-2 rounded-lg text-white/60 hover:text-white hover:bg-white/10 transition-colors ${spinning ? 'animate-spin-once' : ''}`}
           >
             {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
           </button>
@@ -155,16 +168,6 @@ export default function Navbar() {
             <PhoneCall className="w-4 h-4 sm:mr-2" />
             <span className="hidden sm:inline">Call Now</span>
           </Button>
-
-          {/* Admin lock — xl+ */}
-          <button
-            onClick={() => { navigate('/admin'); setMobileOpen(false); }}
-            aria-label="Admin login"
-            title="Admin login"
-            className="hidden xl:flex p-2 rounded-lg text-white/40 hover:text-white/80 hover:bg-white/10 transition-colors"
-          >
-            <Lock className="w-4 h-4" />
-          </button>
 
           {/* Hamburger */}
           <button
@@ -232,16 +235,10 @@ export default function Navbar() {
                   <FaWhatsapp className="w-4 h-4 mr-2 text-green-400" /> WhatsApp
                 </Button>
               </div>
-              <button
-                onClick={() => { navigate('/admin'); setMobileOpen(false); }}
-                className="w-full flex items-center justify-center gap-2 text-xs text-white/30 hover:text-white/60 py-2 transition-colors"
-              >
-                <Lock className="w-3 h-3" /> Admin Login
-              </button>
             </div>
           </nav>
         </div>
       )}
-    </header>
+    </motion.header>
   );
 }

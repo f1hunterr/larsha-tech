@@ -13,7 +13,7 @@ COPY . .
 
 ENV NODE_ENV=production
 
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --no-frozen-lockfile
 
 WORKDIR /app/artifacts/server
 

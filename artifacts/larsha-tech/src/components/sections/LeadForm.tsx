@@ -75,14 +75,12 @@ export default function LeadForm() {
     }
 
     // Backend API — save to database (fire and forget)
-    const apiUrl = import.meta.env.VITE_API_URL as string | undefined;
-    if (apiUrl) {
-      fetch(`${apiUrl}/api/leads`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      }).catch(() => {});
-    }
+    const apiUrl = (import.meta.env.VITE_API_URL as string | undefined) ?? '';
+    fetch(`${apiUrl}/api/leads`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    }).catch(() => {});
 
     const msg = encodeURIComponent(
       `Hi Larsha Tech! 👋\n\nName: ${form.name}\nPhone: ${form.phone}\nService: ${form.service}\n\nIssue / Requirement:\n${form.message}\n\nPlease get back to me at your earliest convenience. 🙏`
