@@ -2,7 +2,8 @@
 
 Company website for **Larsha Tech** — an IT services business in Bangalore offering laptop/computer repair and professional web development.
 
-Live site: [f1hunterr.github.io/larsha-tech](https://f1hunterr.github.io/larsha-tech/)
+Live site: [larsha.com](https://larsha.com)  
+API: [workspaceserver-production-8351.up.railway.app](https://workspaceserver-production-8351.up.railway.app/health)
 
 ## Features
 

@@ -5,6 +5,7 @@ import { ArrowLeft, Loader2, CheckCircle2, Upload, X, Briefcase, Users, Zap, Hea
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import Navbar from '@/components/sections/Navbar';
+import { API_URL } from '@/lib/api';
 
 const POSITIONS = [
   'Computer Repair Technician',
@@ -106,7 +107,6 @@ export default function Careers() {
     setStatus('loading');
     setErrorMsg('');
 
-    const apiUrl = (import.meta.env.VITE_API_URL as string | undefined) ?? '';
 
     try {
       const fd = new FormData();
@@ -118,7 +118,7 @@ export default function Careers() {
       fd.append('message',    form.message);
       if (resume) fd.append('resume', resume);
 
-      const res = await fetch(`${apiUrl}/api/applications`, { method: 'POST', body: fd });
+      const res = await fetch(`${API_URL}/api/applications`, { method: 'POST', body: fd });
       if (!res.ok) {
         const data = await res.json().catch(() => ({})) as { error?: string };
         setStatus('error');

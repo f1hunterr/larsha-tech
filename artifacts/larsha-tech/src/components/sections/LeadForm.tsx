@@ -4,6 +4,7 @@ import { CheckCircle2, Loader2, Send, PhoneCall } from 'lucide-react';
 import { FaWhatsapp } from 'react-icons/fa';
 import { Button } from '@/components/ui/button';
 import { useAnalytics } from '@/hooks/useAnalytics';
+import { API_URL } from '@/lib/api';
 
 const SERVICE_OPTIONS = [
   'Computer / Laptop Repair',
@@ -75,8 +76,7 @@ export default function LeadForm() {
     }
 
     // Backend API — save to database (fire and forget)
-    const apiUrl = (import.meta.env.VITE_API_URL as string | undefined) ?? '';
-    fetch(`${apiUrl}/api/leads`, {
+    fetch(`${API_URL}/api/leads`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),

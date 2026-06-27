@@ -4,8 +4,7 @@ import { usePageMeta } from '@/hooks/usePageMeta';
 import { CheckCircle, CheckCircle2, ChevronLeft, Loader2, Stethoscope } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Navbar from '@/components/sections/Navbar';
-
-const VITE_API_URL = (import.meta.env.VITE_API_URL as string | undefined) ?? '';
+import { API_URL } from '@/lib/api';
 
 const DEVICE_TYPES = ['Laptop', 'Desktop', 'MacBook / iMac', 'All-in-One PC', 'Other'];
 const POWERS_ON_OPTIONS = ['Yes, powers on normally', 'Yes, but with issues', 'Sometimes / Intermittent', 'No, does not power on'];
@@ -67,7 +66,7 @@ export default function FreeDiagnosis() {
     setLoading(true);
     setApiError('');
     try {
-      const res = await fetch(`${VITE_API_URL}/api/diagnoses`, {
+      const res = await fetch(`${API_URL}/api/diagnoses`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

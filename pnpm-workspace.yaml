@@ -66,7 +66,7 @@ onlyBuiltDependencies:
   - unrs-resolver
 
 overrides:
-  # CI (GitHub Actions) and production (Docker) both run linux-x64; exclude other platforms to reduce install size
+  # Exclude platforms not needed in CI (linux-x64) or local Docker on Apple Silicon (linux-arm64)
   "esbuild>@esbuild/darwin-arm64": "-"
   "esbuild>@esbuild/darwin-x64": "-"
   "esbuild>@esbuild/freebsd-arm64": "-"

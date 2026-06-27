@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Lock, LogOut, Loader2, RefreshCw, Download, Search, X, ChevronDown, ChevronUp, MessageCircle, Phone, CheckCircle2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { API_URL } from '@/lib/api';
 
 interface Lead { id: number; name: string; phone: string; service: string; message: string; created_at: string; }
 interface Booking {
@@ -90,7 +91,7 @@ function Toast({ msg, onDone }: { msg: string; onDone: () => void }) {
 }
 
 export default function AdminPage() {
-  const apiUrl = (import.meta.env.VITE_API_URL as string | undefined) ?? '';
+  const apiUrl = API_URL;
 
   const [loginForm, setLoginForm] = useState({ username: 'admin', password: '' });
   const [authHeader, setAuthHeader] = useState<string | null>(() => sessionStorage.getItem('admin-auth'));

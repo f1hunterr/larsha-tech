@@ -9,6 +9,7 @@ import {
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import Navbar from '@/components/sections/Navbar';
+import { API_URL } from '@/lib/api';
 
 // ─── Data ──────────────────────────────────────────────────────────────────────
 
@@ -271,8 +272,6 @@ export default function BookRepair() {
     setStatus('loading');
     setErrorMsg('');
 
-    const apiUrl = (import.meta.env.VITE_API_URL as string | undefined) ?? '';
-
     try {
       const fd = new FormData();
       fd.append('deviceType',    form.deviceType);
@@ -291,7 +290,7 @@ export default function BookRepair() {
       fd.append('email',         form.email);
       photos.forEach(p => fd.append('photos', p.file));
 
-      const res = await fetch(`${apiUrl}/api/bookings`, { method: 'POST', body: fd });
+      const res = await fetch(`${API_URL}/api/bookings`, { method: 'POST', body: fd });
       if (!res.ok) {
         const data = await res.json().catch(() => ({})) as { error?: string };
         setStatus('error');
@@ -329,7 +328,7 @@ export default function BookRepair() {
             Book a Repair
           </h1>
           <p className="text-slate-400 text-base leading-relaxed">
-            Fill in the details below. We'll confirm your booking within 1 hour .
+            Fill in the details below. We'll confirm your booking within 1 hour.
           </p>
         </div>
       </div>
@@ -351,7 +350,7 @@ export default function BookRepair() {
               <p className="text-xs font-mono text-muted-foreground mb-2">Booking #{bookingId}</p>
             )}
             <p className="text-muted-foreground leading-relaxed max-w-sm mx-auto mb-6">
-              Your repair request has been saved. We'll call you on <strong>{form.phone}</strong> to confirm your slot within <strong>1 hour</strong> .
+              Your repair request has been saved. We'll call you on <strong>{form.phone}</strong> to confirm your slot within <strong>1 hour</strong>.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Button variant="outline" onClick={() => { setForm(EMPTY); setPhotos([]); setStatus('idle'); setBookingId(null); setPhoneTouched(false); }}>
