@@ -1,7 +1,7 @@
 {
   "framework": null,
   "installCommand": "pnpm install --no-frozen-lockfile",
-  "buildCommand": "sh vercel-build.sh",
+  "buildCommand": "cd artifacts/larsha-tech && pnpm run build && cd ../.. && rm -rf public && cp -r artifacts/larsha-tech/dist/public public && echo 'public contents:' && ls public",
   "outputDirectory": "public",
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
