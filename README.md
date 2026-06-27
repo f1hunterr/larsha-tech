@@ -35,15 +35,19 @@ API: [workspaceserver-production-8351.up.railway.app](https://workspaceserver-pr
 
 ```
 artifacts/
-  larsha-tech/   # React frontend (GitHub Pages)
+  larsha-tech/   # React frontend
   server/        # Express backend API
 .github/
   workflows/
-    ci.yml       # Typecheck + build on every push/PR
-    deploy.yml   # Deploy frontend to GitHub Pages on push to main
-Dockerfile.api   # Docker image for the backend
-docker-compose.yml
-nginx.conf
+    ci.yml              # Typecheck + build on every push/PR
+    deploy.yml          # Deploy frontend to GitHub Pages on push to main
+    update-lockfile.yml # Manually regenerate pnpm-lock.yaml
+Dockerfile              # Docker image for the frontend (Nginx)
+Dockerfile.api          # Docker image for the backend (Express)
+docker-compose.yml      # Full-stack local dev / self-hosted deploy
+nginx.conf              # Nginx config for the frontend container
+vercel.json             # Vercel deploy config (frontend)
+railway.toml            # Railway deploy config (backend)
 ```
 
 ## Pages
@@ -79,15 +83,20 @@ PORT=3000 BASE_PATH=/ pnpm run build
 
 | Method | Endpoint | Auth | Description |
 |---|---|---|---|
+| GET | `/health` | — | Health check |
 | POST | `/api/leads` | — | Submit a quick lead |
 | GET | `/api/leads` | Admin | List all leads |
-| POST | `/api/bookings` | — | Submit a repair booking |
+| POST | `/api/bookings` | — | Submit a repair booking (multipart, supports photo upload) |
 | GET | `/api/bookings` | Admin | List all bookings |
 | PATCH | `/api/bookings/:id/status` | Admin | Update booking status |
-| POST | `/api/applications` | — | Submit a job application |
+| POST | `/api/diagnoses` | — | Submit a free diagnosis request |
+| GET | `/api/diagnoses` | Admin | List all diagnosis requests |
+| PATCH | `/api/diagnoses/:id/status` | Admin | Update diagnosis status |
+| POST | `/api/applications` | — | Submit a job application (multipart, resume upload) |
 | GET | `/api/applications` | Admin | List all applications |
 | PATCH | `/api/applications/:id/status` | Admin | Update application status |
 | GET | `/api/applications/:id/resume` | Admin | Download resume file |
+| GET | `/admin` | Admin | Server-rendered admin dashboard |
 
 Admin endpoints use HTTP Basic Auth. Credentials are set via environment variables (see below).
 
@@ -97,48 +106,69 @@ Admin endpoints use HTTP Basic Auth. Credentials are set via environment variabl
 
 | Variable | Default | Description |
 |---|---|---|
-| `PORT` | `4000` | Port the API listens on |
+| `PORT` | `4000` | Port the API listens on (Railway sets this automatically) |
 | `DB_PATH` | `./leads.db` | Path to the SQLite database file |
 | `ADMIN_USERNAME` | `admin` | Admin login username |
-| `ADMIN_PASSWORD` | `dev-only-changeme` | Admin login password — **change in production** |
+| `ADMIN_PASSWORD` | *(required in production)* | Admin login password |
+| `ALLOWED_ORIGINS` | `http://localhost:3000,http://localhost:5173` | Comma-separated list of allowed CORS origins |
+| `NODE_ENV` | `development` | Set to `production` in deployed environments |
 
 ### Frontend (build-time)
 
 | Variable | Description |
 |---|---|
-| `VITE_API_URL` | Full URL of the backend API (e.g. `https://api.yourdomain.com`) |
-| `BASE_PATH` | URL base path (e.g. `/larsha-tech/` for GitHub Pages) |
+| `VITE_API_URL` | Full URL of the backend API (e.g. `https://yourapi.railway.app`) |
+| `VITE_FORMSPREE_ID` | Formspree form ID for the contact/lead form fallback |
+| `BASE_PATH` | URL base path — use `/` for Vercel, `/larsha-tech/` for GitHub Pages |
 
-For the GitHub Pages deploy, set `VITE_API_URL` as a repository secret in **Settings → Secrets and variables → Actions**.
+## Deployment
 
-## Docker Deploy (self-hosted, full stack)
+### Vercel + Railway (recommended)
+
+The frontend is hosted on **Vercel** and the backend on **Railway**.
+
+**Railway (API):**
+1. New project → deploy from `f1hunterr/larsha-tech` → Railway auto-detects `railway.toml`
+2. Set environment variables: `ADMIN_PASSWORD`, `ADMIN_USERNAME`, `NODE_ENV=production`, `ALLOWED_ORIGINS`
+3. Add a volume mounted at `/data` and set `DB_PATH=/data/leads.db`
+4. Generate a public domain — this becomes your `VITE_API_URL`
+
+**Vercel (Frontend):**
+1. New project → import `f1hunterr/larsha-tech` → Vercel auto-detects `vercel.json`
+2. Set environment variables: `VITE_API_URL=<Railway URL>`, `VITE_FORMSPREE_ID=<your id>`
+3. Deploy → copy the Vercel URL → add it to Railway's `ALLOWED_ORIGINS`
+
+### Docker (self-hosted, full stack)
 
 Runs two containers:
 - **web** — Nginx serving the built React frontend on port `3000`
-- **api** — Express + SQLite API server (internal, port `4000`)
+- **api** — Express + SQLite API server (internal)
 
-### Prerequisites
+#### Prerequisites
 
 - [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/) installed on the server
 
-### 1. Clone the repo
+> **Apple Silicon (M1/M2):** Docker runs linux/arm64 by default and is fully supported.
+
+#### 1. Clone the repo
 
 ```bash
 git clone https://github.com/f1hunterr/larsha-tech.git
 cd larsha-tech
 ```
 
-### 2. Create the `.env` file
+#### 2. Create the `.env` file
 
 ```bash
 cat > .env <<EOF
 ADMIN_PASSWORD=your_strong_password_here
+ALLOWED_ORIGINS=http://localhost:3000
 EOF
 ```
 
 > The API container **refuses to start** if `ADMIN_PASSWORD` is missing — it is required, not optional.
 
-### 3. Start the stack
+#### 3. Start the stack
 
 ```bash
 docker compose up -d --build
@@ -147,17 +177,15 @@ docker compose up -d --build
 First build takes ~3–5 minutes (compiles native SQLite dependencies).  
 Subsequent starts are fast — Docker caches the layers.
 
-### 4. Open the site
+#### 4. Open the site
 
 ```
-http://your-server-ip:3000
+http://localhost:3000
 ```
-
-The frontend communicates with the API automatically — no extra config needed.
 
 ---
 
-### Useful commands
+#### Useful commands
 
 | Command | Description |
 |---|---|
@@ -168,7 +196,7 @@ The frontend communicates with the API automatically — no extra config needed.
 | `docker compose ps` | Show running containers and their status |
 | `docker compose restart api` | Restart only the API container |
 
-### Data persistence
+#### Data persistence
 
 Leads, bookings, and applications are stored in a SQLite database inside a Docker volume (`leads_data`). Data survives container restarts and image rebuilds.
 
@@ -181,7 +209,7 @@ docker run --rm \
   alpine tar czf /backup/leads-backup.tar.gz /data
 ```
 
-### Putting it behind a domain with SSL
+#### Putting it behind a domain with SSL
 
 Install [Nginx](https://nginx.org/) and [Certbot](https://certbot.eff.org/) on the host, then proxy traffic to the Docker containers:
 
@@ -193,14 +221,8 @@ server {
     ssl_certificate     /etc/letsencrypt/live/yourdomain.com/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/yourdomain.com/privkey.pem;
 
-    # Frontend
     location / {
         proxy_pass http://localhost:3000;
-    }
-
-    # Backend API
-    location /api/ {
-        proxy_pass http://localhost:4000;
     }
 }
 ```
@@ -211,8 +233,10 @@ Then obtain an SSL certificate:
 sudo certbot --nginx -d yourdomain.com
 ```
 
-## CI / Deployment
+## CI / Workflows
 
-- **CI** (`ci.yml`): runs typecheck and full build on every push and pull request to `main`.
-- **Deploy** (`deploy.yml`): builds the frontend and deploys to GitHub Pages on every push to `main`. Requires `VITE_API_URL` to be set as a repository secret.
-- **Update lockfile** (`update-lockfile.yml`): manually triggered workflow to regenerate `pnpm-lock.yaml` after dependency catalog changes.
+| Workflow | Trigger | Description |
+|---|---|---|
+| `ci.yml` | Push / PR to `main` | Typecheck and full build |
+| `deploy.yml` | Push to `main` | Deploy frontend to GitHub Pages |
+| `update-lockfile.yml` | Manual | Regenerate `pnpm-lock.yaml` after catalog changes |
