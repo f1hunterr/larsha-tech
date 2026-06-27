@@ -5,9 +5,6 @@ import path from "path";
 
 const port = Number(process.env.PORT ?? 3000);
 const basePath = process.env.BASE_PATH ?? "/";
-const outDir = process.env.VERCEL
-  ? path.resolve(import.meta.dirname, "../../public")
-  : path.resolve(import.meta.dirname, "dist/public");
 
 export default defineConfig({
   base: basePath,
@@ -23,7 +20,7 @@ export default defineConfig({
   },
   root: path.resolve(import.meta.dirname),
   build: {
-    outDir,
+    outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
     rollupOptions: {
       output: {
