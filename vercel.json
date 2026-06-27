@@ -1,8 +1,8 @@
 {
   "framework": null,
   "installCommand": "pnpm install --no-frozen-lockfile",
-  "buildCommand": "pnpm --filter @workspace/larsha-tech build",
-  "outputDirectory": "artifacts/larsha-tech/dist/public",
+  "buildCommand": "pnpm --filter @workspace/larsha-tech build && cp -r artifacts/larsha-tech/dist/public ./public",
+  "outputDirectory": "public",
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ],
