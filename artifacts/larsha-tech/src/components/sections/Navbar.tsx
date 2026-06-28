@@ -90,7 +90,7 @@ export default function Navbar() {
             <img src={`${import.meta.env.BASE_URL}logo.svg`} alt="" className="h-7 w-7 object-contain" />
           </span>
           <span className="text-white">
-            Larsha <span className="text-blue-400">Tech</span>
+            Larsha <span className="text-blue-400">Technologies</span>
           </span>
         </button>
 
