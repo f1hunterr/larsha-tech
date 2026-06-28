@@ -1,6 +1,6 @@
-# Larsha Tech
+# Larsha Technologies
 
-Company website for **Larsha Tech** — an IT services business in Bangalore offering laptop/computer repair and professional web development.
+Company website for **Larsha Technologies** — an IT services business in Bangalore offering laptop/computer repair and professional web development.
 
 Live site: [larsha.com](https://larsha.com)  
 API: [workspaceserver-production-8351.up.railway.app](https://workspaceserver-production-8351.up.railway.app/health)
@@ -10,13 +10,14 @@ API: [workspaceserver-production-8351.up.railway.app](https://workspaceserver-pr
 - Laptop & computer repair booking with status tracking
 - Free diagnosis request form
 - Web development services showcase with pricing
-- Service areas section (Bangalore localities)
+- Service areas section (6 Bangalore localities)
 - Job application portal with resume upload
 - Admin dashboard for managing leads, bookings, and applications
 - Live chat via Tawk.to
 - Google Analytics 4 with real event tracking
 - PWA support with offline capability
 - Docker-ready for self-hosted full-stack deployment
+- Custom lerp trailing cursor with blend-mode inversion (desktop only)
 
 ## Stack
 
@@ -59,6 +60,20 @@ railway.toml            # Railway deploy config (backend)
 | `/free-diagnosis` | Free diagnosis request form |
 | `/careers` | Job application form with resume upload |
 | `/admin` | Admin dashboard (requires login) |
+
+## Custom Cursor
+
+The site uses a custom **Lerp Trailing Cursor** on desktop (`src/components/CustomCursor.tsx`).
+
+| Part | Technique | Detail |
+|---|---|---|
+| Inner dot | `mix-blend-mode: difference` | Always white; inverts against any background so it stays visible on dark sections (hero, navbar) and light sections equally |
+| Outer ring | Lerp (Linear Interpolation) | Smoothly follows the dot with a 0.25 lerp factor via `requestAnimationFrame` at 60fps |
+| Hover state | Ring expands + turns blue | Detects `a`, `button`, `input`, `select`, `textarea`, `label` under the pointer |
+| Click state | Dot + ring shrink | Visual press feedback |
+| Mobile/touch | Disabled automatically | `(pointer: coarse)` media query check — phone users see the normal cursor |
+
+The cursor is mounted globally in `App.tsx` and the default OS cursor is hidden via CSS only on `(pointer: fine)` devices.
 
 ## Development
 
