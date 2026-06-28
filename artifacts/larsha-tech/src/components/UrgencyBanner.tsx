@@ -30,7 +30,7 @@ export default function UrgencyBanner() {
           <div className="container mx-auto px-4 py-2 flex items-center gap-3">
             <Zap className="w-3.5 h-3.5 shrink-0 text-yellow-300" />
             <p className="flex-1 text-xs font-semibold text-center leading-snug">
-              <span className="hidden sm:inline">Same-day repair slots available · Free diagnosis for all walk-ins · </span>
+              <span className="hidden sm:inline">Repair time depends on diagnosis · Free diagnosis for all walk-ins · </span>
               <span className="sm:hidden">Free diagnosis · Limited slots · </span>
               <a
                 href="#contact"

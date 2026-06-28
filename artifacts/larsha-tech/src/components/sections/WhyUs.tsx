@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Zap, CheckCircle2, MapPin, ShieldCheck } from 'lucide-react';
 
 const FEATURES = [
-  { icon: Zap,          title: 'Quick & Fast',    desc: 'Same-day service for most repairs and fast turnarounds for websites.',         color: 'text-amber-500',  bg: 'bg-amber-50 dark:bg-amber-950/40',   border: 'border-amber-100 dark:border-amber-900/50'  },
+  { icon: Zap,          title: 'Quick & Fast',    desc: 'Repair time depends on diagnosis — we give you a clear timeline before we start.',  color: 'text-amber-500',  bg: 'bg-amber-50 dark:bg-amber-950/40',   border: 'border-amber-100 dark:border-amber-900/50'  },
   { icon: CheckCircle2, title: 'Affordable',      desc: 'Honest pricing with no hidden fees. Quality service that fits your budget.',    color: 'text-green-500',  bg: 'bg-green-50 dark:bg-green-950/40',   border: 'border-green-100 dark:border-green-900/50'  },
   { icon: MapPin,       title: 'Onsite & Remote', desc: 'We come to you, or fix software issues remotely via secure connection.',        color: 'text-blue-500',   bg: 'bg-blue-50 dark:bg-blue-950/40',     border: 'border-blue-100 dark:border-blue-900/50'    },
   { icon: ShieldCheck,  title: 'Reliable',        desc: 'Professional technicians ensuring your data is safe and systems run perfectly.', color: 'text-purple-500', bg: 'bg-purple-50 dark:bg-purple-950/40', border: 'border-purple-100 dark:border-purple-900/50'},

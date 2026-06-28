@@ -180,7 +180,7 @@ export default function BookRepair() {
 
   usePageMeta({
     title: 'Book a Repair',
-    description: 'Book a same-day laptop or computer repair in Bangalore. Free diagnosis, no hidden fees. Drop off or doorstep service available — call +91 80884 61724.',
+    description: 'Book a laptop or computer repair in Bangalore. Repair time depends on diagnosis — free diagnosis, no hidden fees. Drop off or doorstep service available — call +91 80884 61724.',
     path: '/book-repair',
   });
 

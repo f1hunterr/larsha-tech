@@ -11,7 +11,7 @@ const FAQS = [
   },
   {
     q: 'How long does a repair take?',
-    a: "Most software issues, OS installations, and optimizations are completed the same day. Hardware repairs usually take 24–48 hours. We always give you a clear timeline before starting any work — no surprises.",
+    a: "Repair time depends on the diagnosis. Software issues and optimizations are usually quicker, while hardware repairs may take longer. We always give you a clear timeline after the free diagnosis — no surprises.",
   },
   {
     q: "What if you can't fix the problem?",

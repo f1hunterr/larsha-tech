@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 const SITE_NAME = 'Larsha Tech';
 const DEFAULT_TITLE = 'Larsha Tech — Laptop & Computer Repair | Web Development Bangalore';
-const DEFAULT_DESC = 'Larsha Tech: Same-day laptop & computer repair, virus removal, OS installation, SSD upgrades, and professional website development in Bangalore. Free diagnostics. No hidden fees. Call +91 80884 61724.';
+const DEFAULT_DESC = 'Larsha Tech: Fast laptop & computer repair, virus removal, OS installation, SSD upgrades, and professional website development in Bangalore. Free diagnostics. Repair time based on diagnosis. No hidden fees. Call +91 80884 61724.';
 const BASE_URL = 'https://larsha.com';
 
 interface PageMeta {

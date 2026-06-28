@@ -78,7 +78,7 @@ export default function Hero() {
             </motion.div>
 
             <motion.div variants={fadeInUp} className="mt-10 flex flex-wrap gap-6 text-sm font-medium text-slate-400">
-              {['Same Day Fixes', 'No Hidden Fees', 'Free Diagnostics'].map(t => (
+              {['Fast Turnaround', 'No Hidden Fees', 'Free Diagnostics'].map(t => (
                 <div key={t} className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-blue-400 shrink-0" /> {t}
                 </div>

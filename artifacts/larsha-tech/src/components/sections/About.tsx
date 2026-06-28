@@ -8,7 +8,7 @@ const scrollTo = (id: string) => document.getElementById(id)?.scrollIntoView({ b
 
 const STATS = [
   { label: 'Service Area',  value: 'All Bangalore' },
-  { label: 'Response Time', value: 'Same Day'       },
+  { label: 'Response Time', value: 'Post Diagnosis'  },
   { label: 'Diagnostics',   value: 'Always Free'    },
   { label: 'Warranty',      value: '30 Days'        },
 ];
