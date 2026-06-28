@@ -181,6 +181,12 @@
     overflow-x: hidden;
     width: 100%;
   }
+  /* Hide default cursor on non-touch devices — custom cursor takes over */
+  @media (pointer: fine) {
+    *, *::before, *::after {
+      cursor: none !important;
+    }
+  }
   /* Pointer cursor on all interactive elements */
   button, [role="button"], a, label[for], select {
     cursor: pointer;

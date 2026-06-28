@@ -9,6 +9,7 @@ import BookRepair from "@/pages/book-repair";
 import Careers from "@/pages/careers";
 import FreeDiagnosis from "@/pages/free-diagnosis";
 import AdminPage from "@/pages/admin";
+import CustomCursor from "@/components/CustomCursor";
 
 const queryClient = new QueryClient();
 
@@ -40,6 +41,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
+        <CustomCursor />
         <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
           <Router />
         </WouterRouter>
