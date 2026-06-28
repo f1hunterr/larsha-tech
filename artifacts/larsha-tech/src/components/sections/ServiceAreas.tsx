@@ -3,23 +3,8 @@ import { MapPin } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const AREAS = [
-  // Central
-  'MG Road', 'Brigade Road', 'Shivajinagar', 'Vasanth Nagar', 'Richmond Town',
-  'Commercial Street', 'Chickpet', 'Cubbon Park',
-  // South
-  'Koramangala', 'HSR Layout', 'BTM Layout', 'Jayanagar', 'JP Nagar',
-  'Banashankari', 'Basavanagudi', 'Wilson Garden', 'Electronic City',
-  'Silk Board', 'Hulimavu', 'Bommanahalli', 'Begur', 'Kumaraswamy Layout',
-  // East
-  'Indiranagar', 'Domlur', 'Whitefield', 'Marathahalli', 'Bellandur',
-  'Sarjapur', 'Kasavanahalli', 'Agara', 'Cooke Town', 'Frazer Town',
-  'Benson Town', 'Cox Town',
-  // North
-  'Hebbal', 'Yelahanka', 'RT Nagar', 'Sahakara Nagar', 'Sadashivanagar',
-  'Dollars Colony', 'RMV Extension', 'Mathikere', 'Malleswaram',
-  'Rajajinagar', 'Vyalikaval',
-  // West
-  'Vijayanagar', 'Basaveshwara Nagar', 'Nagarbhavi', 'Kengeri',
+  'Hennur', 'Koramangala', 'Indiranagar', 'Domlur',
+  'Kalyan Nagar', 'Kammanahalli',
 ];
 
 export default function ServiceAreas() {
@@ -29,13 +14,13 @@ export default function ServiceAreas() {
 
         <div className="text-center mb-10">
           <div className="inline-flex items-center gap-2 bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 text-xs font-bold px-3 py-1.5 rounded-full mb-4">
-            <MapPin className="w-3.5 h-3.5" /> Serving All of Bangalore
+            <MapPin className="w-3.5 h-3.5" /> Current Service Areas
           </div>
           <h2 className="text-2xl sm:text-3xl font-black text-foreground mb-3">
             We Come to You
           </h2>
           <p className="text-muted-foreground text-sm sm:text-base max-w-xl mx-auto">
-            Doorstep laptop &amp; computer repair across Bangalore. If your area isn't listed, call us — we'll figure it out.
+            Doorstep laptop &amp; computer repair in these areas. Not on the list? Call us — we'll figure it out.
           </p>
         </div>
 
