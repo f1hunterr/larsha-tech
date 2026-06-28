@@ -46,11 +46,11 @@ export default function Home() {
           <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2">
               <span className="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-sm flex-shrink-0">
-                <img src={`${import.meta.env.BASE_URL}logo.svg`} alt="Larsha Tech" className="h-8 w-8 object-contain" />
+                <img src={`${import.meta.env.BASE_URL}logo.svg`} alt="Larsha Technologies" className="h-8 w-8 object-contain" />
               </span>
             </div>
             <p className="text-muted-foreground text-sm">
-              © {new Date().getFullYear()} Larsha Tech · Bangalore, Karnataka
+              © {new Date().getFullYear()} Larsha Technologies · Bangalore, Karnataka
             </p>
             <a
               href="https://wa.me/918088461724"

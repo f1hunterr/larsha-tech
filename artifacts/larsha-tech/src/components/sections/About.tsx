@@ -29,7 +29,7 @@ export default function About() {
             <div className="relative mb-6">
               <img
                 src={`${import.meta.env.BASE_URL}hemanth.jpg`}
-                alt="Hemanth K — Founder, Larsha Tech"
+                alt="Hemanth K — Founder, Larsha Technologies"
                 loading="lazy"
                 decoding="async"
                 className="w-36 h-36 sm:w-48 sm:h-48 rounded-3xl object-cover shadow-2xl shadow-blue-500/25"
@@ -41,7 +41,7 @@ export default function About() {
             </div>
 
             <h3 className="text-2xl font-black mb-1">Hemanth K</h3>
-            <p className="text-primary font-semibold text-sm mb-4">Founder &amp; Tech Lead, Larsha Tech</p>
+            <p className="text-primary font-semibold text-sm mb-4">Founder &amp; Tech Lead, Larsha Technologies</p>
 
             <div className="grid grid-cols-2 gap-3 w-full max-w-xs">
               {STATS.map(({ label, value }) => (
@@ -61,11 +61,11 @@ export default function About() {
           >
             <p className="text-primary font-bold text-sm uppercase tracking-widest mb-3">About Us</p>
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-black mb-5 leading-tight">
-              The person behind<br />Larsha Tech
+              The person behind<br />Larsha Technologies
             </h2>
             <p className="text-muted-foreground leading-relaxed mb-5">
               Hi, I'm Hemanth — a Bangalore-based tech professional who believes everyone deserves
-              honest, jargon-free IT support. I started Larsha Tech to offer real solutions to real
+              honest, jargon-free IT support. I started Larsha Technologies to offer real solutions to real
               people: no inflated quotes, no passing the buck, no fine print.
             </p>
             <p className="text-muted-foreground leading-relaxed mb-8">

@@ -69,8 +69,8 @@ export default function Careers() {
   const [form, setForm] = useState<FormState>(EMPTY);
 
   usePageMeta({
-    title: 'Careers — Join Larsha Tech',
-    description: 'Join the Larsha Tech team in Bangalore. We are hiring computer repair technicians and junior web developers. Apply online with your resume.',
+    title: 'Careers — Join Larsha Technologies',
+    description: 'Join the Larsha Technologies team in Bangalore. We are hiring computer repair technicians and junior web developers. Apply online with your resume.',
     path: '/careers',
   });
   const [resume, setResume] = useState<File | null>(null);
@@ -149,7 +149,7 @@ export default function Careers() {
           >
             <ArrowLeft className="w-4 h-4" /> Back to home
           </button>
-          <p className="text-violet-400 font-bold text-xs uppercase tracking-widest mb-3">Careers at Larsha Tech</p>
+          <p className="text-violet-400 font-bold text-xs uppercase tracking-widest mb-3">Careers at Larsha Technologies</p>
           <h1 className="text-3xl sm:text-4xl font-black text-white mb-3 leading-tight">
             Join Our Growing Team
           </h1>
@@ -268,7 +268,7 @@ export default function Careers() {
             {/* Cover letter */}
             <div id="field-message">
               <label className="block text-sm font-semibold mb-1.5">
-                Why do you want to join Larsha Tech? <span className="text-destructive">*</span>
+                Why do you want to join Larsha Technologies? <span className="text-destructive">*</span>
               </label>
               <textarea
                 rows={5}

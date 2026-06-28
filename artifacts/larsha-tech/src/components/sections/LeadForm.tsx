@@ -83,7 +83,7 @@ export default function LeadForm() {
     }).catch(() => {});
 
     const msg = encodeURIComponent(
-      `Hi Larsha Tech! 👋\n\nName: ${form.name}\nPhone: ${form.phone}\nService: ${form.service}\n\nIssue / Requirement:\n${form.message}\n\nPlease get back to me at your earliest convenience. 🙏`
+      `Hi Larsha Technologies! 👋\n\nName: ${form.name}\nPhone: ${form.phone}\nService: ${form.service}\n\nIssue / Requirement:\n${form.message}\n\nPlease get back to me at your earliest convenience. 🙏`
     );
 
     setTimeout(() => {

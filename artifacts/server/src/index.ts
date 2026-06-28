@@ -79,7 +79,7 @@ function adminRateLimit(req: Request, res: Response, next: () => void) {
 app.get('/admin', adminRateLimit, (req: Request, res: Response) => {
   const header = req.headers.authorization;
   if (!header?.startsWith('Basic ')) {
-    res.setHeader('WWW-Authenticate', 'Basic realm="Larsha Tech Admin"');
+    res.setHeader('WWW-Authenticate', 'Basic realm="Larsha Technologies Admin"');
     res.status(401).send('Login required');
     return;
   }
@@ -88,7 +88,7 @@ app.get('/admin', adminRateLimit, (req: Request, res: Response) => {
   const user = decoded.slice(0, colonIdx);
   const pass = decoded.slice(colonIdx + 1);
   if (user !== ADMIN_USERNAME || pass !== adminPassword) {
-    res.setHeader('WWW-Authenticate', 'Basic realm="Larsha Tech Admin"');
+    res.setHeader('WWW-Authenticate', 'Basic realm="Larsha Technologies Admin"');
     res.status(401).send('Invalid credentials');
     return;
   }
@@ -116,5 +116,5 @@ process.on('unhandledRejection', (reason) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Larsha Tech API → http://localhost:${PORT}`);
+  console.log(`Larsha Technologies API → http://localhost:${PORT}`);
 });

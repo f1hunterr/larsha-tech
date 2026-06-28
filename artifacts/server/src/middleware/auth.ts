@@ -6,7 +6,7 @@ const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'dev-only-changeme';
 export function requireAdmin(req: Request, res: Response, next: NextFunction) {
   const header = req.headers.authorization;
   if (!header?.startsWith('Basic ')) {
-    res.setHeader('WWW-Authenticate', 'Basic realm="Larsha Tech Admin"');
+    res.setHeader('WWW-Authenticate', 'Basic realm="Larsha Technologies Admin"');
     res.status(401).json({ error: 'Authentication required' });
     return;
   }
@@ -15,7 +15,7 @@ export function requireAdmin(req: Request, res: Response, next: NextFunction) {
   const user = decoded.slice(0, colonIdx);
   const pass = decoded.slice(colonIdx + 1);
   if (user !== ADMIN_USERNAME || pass !== ADMIN_PASSWORD) {
-    res.setHeader('WWW-Authenticate', 'Basic realm="Larsha Tech Admin"');
+    res.setHeader('WWW-Authenticate', 'Basic realm="Larsha Technologies Admin"');
     res.status(401).json({ error: 'Invalid credentials' });
     return;
   }

@@ -33,7 +33,7 @@ export default function FreeDiagnosis() {
   const [form, setForm] = useState<Form>(EMPTY);
 
   usePageMeta({
-    title: 'Free Computer Diagnosis — Larsha Tech',
+    title: 'Free Computer Diagnosis — Larsha Technologies',
     description: 'Get a free diagnosis for your laptop or computer problem in Bangalore. Describe your issue and our technician will contact you within hours. No charge, no commitment.',
     path: '/free-diagnosis',
   });

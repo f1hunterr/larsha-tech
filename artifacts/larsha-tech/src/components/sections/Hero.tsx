@@ -100,7 +100,7 @@ export default function Hero() {
                 <span className="w-3 h-3 rounded-full bg-[#f38ba8]" />
                 <span className="w-3 h-3 rounded-full bg-[#f9e2af]" />
                 <span className="w-3 h-3 rounded-full bg-[#a6e3a1]" />
-                <span className="text-xs text-slate-500 ml-3">index.html — Larsha Tech</span>
+                <span className="text-xs text-slate-500 ml-3">index.html — Larsha Technologies</span>
               </div>
               <div className="flex bg-[#181825] border-b border-white/5 text-xs">
                 <span className="px-4 py-2 bg-[#1e1e2e] text-[#89b4fa] border-t-2 border-[#89b4fa] border-r border-white/5">index.html</span>
@@ -108,7 +108,7 @@ export default function Hero() {
                 <span className="px-4 py-2 text-slate-500">script.js</span>
               </div>
               <div className="p-6 leading-7 space-y-0.5">
-                <div><span className="text-[#585b70]">&lt;!-- Larsha Tech Website --&gt;</span></div>
+                <div><span className="text-[#585b70]">&lt;!-- Larsha Technologies Website --&gt;</span></div>
                 <div>
                   <span className="text-[#89b4fa]">&lt;section</span>
                   {' '}<span className="text-[#cba6f7]">class</span><span className="text-[#cdd6f4]">=</span><span className="text-[#a6e3a1]">"hero"</span>

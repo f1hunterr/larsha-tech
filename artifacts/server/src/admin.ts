@@ -56,7 +56,7 @@ export function adminHtml(leads: Lead[], bookings: Booking[], applications: Appl
 <html lang="en">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Larsha Tech Admin</title>
+  <title>Larsha Technologies Admin</title>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
     body{font-family:system-ui,-apple-system,sans-serif;background:#0a0f1e;color:#e2e8f0;min-height:100vh}

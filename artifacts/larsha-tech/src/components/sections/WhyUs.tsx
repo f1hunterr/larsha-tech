@@ -14,7 +14,7 @@ export default function WhyUs() {
     <section id="why-us" className="py-14 sm:py-24 bg-background">
       <div className="container mx-auto px-4">
         <div className="text-center max-w-2xl mx-auto mb-14">
-          <p className="text-primary font-bold text-sm uppercase tracking-widest mb-3">Why Larsha Tech</p>
+          <p className="text-primary font-bold text-sm uppercase tracking-widest mb-3">Why Larsha Technologies</p>
           <h2 className="text-3xl md:text-4xl font-black mb-4">We aren't just another IT company</h2>
           <p className="text-muted-foreground text-lg">Your local, dependable partner for everything tech.</p>
         </div>
