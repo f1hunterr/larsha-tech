@@ -6,18 +6,6 @@ export default function CustomCursor() {
   const [visible, setVisible]   = useState(false);
   const [clicking, setClicking] = useState(false);
   const [hovering, setHovering] = useState(false);
-  const [isDark,   setIsDark]   = useState(() =>
-    typeof document !== 'undefined' && document.documentElement.classList.contains('dark')
-  );
-
-  // Watch for theme changes
-  useEffect(() => {
-    const observer = new MutationObserver(() => {
-      setIsDark(document.documentElement.classList.contains('dark'));
-    });
-    observer.observe(document.documentElement, { attributeFilter: ['class'] });
-    return () => observer.disconnect();
-  }, []);
 
   useEffect(() => {
     if (window.matchMedia('(pointer: coarse)').matches) return;
@@ -70,18 +58,11 @@ export default function CustomCursor() {
 
   if (typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches) return null;
 
-  // Colors adapt to theme
-  const dotColor  = hovering ? '#3b82f6' : isDark ? 'rgba(255,255,255,0.92)' : 'rgba(15,23,42,0.85)';
-  const dotGlow   = hovering ? '0 0 6px 2px rgba(59,130,246,0.55)' : isDark
-    ? '0 0 4px 1px rgba(255,255,255,0.3)'
-    : '0 0 4px 1px rgba(15,23,42,0.2)';
-  const ringColor = hovering ? 'rgba(59,130,246,0.85)' : isDark ? 'rgba(148,163,184,0.5)' : 'rgba(71,85,105,0.45)';
-  const ringGlow  = hovering ? '0 0 10px 2px rgba(59,130,246,0.3)' : 'none';
-  const ringSize  = clicking ? 28 : hovering ? 48 : 40;
+  const ringSize = clicking ? 28 : hovering ? 48 : 40;
 
   return (
     <>
-      {/* Outer ring */}
+      {/* Outer ring — blue always, no blend mode so colour stays consistent */}
       <div
         ref={ringRef}
         style={{
@@ -92,8 +73,8 @@ export default function CustomCursor() {
           marginLeft:    -(ringSize / 2 - 20),
           marginTop:     -(ringSize / 2 - 20),
           borderRadius:  '50%',
-          border:        `1.5px solid ${ringColor}`,
-          boxShadow:     ringGlow,
+          border:        `1.5px solid ${hovering ? 'rgba(59,130,246,0.9)' : 'rgba(59,130,246,0.5)'}`,
+          boxShadow:     hovering ? '0 0 10px 2px rgba(59,130,246,0.35)' : '0 0 6px 1px rgba(59,130,246,0.15)',
           pointerEvents: 'none',
           zIndex:        99999,
           opacity:       visible ? 1 : 0,
@@ -101,7 +82,7 @@ export default function CustomCursor() {
           transition:    'opacity 0.3s, border-color 0.2s, box-shadow 0.2s, width 0.15s, height 0.15s, margin 0.15s',
         }}
       />
-      {/* Inner dot */}
+      {/* Inner dot — mix-blend-mode: difference makes it always visible on any background */}
       <div
         ref={dotRef}
         style={{
@@ -112,13 +93,13 @@ export default function CustomCursor() {
           marginLeft:    clicking ? 1.5 : 0,
           marginTop:     clicking ? 1.5 : 0,
           borderRadius:  '50%',
-          background:    dotColor,
-          boxShadow:     dotGlow,
+          background:    'white',
+          mixBlendMode:  'difference',
           pointerEvents: 'none',
           zIndex:        99999,
           opacity:       visible ? 1 : 0,
           willChange:    'transform',
-          transition:    'opacity 0.3s, background 0.2s, box-shadow 0.2s, width 0.15s, height 0.15s, margin 0.15s',
+          transition:    'opacity 0.3s, width 0.15s, height 0.15s, margin 0.15s',
         }}
       />
     </>
