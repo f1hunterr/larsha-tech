@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 const scrollTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
 const STATS = [
-  { label: 'Service Area',  value: 'All Bangalore' },
+  { label: 'Service Area',  value: '6 Areas'       },
   { label: 'Response Time', value: 'Post Diagnosis'  },
   { label: 'Diagnostics',   value: 'Always Free'    },
   { label: 'Warranty',      value: '30 Days'        },

@@ -51,7 +51,7 @@ function fmt(dt: string) {
 function waLink(phone: string, name: string) {
   const clean = phone.replace(/\D/g, '');
   const num = clean.startsWith('91') ? clean : `91${clean}`;
-  return `https://wa.me/${num}?text=Hi%20${encodeURIComponent(name)}%2C%20this%20is%20Larsha%20Tech%20regarding%20your%20request.`;
+  return `https://wa.me/${num}?text=Hi%20${encodeURIComponent(name)}%2C%20this%20is%20Larsha%20Technologies%20regarding%20your%20request.`;
 }
 
 function ContactButtons({ phone, name }: { phone: string; name: string }) {
