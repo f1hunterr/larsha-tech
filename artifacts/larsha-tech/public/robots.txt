@@ -2,11 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /admin
 
-# Block common exploit scanners
-User-agent: AhrefsBot
-Crawl-delay: 10
-
-User-agent: SemrushBot
-Crawl-delay: 10
-
 Sitemap: https://larsha.com/sitemap.xml
