@@ -163,6 +163,7 @@ export default function Navbar() {
           {/* Call Now */}
           <Button
             size="sm"
+            aria-label="Call Now — +91 80884 61724"
             className="bg-white text-slate-900 hover:bg-slate-100 shadow-md"
             onClick={() => window.open('tel:+918088461724')}
           >

@@ -54,7 +54,7 @@ export default function Home() {
             </p>
             <a
               href="https://wa.me/918088461724"
-              className="flex items-center gap-1.5 text-sm font-semibold text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 transition-colors"
+              className="flex items-center gap-1.5 text-sm font-semibold text-green-700 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300 transition-colors"
             >
               <FaWhatsapp className="w-4 h-4" />
               WhatsApp Us

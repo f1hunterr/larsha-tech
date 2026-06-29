@@ -50,8 +50,8 @@ export default function BrandStrip() {
               <span key={i} className="w-px h-5 bg-border/60 shrink-0 mx-2" />
             ) : (
               <span key={i} className="flex items-center gap-2 whitespace-nowrap select-none">
-                <entry.icon style={{ color: entry.color }} className="w-4 h-4 shrink-0" />
-                <span className="text-xs font-bold text-muted-foreground tracking-widest uppercase">{entry.label}</span>
+                <entry.icon style={{ color: entry.color }} className="w-4 h-4 shrink-0" aria-label={entry.label} role="img" />
+                <span className="text-xs font-bold text-foreground/60 tracking-widest uppercase">{entry.label}</span>
               </span>
             )
           )}
