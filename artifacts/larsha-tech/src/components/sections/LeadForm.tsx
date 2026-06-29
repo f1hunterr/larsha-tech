@@ -172,10 +172,11 @@ export default function LeadForm() {
 
                   {/* Service */}
                   <div>
-                    <label className="block text-sm font-semibold mb-1.5">
+                    <label htmlFor="lead-service" className="block text-sm font-semibold mb-1.5">
                       Service Needed <span className="text-destructive">*</span>
                     </label>
                     <select
+                      id="lead-service"
                       value={form.service}
                       onChange={set('service')}
                       className={`w-full px-4 py-3 rounded-xl border bg-background text-sm outline-none transition-colors focus:ring-2 focus:ring-primary/30 focus:border-primary ${errors.service ? 'border-destructive' : 'border-input'}`}

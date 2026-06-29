@@ -38,7 +38,7 @@ export default function HowWeWork() {
                   <item.icon className="w-6 h-6" />
                 </div>
                 <span className="text-xs font-black text-muted-foreground/40 tracking-widest mb-1">{item.step}</span>
-                <h4 className="font-bold text-base mb-2">{item.title}</h4>
+                <h3 className="font-bold text-base mb-2">{item.title}</h3>
                 <p className="text-muted-foreground text-sm leading-relaxed">{item.desc}</p>
               </motion.div>
             ))}
@@ -53,6 +53,7 @@ export default function HowWeWork() {
         >
           <Headphones className="w-8 h-8 text-primary mx-auto mb-3" />
           <h3 className="font-black text-xl mb-2">Free Diagnostics — Always</h3>
+
           <p className="text-muted-foreground text-sm mb-5 leading-relaxed">
             We diagnose your issue at zero cost. No fix, no fee.
             You only pay when you're satisfied with the solution.

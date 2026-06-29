@@ -84,6 +84,7 @@ export default function Navbar() {
         {/* Logo */}
         <button
           onClick={() => isHome ? window.scrollTo({ top: 0, behavior: 'smooth' }) : navigate('/')}
+          aria-label="Larsha Technologies — go to homepage"
           className="flex-shrink-0 flex items-center gap-2.5 font-bold text-lg tracking-tight"
         >
           <span className="flex-shrink-0 w-11 h-11 rounded-full bg-white flex items-center justify-center shadow-md ring-2 ring-white/20">

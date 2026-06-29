@@ -40,7 +40,7 @@ export default function About() {
               </div>
             </div>
 
-            <h3 className="text-2xl font-black mb-1">Hemanth K</h3>
+            <h2 className="text-2xl font-black mb-1">Hemanth K</h2>
             <p className="text-primary font-semibold text-sm mb-4">Founder &amp; Tech Lead, Larsha Technologies</p>
 
             <div className="grid grid-cols-2 gap-3 w-full max-w-xs">
@@ -60,9 +60,9 @@ export default function About() {
             transition={{ duration: 0.55 }}
           >
             <p className="text-primary font-bold text-sm uppercase tracking-widest mb-3">About Us</p>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-black mb-5 leading-tight">
+            <h3 className="text-2xl sm:text-3xl md:text-4xl font-black mb-5 leading-tight">
               The person behind<br />Larsha Technologies
-            </h2>
+            </h3>
             <p className="text-muted-foreground leading-relaxed mb-5">
               Hi, I'm Hemanth — a Bangalore-based tech professional who believes everyone deserves
               honest, jargon-free IT support. I started Larsha Technologies to offer real solutions to real

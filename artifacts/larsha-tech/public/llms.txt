@@ -1,0 +1,38 @@
+# Larsha Technologies
+
+> Fast laptop & computer repair and professional website development in Bangalore, India.
+
+## About
+
+Larsha Technologies is an IT services business based in Bangalore, Karnataka, India.
+Founded by Hemanth K, we offer doorstep laptop and computer repair, virus removal,
+OS installation, SSD/RAM upgrades, data recovery, and professional website development
+for small businesses.
+
+## Services
+
+- Laptop & computer hardware repair (screen, keyboard, battery, motherboard)
+- Virus & malware removal
+- OS installation (Windows, macOS)
+- SSD upgrade & RAM upgrade
+- Data recovery
+- Slow computer optimisation
+- Website design & development
+- Website maintenance
+
+## Service Areas
+
+Hennur, Koramangala, Indiranagar, Domlur, Kalyan Nagar, Kammanahalli (Bangalore, Karnataka)
+
+## Contact
+
+- Phone: +91 80884 61724
+- WhatsApp: https://wa.me/918088461724
+- Website: https://larsha.com
+
+## Pages
+
+- https://larsha.com/ — Home
+- https://larsha.com/book-repair — Book a Repair
+- https://larsha.com/free-diagnosis — Free Diagnosis
+- https://larsha.com/careers — Careers
